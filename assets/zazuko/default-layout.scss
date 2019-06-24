@@ -1,0 +1,33 @@
+.default-header {
+  background: $bck-light;
+  border-bottom: solid 1px $line-light;
+
+  .header-content {
+    padding: 100px;
+    text-align: center;
+
+    @media screen and (max-width: $mq-s) {
+      padding: 100px $default-m-margin;
+    }
+
+    h1 {
+      font-size: $fs-header-mini;
+      line-height: $fs-header-mini;
+      font-family: $font-header;
+      font-weight: 700;
+      padding-top: 20px;
+    }
+
+    a {
+      font-size: $fs-title;
+      line-height: $fs-title;
+      text-transform: uppercase;
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}
+
+.default-content {
+  // background: red;
+}

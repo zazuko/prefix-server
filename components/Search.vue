@@ -1,0 +1,248 @@
+<template>
+  <div class="main-container">
+    <div class="home-header">
+      <div class="layout-width">
+        <div class="search-field-container flex-container">
+          <div class="flex-item title">
+            <div>
+              <h1>
+                Resolve
+                <br>
+                RDF Terms
+              </h1>
+            </div>
+          </div>
+          <div class="flex-item">
+            <v-autocomplete
+              v-model="model"
+              :items="items"
+              :loading="isLoading"
+              :search-input.sync="search"
+              autofocus
+              color="white"
+              hide-no-data
+              hide-selected
+              item-text="itemText"
+              item-value="iri.value"
+              no-data-text="Nothing found :("
+              no-filter
+              placeholder="Start typing to Search"
+              return-object
+            />
+          </div>
+          <div class="flex-item desc">
+            <p>
+              Data based on <strong>@zazuko/rdf-vocabularies</strong><span class="tail" />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="model" class="default-content main-results">
+      <div class="layout-width">
+        <main-results :model="model" />
+      </div>
+    </div>
+
+    <div class="default-content search-results">
+      <div class="layout-width">
+        <clipboard
+          v-if="model"
+          :to-copy="model.iri.value"
+          @success="clipboardSuccessHandler"
+          @error="clipboardErrorHandler"
+        />
+
+        <v-alert
+          :value="copySuccess"
+          type="success"
+          dismissible
+          transition="scale-transition"
+        >
+          Copied!
+        </v-alert>
+        <v-alert
+          :value="copyFailure"
+          type="error"
+          dismissible
+          transition="scale-transition"
+        >
+          Could not copy to clipboard, sorry!
+        </v-alert>
+
+        <detail-results
+          v-if="model"
+          :model="model"
+        />
+        <v-btn
+          :disabled="!model"
+          color="grey darken-3"
+          @click="model = ''"
+        >
+          Clear
+          <v-icon right>
+            mdi-close-circle
+          </v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import _debounce from 'lodash/debounce'
+import Clipboard from '@/components/Clipboard'
+import MainResults from '@/components/MainResults'
+import DetailResults from '@/components/DetailResults'
+
+export default {
+  name: 'Search',
+  components: {
+    Clipboard,
+    MainResults,
+    DetailResults
+  },
+  data: () => ({
+    entries: [],
+    isLoading: false,
+    model: null,
+    search: null,
+    iriFromURL: '',
+    copySuccess: false,
+    copyFailure: false
+  }),
+  computed: {
+    items() {
+      return this.entries
+    }
+  },
+  watch: {
+    model() {
+      if (this.model) {
+        this.$router.push(`/${this.model.prefixed}`)
+      } else {
+        this.$router.push('/')
+      }
+    },
+    '$route.path'(newPath) {
+      this.pathChanged()
+    },
+    search: _debounce(async function (val) {
+      await this.doSearch(val)
+    }, 250)
+  },
+  mounted() {
+    this.pathChanged()
+  },
+  methods: {
+    async doSearch(val) {
+      val = val || ''
+      val = val.replace(/#/g, '---hash---')
+      if (val.toLowerCase() === this.loadingVal) {
+        // Items have already been loaded
+        if (this.items.length > 0) {
+          return
+        }
+
+        // Items have already been requested
+        if (this.isLoading) {
+          return
+        }
+      }
+
+      this.isLoading = true
+      this.loadingVal = val.toLowerCase()
+
+      // Lazily load input items
+      await fetch(`/api/search?q=${val}`)
+        .then(res => res.json())
+        .then((res) => {
+          this.entries = res
+        })
+        // .catch((err) => {
+        //   console.log(err)
+        // })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
+    pathChanged() {
+      this.iriFromURL = this.$route.path + this.$route.hash
+      if (this.iriFromURL.startsWith('/')) {
+        // this.$route.path often starts with `/`, strip it since
+        // no IRI nor any prefix start with /
+        this.iriFromURL = this.iriFromURL.substr(1)
+      }
+      // http://example.com/http://schema.org will become
+      // http://example.com/http:/schema.org
+      // for this reason we need to replace http:/s with http://s
+      this.iriFromURL = this.iriFromURL.replace(/^(https?:\/)([^/])/, (match, p1, p2) => `${p1}/${p2}`)
+
+      this.doSearch(this.iriFromURL).then(() => {
+        if (this.entries.length) {
+          let found = false
+          // find the best match from the search results
+          for (const match of this.entries) {
+            // ideally a case sensitive exact match
+            if (
+              match.iri.value === this.iriFromURL ||
+              match.prefixed === this.iriFromURL
+            ) {
+              this.model = match
+              this.entries = []
+              found = true
+              break
+            }
+          }
+          if (found) {
+            return
+          }
+          // otherwise a case insensitive one
+          for (const match of this.entries) {
+            if (
+              match.iri.value.toLowerCase() === this.iriFromURL.toLowerCase() ||
+              match.prefixed.toLowerCase() === this.iriFromURL.toLowerCase()
+            ) {
+              this.model = match
+              this.entries = []
+              found = true
+              break
+            }
+          }
+          if (found) {
+            return
+          }
+          // last resort: use one the API ranked first
+          this.model = this.entries[0]
+          this.entries = []
+        }
+      })
+    },
+    clipboardSuccessHandler() {
+      this.copySuccess = true
+      setTimeout(() => {
+        this.copySuccess = false
+      }, 2000)
+    },
+    clipboardErrorHandler() {
+      this.copyFailure = true
+      setTimeout(() => {
+        this.copyFailure = false
+      }, 2000)
+    }
+  }
+}
+</script>
+
+<style>
+.v-input.v-text-field input {
+  background: #FFFFFF;
+  border: 1px solid #979797;
+}
+.v-menu {
+  position: fixed;
+  left: 0;
+  top: 24px;
+}
+</style>

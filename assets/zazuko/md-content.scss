@@ -1,0 +1,264 @@
+.md-content {
+  padding: 100px 0;
+  text-align: justify;
+
+  * {
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  * > p {
+    font-size: $fs-text;
+    line-height: $fs-text + 6;
+  }
+
+  code {
+    color: #ccc;
+    background: #2d2d2d;
+    font-family: Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    tab-size: 4;
+    hyphens: none;
+    font-size: 0.9em;
+    padding: 2px;
+  }
+
+  @media screen and (max-width: $mq-s) {
+    padding: $default-l-margin 0 100px;
+  }
+
+  .content > *:not(.float) {
+    margin-left: calc((#{$layout-width} - #{$inner-layout-width}) / 2);
+    margin-right: calc((#{$layout-width} - #{$inner-layout-width}) / 2);
+
+    @media screen and (max-width: $mq-m) {
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+
+    @media screen and (max-width: $mq-s) {
+      margin-left: $default-m-margin;
+      margin-right: $default-m-margin;
+    }
+  }
+
+  .float {
+    margin-top: $default-l-margin;
+    margin-bottom: $default-l-margin;
+    padding: 0;
+    background: $bck-light;
+
+    border-radius: 3px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .2);
+    overflow: hidden;
+
+    @media screen and (max-width: $mq-s) {
+      margin: 0 $default-m-margin 16px $default-m-margin !important;
+      width: auto !important;
+    }
+
+    &.is-small { width: 30%; }
+    &.is-medium { width: 45%; }
+    &.is-large { width: 100%; }
+
+    &.is-left {
+      float: left;
+      margin-right: $default-l-margin;
+
+      @media screen and (max-width: $mq-s) {
+        float: none;
+      }
+    }
+
+    &.is-right {
+      float: right;
+      margin-left: $default-l-margin;
+
+      @media screen and (max-width: $mq-s) {
+        float: none;
+      }
+    }
+
+    &.has-padding {
+      padding: $default-l-margin;
+    }
+
+    &> * {
+      margin: 0 !important;
+    }
+
+    img {
+      display: block;
+    }
+
+    blockquote {
+      padding: 0; margin: 0;
+      border: none;
+
+      font-family: $font-header;
+      color: $color-text;
+
+      p {
+        font-size: $fs-title;
+      }
+    }
+
+    &.metadata {
+      @media screen and (max-width: $mq-s) {
+        margin-bottom: 30px !important;
+      }
+
+      .metadata-item:not(:last-child) {
+        padding-bottom: $default-m-margin;
+      }
+
+      .label {
+        color: $color-text-lighter;
+      }
+
+      .value {
+        font-size: $fs-text;
+        line-height: $fs-text + 4;
+        font-weight: bold;
+
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  // TODO: remove properly
+  .header-anchor {
+    display: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+  }
+
+  h1 {
+    font-size: $fs-title;
+    line-height: $fs-title + 6;
+    margin: 24px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: $fs-title;
+    line-height: $fs-title + 6;
+    margin: 24px 0;
+    font-weight: bold;
+  }
+
+  h3 {
+    font-size: $fs-text;
+    line-height: $fs-text + 6;
+    margin: 24px 0;
+    font-weight: bold;
+  }
+
+  h4, h5, h6 {
+    font-size: $fs-text;
+    line-height: $fs-text + 6;
+    margin: 16px 0;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  .extra-class {
+    margin-bottom: 16px;
+  }
+
+  a {
+    color: $color-secondary;
+
+    .icon {
+      display: inline-block;
+      margin-left: 5px;
+    }
+
+    &:hover, &:focus {
+      color: $color-secondary-h;
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: solid 1px $line-light;
+    margin-bottom: 16px;
+  }
+
+  ul, ol {
+    margin-bottom: 16px;
+    list-style-position: outside;
+    padding-left: 20px;
+
+    li {
+      padding-bottom: 4px;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  ul { list-style-type: square; }
+  ol { list-style-type: number; }
+
+  img {
+    max-width: 100%;
+  }
+
+  blockquote {
+    background: $bck-light;
+    padding: 0 16px;
+    margin-bottom: 16px;
+    color: $color-text-lighter;
+    border-left: solid 1px $line-light;
+  }
+
+  table {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    margin-bottom: 16px;
+
+    tr {
+      border-top: 1px solid $line-light;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    th, td {
+      border: 1px solid $line-light;
+      padding: 8px 16px;
+    }
+  }
+
+  pre {
+    line-height: 20px;
+  }
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
