@@ -1,0 +1,54 @@
+*::selection {
+  background: $color-primary;
+  color: white;
+}
+
+body, button, input, textarea {
+  font-family: $font-text;
+  font-size: $fs-text;
+  line-height: $fs-text + 4;
+  font-weight: 300;
+
+  background: white;
+}
+
+html, body {
+  display: block;
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.layout-width {
+  width: $layout-width;
+  margin: auto;
+
+  @media screen and (max-width: $mq-l) {
+    width: 100%;
+    padding: 0 $default-l-margin;
+  }
+
+  @media screen and (max-width: $mq-m) {
+    padding: 0 $default-m-margin;
+  }
+}
+
+.main-container {
+  min-height: calc(100vh - 202px);
+  background-color: $bck-light;
+}
+
+.no-mobile {
+  @media screen and (max-width: $mq-burger-nav) {
+    display: none !important;
+  }
+}
+
+.only-mobile {
+  @media screen and (min-width: $mq-burger-nav) {
+    display: none !important;
+  }
+}

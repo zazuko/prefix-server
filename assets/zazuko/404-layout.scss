@@ -1,0 +1,31 @@
+.layout-404 {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  background: $color-primary-h;
+  background-image: linear-gradient(to bottom right, $color-primary, $color-primary-h);
+
+  h1 {
+    font-size: $fs-header;
+    line-height: $fs-header + 40;
+    font-family: $font-header;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: $fs-title;
+      line-height: $fs-title;
+      padding-bottom: 20px;
+      text-transform: uppercase;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+}

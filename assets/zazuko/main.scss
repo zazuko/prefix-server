@@ -1,0 +1,49 @@
+$color-primary: #ffb15e;
+$color-primary-h: #ffe38d;
+$color-secondary: #ff441c;
+$color-secondary-h: #c30000;
+
+$color-text: #000000;
+$color-text-lighter: #4f4f4f;
+$bck-light: #fcfcfc;
+$line-light: #e5e5e5;
+$bck-dark: #202020;
+
+$layout-width: 1200px;
+$inner-layout-width: 700px;
+$mainline-height: 100px;
+$default-l-margin: 40px;
+$default-m-margin: 20px;
+$default-s-margin: 10px;
+
+// media queries rules
+$mq-l: $layout-width + (2 * $default-l-margin);
+$mq-m: 1000px;
+$mq-burger-nav: 950px;
+$mq-s: 800px;
+
+$fs-small: 15px;
+$fs-text: 18px;
+$fs-title: 24px;
+$fs-header: 90px;
+$fs-header-mini: 50px;
+
+$font-header: 'Playfair Display', serif;
+$font-text: 'Roboto', sans-serif;
+
+@import "reset";
+@import "general";
+@import "topbar";
+@import "footer";
+
+@import "home-layout";
+@import "search-result";
+// @import "section-layout";
+// @import "default-layout";
+// @import "contact-layout";
+// @import "404-layout";
+
+// @import "items-list";
+// @import "md-content";
+
+// @import "components";

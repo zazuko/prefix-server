@@ -1,0 +1,84 @@
+.home-header {
+  border-bottom: 1px solid $line-light;
+
+  .search-field-container {
+    margin: 0 240px;
+    padding: 40px 0;
+  }
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-item {
+    @media screen and (max-width: $mq-m) {
+      height: auto;
+      min-height: 0;
+    }
+
+    &.desc {
+      display: flex;
+      padding: 0;
+
+      @media screen and (max-width: $mq-s) {
+        padding: 40px 0 0 0;
+      }
+
+      p {
+        width: 100%;
+        align-self: flex-end;
+        font-size: $fs-title;
+        line-height: $fs-title + 4;
+        padding-bottom: 5px;
+
+        .tail {
+          margin-bottom: -1px;
+          display: inline-block;
+          width: 18px; height: 18px;
+          margin-left: 10px;
+          background: $color-secondary;
+
+          @media screen and (max-width: $mq-s) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    &.title {
+      display: flex;
+      padding: 0;
+
+      div {
+        align-self: flex-end;
+
+        h1 {
+          position: relative;
+          font-size: $fs-header;
+          line-height: $fs-header;
+          font-family: $font-header;
+          font-weight: 700;
+
+          @media screen and (max-width: $mq-m) {
+            font-size: $fs-header - 20px;
+            line-height: $fs-header - 20px;
+          }
+
+          @media screen and (max-width: $mq-s) {
+            font-size: $fs-header-mini;
+            line-height: $fs-header-mini;
+          }
+        }
+      }
+    }
+  }
+}
+
+.home-content {
+  padding-bottom: 100px;
+  background: $color-primary;
+
+  @media screen and (max-width: $mq-l) {
+    padding-bottom: 0;
+  }
+}
