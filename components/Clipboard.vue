@@ -1,31 +1,11 @@
 <template>
-  <v-layout
-    v-if="toCopy"
-    row
-    wrap
+  <button
+    v-clipboard="() => toCopy"
+    v-clipboard:success="clipboardSuccessHandler"
+    v-clipboard:error="clipboardErrorHandler"
   >
-    <v-flex
-      xs12
-      text-xs-center
-    >
-      <v-text-field
-        box
-        :readonly="true"
-        :value="toCopy"
-      >
-        <template v-slot:append>
-          <v-btn
-            v-clipboard="() => toCopy"
-            v-clipboard:success="clipboardSuccessHandler"
-            v-clipboard:error="clipboardErrorHandler"
-            color="primary"
-          >
-            Copy to clipboard
-          </v-btn>
-        </template>
-      </v-text-field>
-    </v-flex>
-  </v-layout>
+    Copy
+  </button>
 </template>
 
 <script>

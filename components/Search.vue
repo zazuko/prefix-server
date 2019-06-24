@@ -47,30 +47,6 @@
 
     <div class="default-content search-results">
       <div class="layout-width">
-        <clipboard
-          v-if="model"
-          :to-copy="model.iri.value"
-          @success="clipboardSuccessHandler"
-          @error="clipboardErrorHandler"
-        />
-
-        <v-alert
-          :value="copySuccess"
-          type="success"
-          dismissible
-          transition="scale-transition"
-        >
-          Copied!
-        </v-alert>
-        <v-alert
-          :value="copyFailure"
-          type="error"
-          dismissible
-          transition="scale-transition"
-        >
-          Could not copy to clipboard, sorry!
-        </v-alert>
-
         <detail-results
           v-if="model"
           :model="model"
@@ -89,14 +65,12 @@
 
 <script>
 import _debounce from 'lodash/debounce'
-import Clipboard from '@/components/Clipboard'
 import MainResults from '@/components/MainResults'
 import DetailResults from '@/components/DetailResults'
 
 export default {
   name: 'Search',
   components: {
-    Clipboard,
     MainResults,
     DetailResults
   },
@@ -112,9 +86,7 @@ export default {
       isLoading: false,
       model: null,
       search: null,
-      iriFromURL: '',
-      copySuccess: false,
-      copyFailure: false
+      iriFromURL: ''
     }
   },
   computed: {
@@ -201,18 +173,6 @@ export default {
         .finally(() => {
           this.isLoading = false
         })
-    },
-    clipboardSuccessHandler() {
-      this.copySuccess = true
-      setTimeout(() => {
-        this.copySuccess = false
-      }, 2000)
-    },
-    clipboardErrorHandler() {
-      this.copyFailure = true
-      setTimeout(() => {
-        this.copyFailure = false
-      }, 2000)
     }
   }
 }
