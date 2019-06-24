@@ -108,10 +108,17 @@ export default {
     }, 250)
   },
   async mounted() {
+    this.iriFromURL = this.$route.path + this.$route.hash
+    if (this.iriFromURL.startsWith('/')) {
+      // this.$route.path often starts with `/`, strip it since
+      // no IRI nor any prefix start with /
+      this.iriFromURL = this.iriFromURL.substr(1)
+    }
+
     if (this.prefetchedEntries.length) {
       let found = false
       // find the best match from the search results
-      for (const match of this.entries) {
+      for (const match of this.prefetchedEntries) {
         // ideally a case sensitive exact match
         if (
           match.iri.value === this.iriFromURL ||
@@ -123,11 +130,13 @@ export default {
           break
         }
       }
+
       if (found) {
         return
       }
+
       // otherwise a case insensitive one
-      for (const match of this.entries) {
+      for (const match of this.prefetchedEntries) {
         if (
           match.iri.value.toLowerCase() === this.iriFromURL.toLowerCase() ||
           match.prefixed.toLowerCase() === this.iriFromURL.toLowerCase()
@@ -140,13 +149,6 @@ export default {
       }
       if (found) {
         return
-      }
-
-      this.iriFromURL = this.$route.path + this.$route.hash
-      if (this.iriFromURL.startsWith('/')) {
-        // this.$route.path often starts with `/`, strip it since
-        // no IRI nor any prefix start with /
-        this.iriFromURL = this.iriFromURL.substr(1)
       }
 
       await this.doSearch(this.iriFromURL)
