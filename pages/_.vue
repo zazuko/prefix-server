@@ -9,15 +9,13 @@ export default {
   components: {
     Search
   },
-  asyncData({ $axios, params }) {
+  async asyncData({ $axios, params }) {
+    let entries = []
     if (params.pathMatch) {
-      return $axios.get(`/api/search?q=${params.pathMatch}`)
-        .then(res => ({
-          prefetchedEntries: res.data
-        }))
+      entries = await $axios.$get(`/api/search?q=${params.pathMatch}`)
     }
     return {
-      prefetchedEntries: []
+      prefetchedEntries: entries
     }
   }
 }
