@@ -76,14 +76,11 @@
           :model="model"
         />
         <v-btn
-          :disabled="!model"
+          v-show="model"
           color="grey darken-3"
           @click="model = ''"
         >
           Clear
-          <v-icon right>
-            mdi-close-circle
-          </v-icon>
         </v-btn>
       </div>
     </div>
@@ -103,15 +100,23 @@ export default {
     MainResults,
     DetailResults
   },
-  data: () => ({
-    entries: [],
-    isLoading: false,
-    model: null,
-    search: null,
-    iriFromURL: '',
-    copySuccess: false,
-    copyFailure: false
-  }),
+  props: {
+    prefetchedEntries: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      entries: this.prefetchedEntries,
+      isLoading: false,
+      model: null,
+      search: null,
+      iriFromURL: '',
+      copySuccess: false,
+      copyFailure: false
+    }
+  },
   computed: {
     items() {
       return this.entries
@@ -125,15 +130,48 @@ export default {
         this.$router.push('/')
       }
     },
-    '$route.path'(newPath) {
-      this.pathChanged()
-    },
     search: _debounce(async function (val) {
       await this.doSearch(val)
     }, 250)
   },
   mounted() {
-    this.pathChanged()
+    if (this.prefetchedEntries.length) {
+      let found = false
+      // find the best match from the search results
+      for (const match of this.entries) {
+        // ideally a case sensitive exact match
+        if (
+          match.iri.value === this.iriFromURL ||
+          match.prefixed === this.iriFromURL
+        ) {
+          this.model = match
+          this.entries = []
+          found = true
+          break
+        }
+      }
+      if (found) {
+        return
+      }
+      // otherwise a case insensitive one
+      for (const match of this.entries) {
+        if (
+          match.iri.value.toLowerCase() === this.iriFromURL.toLowerCase() ||
+          match.prefixed.toLowerCase() === this.iriFromURL.toLowerCase()
+        ) {
+          this.model = match
+          this.entries = []
+          found = true
+          break
+        }
+      }
+      if (found) {
+        return
+      }
+      // last resort: use one the API ranked first
+      this.model = this.entries[0]
+      this.entries = []
+    }
   },
   methods: {
     async doSearch(val) {
@@ -160,64 +198,9 @@ export default {
         .then((res) => {
           this.entries = res
         })
-        // .catch((err) => {
-        //   console.log(err)
-        // })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    pathChanged() {
-      this.iriFromURL = this.$route.path + this.$route.hash
-      if (this.iriFromURL.startsWith('/')) {
-        // this.$route.path often starts with `/`, strip it since
-        // no IRI nor any prefix start with /
-        this.iriFromURL = this.iriFromURL.substr(1)
-      }
-      // http://example.com/http://schema.org will become
-      // http://example.com/http:/schema.org
-      // for this reason we need to replace http:/s with http://s
-      this.iriFromURL = this.iriFromURL.replace(/^(https?:\/)([^/])/, (match, p1, p2) => `${p1}/${p2}`)
-
-      this.doSearch(this.iriFromURL).then(() => {
-        if (this.entries.length) {
-          let found = false
-          // find the best match from the search results
-          for (const match of this.entries) {
-            // ideally a case sensitive exact match
-            if (
-              match.iri.value === this.iriFromURL ||
-              match.prefixed === this.iriFromURL
-            ) {
-              this.model = match
-              this.entries = []
-              found = true
-              break
-            }
-          }
-          if (found) {
-            return
-          }
-          // otherwise a case insensitive one
-          for (const match of this.entries) {
-            if (
-              match.iri.value.toLowerCase() === this.iriFromURL.toLowerCase() ||
-              match.prefixed.toLowerCase() === this.iriFromURL.toLowerCase()
-            ) {
-              this.model = match
-              this.entries = []
-              found = true
-              break
-            }
-          }
-          if (found) {
-            return
-          }
-          // last resort: use one the API ranked first
-          this.model = this.entries[0]
-          this.entries = []
-        }
-      })
     },
     clipboardSuccessHandler() {
       this.copySuccess = true
