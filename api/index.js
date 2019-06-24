@@ -1,6 +1,6 @@
 const express = require('express')
 const Fuse = require('fuse.js')
-const { vocabularies, shrink, prefixes } = require('@zazuko/rdf-vocabularies')
+const { vocabularies, shrink, expand, prefixes } = require('@zazuko/rdf-vocabularies')
 const debug = require('debug')('prefix-server')
 
 const app = express()
@@ -31,6 +31,17 @@ const shrinkAndCache = (term) => {
   const shrunk = shrink(term.value) || term.value
   shrunkCache[term.value] = shrunk
   return shrunk
+}
+
+const expandedCache = {}
+const expandAndCache = (term) => {
+  const cached = expandedCache[term.value]
+  if (cached) {
+    return cached
+  }
+  const expanded = expand(term.value) || term.value
+  expandedCache[term.value] = expanded
+  return expanded
 }
 
 let loadedPrefixesCount = 0
@@ -99,8 +110,46 @@ router.get('/search', (req, res) => {
   res.json([])
 })
 
+router.get('/shrink', (req, res) => {
+  const iri = req.query.q
+
+  if (iri) {
+    const attempt = shrinkAndCache({ value: iri })
+    if (attempt !== iri) {
+      return res.json({
+        success: true,
+        value: attempt
+      })
+    }
+    return res.status(404).json({
+      success: false
+    })
+  }
+
+  res.status(400).json({ help: '/api/shrink?q=…' })
+})
+
+router.get('/expand', (req, res) => {
+  const prefixed = req.query.q
+
+  if (prefixed) {
+    const attempt = expandAndCache({ value: prefixed })
+    if (attempt !== prefixed) {
+      return res.json({
+        success: true,
+        value: attempt
+      })
+    }
+    return res.status(404).json({
+      success: false
+    })
+  }
+
+  res.status(400).json({ help: '/api/expand?q=…' })
+})
+
 router.get('/health', (req, res) => {
-  res.send('ok')
+  res.json('ok')
 })
 
 app.use(router)
