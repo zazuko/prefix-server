@@ -45,10 +45,7 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/vuetify',
-    // Doc: https://axios.nuxtjs.org/usage
-    // '@nuxtjs/pwa',
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Axios module configuration
