@@ -54,7 +54,7 @@
         <v-btn
           v-show="model"
           color="grey darken-3"
-          @click="model = ''"
+          @click="clear"
         >
           Clear
         </v-btn>
@@ -96,17 +96,18 @@ export default {
   },
   watch: {
     model() {
-      if (this.model) {
+      // only redirect to result when user search something, otherwise people hitting
+      // http://localhost:3000/http://www.w3.org/ns/rdfa#PrefixOrTermMapping
+      // will also be redirected
+      if (this.model && this.search) {
         this.$router.push(`/${this.model.prefixed}`)
-      } else {
-        this.$router.push('/')
       }
     },
     search: _debounce(async function (val) {
       await this.doSearch(val)
     }, 250)
   },
-  mounted() {
+  async mounted() {
     if (this.prefetchedEntries.length) {
       let found = false
       // find the best match from the search results
@@ -140,9 +141,19 @@ export default {
       if (found) {
         return
       }
-      // last resort: use one the API ranked first
-      this.model = this.entries[0]
-      this.entries = []
+
+      this.iriFromURL = this.$route.path + this.$route.hash
+      if (this.iriFromURL.startsWith('/')) {
+        // this.$route.path often starts with `/`, strip it since
+        // no IRI nor any prefix start with /
+        this.iriFromURL = this.iriFromURL.substr(1)
+      }
+
+      await this.doSearch(this.iriFromURL)
+      if (this.entries.length) {
+        this.model = this.entries[0]
+        this.entries = []
+      }
     }
   },
   methods: {
@@ -165,14 +176,15 @@ export default {
       this.loadingVal = val.toLowerCase()
 
       // Lazily load input items
-      await fetch(`/api/search?q=${val}`)
-        .then(res => res.json())
-        .then((res) => {
-          this.entries = res
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
+      try {
+        this.entries = await this.$axios.$get(`/api/search?q=${val}`)
+      } catch (err) {
+        console.error(err)
+      }
+      this.isLoading = false
+    },
+    clear() {
+      this.$router.push('/')
     }
   }
 }
