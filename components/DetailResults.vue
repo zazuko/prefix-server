@@ -2,24 +2,18 @@
   <section class="grid">
     <template v-for="predicate in importantPredicates">
       <template v-if="prefixedPredicates[predicate]">
-        <div :key="'a' + predicate" class="item">
-          {{ predicate }}
-        </div>
+        <predicate :key="'a' + predicate" :term="predicate" />
         <terms :key="'b' + predicate" :terms="prefixedPredicates[predicate]" />
       </template>
     </template>
 
     <template v-for="item in sortedPrefixedPredicates">
-      <div :key="'a' + item.predicate" class="item">
-        {{ item.predicate }}
-      </div>
+      <predicate :key="'a' + item.predicate" :term="item.predicate" />
       <terms :key="'b' + item.predicate" :terms="item.values" />
     </template>
 
     <template v-for="item in sortedIriPredicates">
-      <div :key="'a' + item.predicate" class="item">
-        {{ item.predicate }}
-      </div>
+      <predicate :key="'a' + item.predicate" :term="item.predicate" />
       <terms :key="'b' + item.predicate" :terms="item.values" />
     </template>
   </section>
@@ -27,6 +21,7 @@
 
 <script>
 import _sortBy from 'lodash/sortBy'
+import Predicate from '@/components/Predicate'
 import Terms from '@/components/Terms'
 
 const importantPredicates = [
@@ -49,6 +44,7 @@ const importantPredicates = [
 export default {
   name: 'DetailResults',
   components: {
+    Predicate,
     Terms
   },
   props: {
