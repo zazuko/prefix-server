@@ -17,11 +17,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Playfair+Display:400,700|Roboto:300,600'
+        href: 'https://fonts.googleapis.com/css?family=Playfair+Display:400,700|Roboto:300,400,500,700|Material+Icons'
       }
     ]
   },
@@ -48,10 +44,10 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
     '@nuxtjs/vuetify',
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
     '@nuxtjs/eslint-module'
   ],
   /*
