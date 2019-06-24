@@ -12,7 +12,7 @@
               </h1>
             </div>
           </div>
-          <div class="flex-item">
+          <div class="flex-item" data-app>
             <v-autocomplete
               v-model="model"
               :items="items"
