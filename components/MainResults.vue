@@ -6,7 +6,7 @@
       dismissible
       transition="scale-transition"
     >
-      Copied!
+      Copied <code>{{ model.iri.value }}</code>!
     </v-alert>
     <v-alert
       :value="copyFailure"
@@ -85,3 +85,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-alert {
+  &.success {
+    background-color: green;
+  }
+  &.error {
+    background-color: red;
+  }
+}
+</style>
