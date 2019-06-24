@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="term">
     <div v-if="isExternalIRI">
       <a
         :href="term.objectIRI"
@@ -51,3 +51,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.term {
+  color: rgba(0,0,0,0.60);
+  letter-spacing: 0.25px;
+  text-align: justify;
+  line-height: 20px;
+
+  .language {
+    color: #FF441C;
+  }
+  a {
+    color: #FF441C;
+  }
+}
+</style>
