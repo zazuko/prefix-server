@@ -66,15 +66,6 @@ export default {
       sortedPrefixedPredicates: []
     }
   },
-  computed: {
-    fields() {
-      if (!this.model) {
-        return []
-      }
-
-      return []
-    }
-  },
   mounted() {
     [this.prefixedPredicates, this.iriPredicates] = this.model.parts
       .reduce(([prefixedPredicates, iriPredicates], field) => {
