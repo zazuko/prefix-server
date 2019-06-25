@@ -1,47 +1,30 @@
 <template>
   <div class="main-container">
     <div class="home-header">
-      <div class="layout-width">
-        <div class="search-field-container flex-container">
-          <div class="flex-item title">
-            <div>
-              <h1>
-                Resolve
-                <br>
-                RDF Terms
-              </h1>
-            </div>
+      <div class="search-field-container flex-container">
+        <div class="flex-item title">
+          <div>
+            <h1>
+              Resolve
+              <br>
+              RDF Terms
+            </h1>
           </div>
-          <div class="flex-item" data-app>
-            <v-autocomplete
-              v-model="model"
-              :items="items"
-              :loading="isLoading"
-              :search-input.sync="search"
-              autofocus
-              color="white"
-              hide-no-data
-              hide-selected
-              item-text="itemText"
-              item-value="iri.value"
-              no-data-text="Nothing found :("
-              no-filter
-              placeholder="Start typing to Search"
-              return-object />
+        </div>
+        <div class="flex-item">
+          <input placeholder="Start typing to search…" />
+        </div>
+        <div class="flex-item desc">
+          <div>
+            Data based on <span>@zazuko/rdf-vocabularies</span>
           </div>
-          <div class="flex-item desc">
-            <p>
-              Data based on <strong>@zazuko/rdf-vocabularies</strong><span class="tail" />
-            </p>
-          </div>
+          <div class="tail"></div>
         </div>
       </div>
     </div>
 
     <div v-if="model" class="default-content main-results">
-      <div class="layout-width">
-        <main-results :model="model" />
-      </div>
+      <main-results :model="model" />
     </div>
 
     <div class="default-content search-results">
@@ -191,10 +174,6 @@ export default {
 </script>
 
 <style>
-.v-input.v-text-field input {
-  background: #FFFFFF;
-  border: 1px solid #979797;
-}
 .v-menu {
   position: fixed;
   left: 0;
