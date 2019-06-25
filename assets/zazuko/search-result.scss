@@ -49,21 +49,40 @@
 .search-results {
   background-color: $bck-light;
   border-top: 1px solid $line-light;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 
   .grid {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-gap: 0px;
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      border-bottom: 1px solid $line-light;
 
-    div.item {
-      padding: 10px;
-      border-top: 1px solid #dfdfdf;
-      border-left: 1px solid #dfdfdf;
-      &:nth-child(-n+2) {
-        border-top: none;
+      .predicate {
+        padding: 10px 0;
       }
-      &:nth-child(odd) {
-        border-left: none;
+
+      .terms {
+        flex: 0 1 720px;
+        border-left: 1px solid $line-light;
+        margin-left: auto;
+
+        .term {
+          margin-top: -1px;
+          border-top: 1px solid $line-light;
+          padding: 10px 0 10px 20px;
+        }
+
+        @media screen and (max-width: 720px + 50px) {
+          border-left: 0;
+          border-bottom: 1px solid $line-light;
+
+          .term {
+            padding: 10px 0;
+          }
+        }
       }
     }
   }
