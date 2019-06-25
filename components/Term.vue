@@ -1,24 +1,27 @@
 <template>
   <div class="term">
-    <div v-if="isExternalIRI">
-      <a
-        :href="term.objectIRI"
-        target="_blank">
-        {{ term.object }}
-      </a>
+    <div v-if="language" class="language">
+      {{ language }}
     </div>
-    <router-link
-      v-else-if="term.objectIRI"
-      :to="{ path: `/${term.object}` }">
-      {{ term.object }}
-    </router-link>
-    <div v-else-if="language">
-      <span class="language">{{ language }}</span>
-      <br>
-      {{ term.object.value }}
-    </div>
-    <div v-else>
-      {{ term.object }}
+
+    <div class="value">
+      <div v-if="isExternalIRI">
+        <a
+          :href="value"
+          target="_blank"
+        >
+          {{ value }}
+        </a>
+      </div>
+      <router-link
+        v-else-if="term.objectIRI"
+        :to="{ path: `/${value}` }"
+      >
+        {{ value }}
+      </router-link>
+      <div v-else>
+        {{ value }}
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +48,13 @@ export default {
         return `lang:${object.language}`
       }
       return false
+    },
+    value() {
+      const object = this.term.object
+      if (typeof object === 'object') {
+        return object.value
+      }
+      return object
     }
   }
 }

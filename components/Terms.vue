@@ -1,5 +1,5 @@
 <template>
-  <div class="item">
+  <div class="terms">
     <term v-for="(term, i) in terms" :key="i" :term="term" />
   </div>
 </template>

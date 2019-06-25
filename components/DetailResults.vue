@@ -2,19 +2,25 @@
   <section class="grid">
     <template v-for="predicate in importantPredicates">
       <template v-if="prefixedPredicates[predicate]">
-        <predicate :key="'a' + predicate" :term="predicate" />
-        <terms :key="'b' + predicate" :terms="prefixedPredicates[predicate]" />
+        <div :key="predicate" class="row">
+          <predicate :term="predicate" />
+          <terms :terms="prefixedPredicates[predicate]" />
+        </div>
       </template>
     </template>
 
     <template v-for="item in sortedPrefixedPredicates">
-      <predicate :key="'a' + item.predicate" :term="item.predicate" />
-      <terms :key="'b' + item.predicate" :terms="item.values" />
+      <div :key="item.predicate" class="row">
+        <predicate :term="item.predicate" />
+        <terms :terms="item.values" />
+      </div>
     </template>
 
     <template v-for="item in sortedIriPredicates">
-      <predicate :key="'a' + item.predicate" :term="item.predicate" />
-      <terms :key="'b' + item.predicate" :terms="item.values" />
+      <div :key="item.predicate" class="row">
+        <predicate :term="item.predicate" />
+        <terms :terms="item.values" />
+      </div>
     </template>
   </section>
 </template>
