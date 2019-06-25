@@ -97,7 +97,9 @@ const expandAndCache = (term) => {
         Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB })
 
         termToAdd.itemText = `${termToAdd.prefixed} ― ${termToAdd.iri.value}`
-        obj.push(termToAdd)
+        if (!termToAdd.prefixed.endsWith(':')) {
+          obj.push(termToAdd)
+        }
       }
       return obj
     }, [])
