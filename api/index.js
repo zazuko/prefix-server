@@ -42,7 +42,8 @@ const expandAndCache = (term) => {
   try {
     expanded = expand(term.value) || term.value
     expandedCache[term.value] = expanded
-  } catch (err) {
+  }
+  catch (err) {
     // TODO: track what people are failing to expand?
   }
   return expanded
@@ -85,7 +86,8 @@ const expandAndCache = (term) => {
       const index = obj.findIndex(x => x.iri.equals(quad.subject))
       if (index !== -1) {
         obj[index].parts.push(part)
-      } else {
+      }
+      else {
         const termToAdd = {
           iri: quad.subject,
           prefixed: shrinkAndCache(quad.subject),

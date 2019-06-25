@@ -2,8 +2,7 @@
   <button
     v-clipboard="() => toCopy"
     v-clipboard:success="clipboardSuccessHandler"
-    v-clipboard:error="clipboardErrorHandler"
-  >
+    v-clipboard:error="clipboardErrorHandler">
     Copy
   </button>
 </template>
@@ -19,10 +18,10 @@ export default {
     }
   },
   methods: {
-    clipboardSuccessHandler() {
+    clipboardSuccessHandler () {
       this.$emit('success')
     },
-    clipboardErrorHandler() {
+    clipboardErrorHandler () {
       this.$emit('error')
     }
   }

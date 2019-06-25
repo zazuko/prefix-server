@@ -9,7 +9,7 @@ export default {
   components: {
     Search
   },
-  async asyncData({ $axios, params, error }) {
+  async asyncData ({ $axios, params, error }) {
     let entries = []
     if (params.pathMatch) {
       const val = `${params.pathMatch}`.replace(/#/g, '---hash---')
@@ -22,7 +22,7 @@ export default {
       prefetchedEntries: entries
     }
   },
-  validate({ params }) {
+  validate ({ params }) {
     if (params.pathMatch && params.pathMatch.endsWith(':')) {
       return false
     }

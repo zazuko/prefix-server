@@ -86,3 +86,6 @@ sw.*
 
 # Mac OSX
 .DS_Store
+
+# Cypress videos
+/test/e2e/videos/*.mp4

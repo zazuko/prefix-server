@@ -20,8 +20,8 @@
 
 <script>
 export default {
-  async asyncData({ $axios }) {
-    const summary = await $axios.$get(`/api/v1/summary`)
+  async asyncData ({ $axios }) {
+    const summary = await $axios.$get('/api/v1/summary')
     return {
       summary
     }

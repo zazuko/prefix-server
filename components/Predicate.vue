@@ -3,8 +3,7 @@
     <span v-if="isIRI" class="iri">
       <a
         :href="term"
-        target="_blank"
-      >
+        target="_blank">
         {{ term }}
       </a>
     </span>
@@ -31,13 +30,13 @@ export default {
     }
   },
   computed: {
-    isIRI() {
+    isIRI () {
       return this.term.includes('://')
     },
-    prefixSplitA() {
+    prefixSplitA () {
       return this.term.split(':')[0] + ':'
     },
-    prefixSplitB() {
+    prefixSplitB () {
       return this.term.split(':')[1]
     }
   }
