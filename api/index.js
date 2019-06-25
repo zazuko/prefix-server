@@ -21,7 +21,6 @@ const options = {
   }]
 }
 
-let searchArray
 const shrunkCache = {}
 const shrinkAndCache = (term) => {
   const cached = shrunkCache[term.value]
@@ -39,13 +38,21 @@ const expandAndCache = (term) => {
   if (cached) {
     return cached
   }
-  const expanded = expand(term.value) || term.value
-  expandedCache[term.value] = expanded
+  let expanded = term.value
+  try {
+    expanded = expand(term.value) || term.value
+    expandedCache[term.value] = expanded
+  } catch (err) {
+    // TODO: track what people are trying to expand?
+  }
   return expanded
 }
 
+let summary = []
+let searchArray
 let loadedPrefixesCount = 0
 let loadedTermsCount = 0
+
 vocabularies()
   .then((datasets) => {
     const now = Date.now()
@@ -56,6 +63,10 @@ vocabularies()
           loadedPrefixesCount += 1
           loadedTermsCount += filtered.length
         }
+        summary.push({
+          prefix,
+          terms: filtered.length
+        })
         return acc.concat(filtered)
       }, [])
       .reduce((obj, quad) => {
@@ -110,10 +121,17 @@ router.get('/search', (req, res) => {
   res.json([])
 })
 
+router.get('/summary', (req, res) => {
+  res.json(summary)
+})
+
 router.get('/shrink', (req, res) => {
-  const iri = req.query.q
+  let iri = req.query.q
 
   if (iri) {
+    if (iri.includes('%3A%2F%2F')) {
+      iri = decodeURIComponent(iri)
+    }
     const attempt = shrinkAndCache({ value: iri })
     if (attempt !== iri) {
       return res.json({
@@ -126,7 +144,7 @@ router.get('/shrink', (req, res) => {
     })
   }
 
-  res.status(400).json({ help: '/api/shrink?q=…' })
+  res.status(400).json({ help: '/api/v1/shrink?q=…' })
 })
 
 router.get('/expand', (req, res) => {
@@ -145,7 +163,7 @@ router.get('/expand', (req, res) => {
     })
   }
 
-  res.status(400).json({ help: '/api/expand?q=…' })
+  res.status(400).json({ help: '/api/v1/expand?q=…' })
 })
 
 router.get('/health', (req, res) => {
@@ -154,4 +172,4 @@ router.get('/health', (req, res) => {
 
 app.use(router)
 
-module.exports = { path: '/api', handler: app }
+module.exports = { path: '/api/v1', handler: app }

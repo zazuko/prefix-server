@@ -13,7 +13,7 @@ export default {
     let entries = []
     if (params.pathMatch) {
       const val = `${params.pathMatch}`.replace(/#/g, '---hash---')
-      entries = await $axios.$get(`/api/search?q=${val}`)
+      entries = await $axios.$get(`/api/v1/search?q=${val}`)
       if (!entries.length) {
         return error({ statusCode: 404, message: 'No Result' })
       }

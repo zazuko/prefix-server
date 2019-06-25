@@ -179,7 +179,7 @@ export default {
 
       // Lazily load input items
       try {
-        this.entries = await this.$axios.$get(`/api/search?q=${val}`)
+        this.entries = await this.$axios.$get(`/api/v1/search?q=${val}`)
       } catch (err) {
         console.error(err)
       }
