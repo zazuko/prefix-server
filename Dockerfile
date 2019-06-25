@@ -24,4 +24,4 @@ ENTRYPOINT []
 CMD ["npm", "run", "start"]
 
 EXPOSE 3000
-HEALTHCHECK CMD wget -q -O- http://localhost:3000/api/health
+HEALTHCHECK CMD wget -q -O- http://localhost:3000/api/v1/health
