@@ -53,7 +53,7 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       // important predicates, manually selected+sorted
       importantPredicates,
@@ -66,7 +66,7 @@ export default {
       sortedPrefixedPredicates: []
     }
   },
-  mounted() {
+  mounted () {
     [this.prefixedPredicates, this.iriPredicates] = this.model.parts
       .reduce(([prefixedPredicates, iriPredicates], field) => {
         if (field.predicate !== field.predicateIRI) {
@@ -74,7 +74,8 @@ export default {
             prefixedPredicates[field.predicate] = []
           }
           prefixedPredicates[field.predicate].push(field)
-        } else {
+        }
+        else {
           if (!iriPredicates[field.predicate]) {
             iriPredicates[field.predicate] = []
           }

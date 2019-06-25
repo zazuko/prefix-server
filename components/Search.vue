@@ -27,8 +27,7 @@
               no-data-text="Nothing found :("
               no-filter
               placeholder="Start typing to Search"
-              return-object
-            />
+              return-object />
           </div>
           <div class="flex-item desc">
             <p>
@@ -49,13 +48,11 @@
       <div class="layout-width">
         <detail-results
           v-if="model"
-          :model="model"
-        />
+          :model="model" />
         <v-btn
           v-show="model"
           color="grey darken-3"
-          @click="clear"
-        >
+          @click="clear">
           Clear
         </v-btn>
       </div>
@@ -80,7 +77,7 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       entries: this.prefetchedEntries,
       isLoading: false,
@@ -90,12 +87,12 @@ export default {
     }
   },
   computed: {
-    items() {
+    items () {
       return this.entries
     }
   },
   watch: {
-    model() {
+    model () {
       // only redirect to result when user search something, otherwise people hitting
       // http://localhost:3000/http://www.w3.org/ns/rdfa#PrefixOrTermMapping
       // will also be redirected
@@ -107,7 +104,7 @@ export default {
       await this.doSearch(val)
     }, 250)
   },
-  async mounted() {
+  async mounted () {
     this.iriFromURL = this.$route.path + this.$route.hash
     if (this.iriFromURL.startsWith('/')) {
       // this.$route.path often starts with `/`, strip it since
@@ -159,7 +156,7 @@ export default {
     }
   },
   methods: {
-    async doSearch(val) {
+    async doSearch (val) {
       val = val || ''
       val = val.replace(/#/g, '---hash---')
       if (val.toLowerCase() === this.loadingVal) {
@@ -180,12 +177,13 @@ export default {
       // Lazily load input items
       try {
         this.entries = await this.$axios.$get(`/api/v1/search?q=${val}`)
-      } catch (err) {
+      }
+      catch (err) {
         console.error(err)
       }
       this.isLoading = false
     },
-    clear() {
+    clear () {
       this.$router.push('/')
     }
   }

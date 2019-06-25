@@ -4,16 +4,14 @@
       :value="copySuccess"
       type="success"
       dismissible
-      transition="scale-transition"
-    >
+      transition="scale-transition">
       Copied <code>{{ model.iri.value }}</code>!
     </v-alert>
     <v-alert
       :value="copyFailure"
       type="error"
       dismissible
-      transition="scale-transition"
-    >
+      transition="scale-transition">
       Could not copy to clipboard, sorry!
     </v-alert>
     <div class="big">
@@ -26,8 +24,7 @@
           v-if="model"
           :to-copy="model.iri.value"
           @success="clipboardSuccessHandler"
-          @error="clipboardErrorHandler"
-        />
+          @error="clipboardErrorHandler" />
         <span class="partA">{{ model.iriSplitA }}</span>
         <span class="partB">{{ model.iriSplitB }}</span>
       </p>
@@ -63,20 +60,20 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       copySuccess: false,
       copyFailure: false
     }
   },
   methods: {
-    clipboardSuccessHandler() {
+    clipboardSuccessHandler () {
       this.copySuccess = true
       setTimeout(() => {
         this.copySuccess = false
       }, 2000)
     },
-    clipboardErrorHandler() {
+    clipboardErrorHandler () {
       this.copyFailure = true
       setTimeout(() => {
         this.copyFailure = false

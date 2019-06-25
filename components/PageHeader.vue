@@ -15,5 +15,6 @@
 
 <script>
 export default {
+  name: 'PageHader'
 }
 </script>
