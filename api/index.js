@@ -112,7 +112,7 @@ const expandAndCache = (term) => {
       // possible optimization: find the prefix by finding a colon in the search string,
       // then scope the search to this prefix only
       const fuse = new Fuse(searchArray, options)
-      const searchResult = fuse.search(searchVal).slice(0, 25)
+      const searchResult = fuse.search(searchVal).slice(0, 10)
       res.json(searchResult)
       return
     }
