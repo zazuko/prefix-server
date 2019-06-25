@@ -1,9 +1,14 @@
 .main-results {
-  margin: 30px 0;
+  padding: 32px 0;
   background-color: white;
+  display: flex;
+
   section {
-    margin: 0 240px;
+    margin: 0 auto;
+    flex: 0 0 460px;
+    white-space: nowrap;
   }
+
   .big {
     .partA {
       color: #5D5D5D;
@@ -13,19 +18,30 @@
       margin-left: -4px;
     }
     font-size: 20px;
+    line-height: 28px;
     text-align: right;
     font-weight: 500;
   }
 
   .small {
-    margin-top: 30px;
+    margin: 38px -8px 0;
     display: flex;
-    h3 {
-      font-weight: 400;
-      margin-bottom: 6px;
-    }
-    div {
-      flex: 1;
+    justify-content: space-between;
+
+    & > div {
+      margin: 0 8px;
+      h3 {
+        color: #212121;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 22px;
+      }
+
+      p {
+        color: $color-secondary;
+        font-weight: 400;
+        font-size: 16px;
+      }
     }
   }
 }

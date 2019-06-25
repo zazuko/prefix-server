@@ -20,11 +20,14 @@
         <span class="partB">{{ model.prefixedSplitB }}</span>
       </p>
       <p>
+        <!--
         <clipboard
           v-if="model"
           :to-copy="model.iri.value"
           @success="clipboardSuccessHandler"
-          @error="clipboardErrorHandler" />
+          @error="clipboardErrorHandler"
+        />
+        -->
         <span class="partA">{{ model.iriSplitA }}</span>
         <span class="partB">{{ model.iriSplitB }}</span>
       </p>
@@ -34,13 +37,17 @@
         <h3>
           Namespace
         </h3>
-        {{ model.iriSplitA }}
+        <p>
+          {{ model.iriSplitA }}
+        </p>
       </div>
       <div>
         <h3>
           Recommended prefix
         </h3>
-        {{ model.prefixedSplitA }}:
+        <p>
+          {{ model.prefixedSplitA }}:
+        </p>
       </div>
     </div>
   </section>

@@ -2,8 +2,9 @@
   border-bottom: 1px solid $line-light;
 
   .search-field-container {
-    margin: 0 240px;
-    padding: 40px 0;
+    max-width: 460px;
+    padding: 64px 0;
+    margin: auto;
   }
   .flex-container {
     display: flex;
@@ -16,32 +17,48 @@
       min-height: 0;
     }
 
+    margin: 8px 0;
+
     &.desc {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 0;
 
       @media screen and (max-width: $mq-s) {
         padding: 40px 0 0 0;
       }
 
-      p {
-        width: 100%;
-        align-self: flex-end;
-        font-size: $fs-title;
-        line-height: $fs-title + 4;
-        padding-bottom: 5px;
+      font-size: 20px;
+      line-height: 24px;
+      padding-bottom: 5px;
 
-        .tail {
-          margin-bottom: -1px;
-          display: inline-block;
-          width: 18px; height: 18px;
-          margin-left: 10px;
-          background: $color-secondary;
+      span {
+        font-family: monospace;
+      }
 
-          @media screen and (max-width: $mq-s) {
-            display: none;
-          }
+      .tail {
+        width: 18px; height: 18px;
+        background: $color-secondary;
+
+        @media screen and (max-width: $mq-s) {
+          display: none;
         }
+      }
+    }
+
+    input {
+      background-color: #FFF;
+      border: 1px solid #979797;
+      line-height: 46px;
+      padding: 0 12px;
+      width: 100%;
+      font-size: 16px;
+
+      &:focus {
+        outline: 0;
+        border-color: $color-secondary;
+        box-shadow: inset 0 0 0 2px $color-secondary;
       }
     }
 

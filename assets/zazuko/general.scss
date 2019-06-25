@@ -1,5 +1,5 @@
 *::selection {
-  background: $color-primary;
+  background: $color-secondary;
   color: white;
 }
 
@@ -15,11 +15,7 @@ body, button, input, textarea {
 html, body {
   display: block;
   margin: 0; padding: 0;
-  width: 100%; height: 100%;
-}
-
-body {
-  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 .layout-width {
