@@ -7,17 +7,23 @@ const app = express()
 const router = express.Router()
 
 const options = {
+  shouldSort: true,
   treshold: 0.2,
   distance: 40,
+  minMatchCharLength: 2,
+  maxPatternLength: 40,
   keys: [{
     name: 'prefixed',
     weight: 6 / 15
   }, {
-    name: 'parts.object.value',
+    name: 'label',
     weight: 4 / 15
   }, {
+    name: 'parts.object.value',
+    weight: 2 / 15
+  }, {
     name: 'iri.value',
-    weight: 5 / 15
+    weight: 3 / 15
   }]
 }
 
@@ -98,13 +104,48 @@ const expandAndCache = (term) => {
         const iriSplitA = termToAdd.iri.value.split(prefixedSplitB)[0]
         Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB })
 
-        termToAdd.itemText = `${termToAdd.prefixed} ― ${termToAdd.iri.value}`
         if (!termToAdd.prefixed.endsWith(':')) {
           obj.push(termToAdd)
         }
       }
       return obj
     }, [])
+    .map((term) => {
+      const labels = term.parts.reduce((labels, part) => {
+        if (part.predicateIRI === 'http://www.w3.org/2000/01/rdf-schema#label') {
+          const language = part.object.language
+          if (typeof language === 'string') {
+            labels[language] = part.object.value
+          }
+          else {
+            if (!labels['no language']) {
+              labels['no language'] = []
+            }
+            labels['no language'].push(part.object.value)
+          }
+        }
+        return labels
+      }, {})
+      if (labels.en) {
+        term.label = labels.en
+      }
+      else if (labels['']) {
+        term.label = labels['']
+      }
+      else if (labels['no language']) {
+        term.label = labels['no language'].join('\n')
+      }
+
+      term.itemText = term.prefixed
+      if (term.label) {
+        // ―
+        term.itemText += ` (${term.label})`
+      }
+
+      return term
+    })
+
+  const fuse = new Fuse(searchArray, options)
   debug(`API ready in ${Date.now() - now}ms, loaded ${loadedPrefixesCount} prefixes for a total of ${loadedTermsCount} triples`)
 
   router.get('/search', (req, res) => {
@@ -113,7 +154,6 @@ const expandAndCache = (term) => {
     if (searchVal) {
       // possible optimization: find the prefix by finding a colon in the search string,
       // then scope the search to this prefix only
-      const fuse = new Fuse(searchArray, options)
       const searchResult = fuse.search(searchVal).slice(0, 10)
       res.json(searchResult)
       return
