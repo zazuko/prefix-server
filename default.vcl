@@ -22,7 +22,12 @@ sub vcl_recv {
     set req.http.X-Forwarded-Port = "80";
     set req.backend_hint = express;
 
-    // pass through URLs ending with ?nocache
+    # don't cache /api/health
+    if (req.url ~ "^/api/v1/health") {
+        return (pass);
+    }
+
+    # pass through URLs ending with ?nocache
     if (req.url ~ "\?nocache$") {
         set req.url = regsub(req.url, "\?$", "");
         return (pass);
