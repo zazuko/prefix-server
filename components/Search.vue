@@ -12,6 +12,7 @@
           </div>
         </div>
         <div class="flex-item">
+          <!-- TODO: autocomplete -->
           <input placeholder="Start typing to search…" />
         </div>
         <div class="flex-item desc">
@@ -23,22 +24,15 @@
       </div>
     </div>
 
-    <div v-if="model" class="default-content main-results">
+    <div v-if="model" class="main-results">
       <main-results :model="model" />
     </div>
 
-    <div class="default-content search-results">
-      <div class="layout-width">
-        <detail-results
-          v-if="model"
-          :model="model" />
-        <v-btn
-          v-show="model"
-          color="grey darken-3"
-          @click="clear">
-          Clear
-        </v-btn>
-      </div>
+    <div class="search-results">
+      <detail-results
+        v-if="model"
+        :model="model"
+      />
     </div>
   </div>
 </template>

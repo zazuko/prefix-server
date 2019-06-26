@@ -1,35 +1,43 @@
 .main-results {
   padding: 32px 0;
   background-color: white;
-  display: flex;
+  border-top: 1px solid $line-light;
+  border-bottom: 1px solid $line-light;
+  align-self: stretch;
 
+  // TODO(sandhose): this is confusing, but this part ensures it scrolls and
+  // works correctly on mobile
+  max-width: 100%;
+  overflow-x: auto;
+  text-align: center;
   section {
-    margin: 0 auto;
-    flex: 0 0 460px;
-    white-space: nowrap;
+    text-align: initial;
+    display: inline-block;
   }
 
   .big {
-    .partA {
+    white-space: nowrap;
+    margin: 0 20px;
+    cursor: pointer;
+
+    .line > span {
       color: #5D5D5D;
     }
-    .partB {
-      color: black;
-      margin-left: -4px;
-    }
+
+    text-align: right;
     font-size: 20px;
     line-height: 28px;
-    text-align: right;
     font-weight: 500;
   }
 
   .small {
-    margin: 38px -8px 0;
+    margin: 28px 10px 0;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 100vw;
 
     & > div {
-      margin: 0 8px;
+      margin: 5px 10px;
       h3 {
         color: #212121;
         font-size: 16px;
@@ -47,11 +55,13 @@
 }
 
 .search-results {
+  @include container;
+
   background-color: $bck-light;
-  border-top: 1px solid $line-light;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
+  margin-bottom: 40px;
 
   .grid {
     .row {
@@ -61,7 +71,8 @@
       border-bottom: 1px solid $line-light;
 
       .predicate {
-        padding: 10px 0;
+        padding: 10px 10px 10px 0;
+        word-break: break-all;
       }
 
       .terms {
@@ -75,7 +86,16 @@
           padding: 10px 0 10px 20px;
         }
 
-        @media screen and (max-width: 720px + 50px) {
+        @media screen and (max-width: $mq-m) {
+          flex-basis: 600px;
+        }
+
+        @media screen and (max-width: $mq-s) {
+          flex-basis: 500px;
+        }
+
+        @media screen and (max-width: 500px + 55px) {
+          flex-basis: 100%;
           border-left: 0;
           border-bottom: 1px solid $line-light;
 
