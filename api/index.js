@@ -62,6 +62,7 @@ const expandAndCache = (term) => {
 
   const datasets = await vocabularies()
   const now = Date.now()
+  const searchArrayByPrefix = {}
   const searchArray = Object.entries(datasets)
     .reduce((acc, [prefix, dataset]) => {
       const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
@@ -142,24 +143,42 @@ const expandAndCache = (term) => {
         term.itemText += ` (${term.label})`
       }
 
+      // create the prefix-specific search array
+      const prefix = term.prefixed.split(':')[0]
+      if (!searchArrayByPrefix[prefix]) {
+        searchArrayByPrefix[prefix] = []
+      }
+      searchArrayByPrefix[prefix].push(term)
+
       return term
     })
 
   const fuse = new Fuse(searchArray, options)
+  for (const prefix in searchArrayByPrefix) {
+    searchArrayByPrefix[prefix] = new Fuse(searchArrayByPrefix[prefix], options)
+  }
   debug(`API ready in ${Date.now() - now}ms, loaded ${loadedPrefixesCount} prefixes for a total of ${loadedTermsCount} triples`)
 
   router.get('/search', (req, res) => {
-    const searchVal = (req.query.q || '').replace(/---hash---/g, '#')
+    const query = (req.query.q || '').replace(/---hash---/g, '#').trim()
 
-    if (searchVal) {
-      // possible optimization: find the prefix by finding a colon in the search string,
-      // then scope the search to this prefix only
-      const searchResult = fuse.search(searchVal).slice(0, 10)
-      res.json(searchResult)
+    if (!query) {
+      res.json([])
       return
     }
 
-    res.json([])
+    // detect queries like this: `skos:`, `skos:foo`
+    // do not detect queries containing a URL or spaces
+    if (query.split(' ').length <= 1 && query.split('.').length <= 3 && !query.includes('://')) {
+      const prefix = query.split(':')[0]
+      // scope the search to only this prefix
+      if (searchArrayByPrefix[prefix]) {
+        res.json(searchArrayByPrefix[prefix].search(query).slice(0, 10))
+        return
+      }
+    }
+
+    res.json(fuse.search(query).slice(0, 10))
   })
 
   router.get('/summary', (req, res) => {
