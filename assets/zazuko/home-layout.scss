@@ -42,18 +42,63 @@
       }
     }
 
-    input {
-      background-color: #FFF;
-      border: 1px solid #979797;
-      line-height: 46px;
-      padding: 0 12px;
-      width: 100%;
-      font-size: 16px;
+    .autocomplete {
+      position: relative;
 
-      &:focus {
-        outline: 0;
-        border-color: $color-secondary;
-        box-shadow: inset 0 0 0 2px $color-secondary;
+      input {
+        position: relative;
+        background-color: #FFF;
+        border: 1px solid #979797;
+        line-height: 46px;
+        padding: 0 12px;
+        width: 100%;
+        font-size: 16px;
+
+        &:focus {
+          outline: 0;
+          border-color: $color-secondary;
+          box-shadow: inset 0 0 0 2px $color-secondary;
+          z-index: 2;
+        }
+      }
+
+      &.open .results { display: block; }
+      .results {
+        display: none;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        right: 0;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
+
+        li a {
+          color: black;
+          text-decoration: none;
+          background: white;
+          border: 1px solid #979797;
+          margin-top: -1px;
+          display: block;
+          padding: 0 12px;
+          font-size: 16px;
+          line-height: 30px;
+
+          // Small detail but I want to have those borders correctly displayed
+          position: relative;
+          z-index: 1;
+
+          &:hover {
+            border-left: solid 5px $color-secondary;
+            padding-left: 12px - 4px;
+          }
+
+          &:focus {
+            z-index: 2;
+            background: $color-secondary;
+            border-color: $color-secondary;
+            color: white;
+            outline: 0;
+          }
+        }
       }
     }
 
