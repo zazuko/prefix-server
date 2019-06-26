@@ -23,7 +23,7 @@ describe('Search', () => {
   })
 
   it('should be available on homepage', () => {
-    searchField().type('schema:')
+    searchField().type('rdau:P608')
     cy.wait(500)
     suggestionList().should('be.visible')
     suggestedElements().then(collectResults)
