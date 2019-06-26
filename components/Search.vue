@@ -13,7 +13,7 @@
         </div>
         <div class="flex-item">
           <!-- TODO: autocomplete -->
-          <input placeholder="Start typing to search…" />
+          <autocomplete />
         </div>
         <div class="flex-item desc">
           <div>
@@ -41,12 +41,14 @@
 import _debounce from 'lodash/debounce'
 import MainResults from '@/components/MainResults'
 import DetailResults from '@/components/DetailResults'
+import Autocomplete from '@/components/Autocomplete'
 
 export default {
   name: 'Search',
   components: {
     MainResults,
-    DetailResults
+    DetailResults,
+    Autocomplete
   },
   props: {
     prefetchedEntries: {
