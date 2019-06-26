@@ -20,8 +20,35 @@
     margin: 0 20px;
     cursor: pointer;
 
-    .line > span {
-      color: #5D5D5D;
+    .line {
+      position: relative;
+
+      & > span {
+        color: #5D5D5D;
+      }
+
+      &:hover {
+        .tooltip {
+          opacity: 1;
+          transform: translateY(-20px);
+        }
+      }
+
+      .tooltip {
+        pointer-events: none;
+        transition: opacity ease .1s, transform ease .1s;
+        opacity: 0;
+        transform: translateY(-40px);
+        color: white;
+        font-size: 12px;
+        line-height: 24px;
+        background-color: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        padding: 0 4px;
+        border-radius: 3px;
+        top: 0;
+        right: 0;
+      }
     }
 
     text-align: right;
