@@ -1,35 +1,9 @@
 .topbar-container {
+  background-color: $color-primary;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.2);
+
   .topbar {
-    display: flex;
-  }
-
-  .topbar-logo {
-     margin-right: auto;
-  }
-
-  .nav-item {
-    display: inline-block;
-
-    .nav-link {
-      display: inline-block;
-      margin: 0;
-      padding: 0 10px;
-      line-height: $mainline-height;
-      text-transform: uppercase;
-
-      color: rgba(0, 0, 0, .6);
-      text-decoration: none;
-      transition: color ease-in-out 150ms;
-
-      &:hover, &:focus {
-        color: rgba(0, 0, 0, 1);
-      }
-
-      &.squared {
-        width: $mainline-height;
-        text-align: center;
-      }
-    }
+    @include container;
   }
 
   .logo {
@@ -37,13 +11,15 @@
     position: relative;
     padding: 0 30px;
     line-height: $mainline-height;
-    margin-right: 40px;
+    white-space: nowrap;
 
     font-weight: bold;
     text-transform: uppercase;
     background: $bck-light;
-    box-shadow: 0 0 10px 0 $line-light;
     z-index: 1;
+    text-decoration: none;
+    color: #222;
+    margin-bottom: -1px;
 
     img {
       position: relative;
@@ -53,130 +29,14 @@
       vertical-align: middle;
       margin-right: 10px;
     }
-  }
 
-  .burger-container {
-    position: absolute;
-    width: 106px; height: 100px;
-    padding: 40px;
-    right: 0; top: 0;
-    cursor: pointer;
-
-    .burger {
-      position: relative;
-      width: 26px; height: 20px;
-
-      .burger-line {
-        position: absolute;
-        left: 0; right: 0;
-        height: 2px;
-        background-color: $color-text-lighter;
-
-        &:nth-child(1) { top: 0; }
-        &:nth-child(2) { top: 9px; }
-        &:nth-child(3) { bottom: 0; }
-      }
-    }
-  }
-
-  @media screen and (max-width: $mq-burger-nav) {
-    .mobile-nav-overlay {
-      position: fixed;
-      top: 0; bottom: 0;
+    @media screen and (max-width: 400px) {
+      text-align: center;
       width: 100%;
-      right: -100%;
-      z-index: 1000;
-      transition: 0.5s;
-
-      &.open {
-        right: 0;
-      }
-
-      .mobile-nav-content {
-        position: absolute;
-        overflow-x: hidden;
-        height: 100%;
-        top: 0; left: 50%; right: 0;
-        background: $color-primary;
-        padding-top: 100px;
-
-        .nav-item {
-          display: block;
-
-          .nav-link {
-            display: block;
-            padding: 0 $default-l-margin;
-            line-height: 50px;
-
-            color: black;
-
-            &:hover, &:focus {
-              color: black;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  &.reversed {
-    background: $color-primary;
-    // border-bottom: solid 1px rgba(0, 0, 0, .1);
-
-    .nav-item {
-      position: relative;
-
-      &:before {
-        position: absolute;
-        content: '';
-        top: 0; left: 0; right: 0;
-        height: 0;
-
-        background: rgba(255, 255, 255, .2);
-        transition: height ease-in-out 150ms;
-      }
-
-      @media screen and (min-width: $mq-burger-nav) {
-        &:hover, &:focus {
-          &:before {
-            height: 101px;
-          }
-        }
-      }
-    }
-
-    .nav-link {
-      position: relative;
-      color: black;
-      z-index: 1;
-
-      &.router-link-active {
-        color: $color-text;
-        font-weight: bold;
-        background: rgba(255, 255, 255, .4);
-        box-shadow: 0 1px 0 0 rgba(255, 255, 255, .4);
-      }
-    }
-
-    .logo {
-      background: none;
-      box-shadow: none;
-      background: $bck-light;
-
-      font-family: $font-text;
-      font-size: 20px;
-      color: rgba(0,0,0,0.87);
-      text-decoration: none;
-    }
-
-    @media screen and (max-width: $mq-burger-nav) {
-      .burger-line {
-        background-color: white;
-      }
-
-      .mobile-nav-content {
-        background: white;
-        border-left: solid 1px $line-light;
+      line-height: 80px;
+      font-size: 13px;
+      img {
+        width: 90px;
       }
     }
   }

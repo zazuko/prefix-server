@@ -9,6 +9,15 @@ $bck-light: #fcfcfc;
 $line-light: #e5e5e5;
 $bck-dark: #202020;
 
+@mixin container($width: 940px, $gap: 20px) {
+  width: $width + (2 * $gap);
+  max-width: 100%;
+  padding-left: $gap;
+  padding-right: $gap;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 $layout-width: 940px;
 $inner-layout-width: 700px;
 $mainline-height: 100px;

@@ -1,13 +1,11 @@
 <template>
-  <nav class="topbar-container reversed">
-    <div class="layout-width">
-      <div class="topbar">
-        <div class="topbar-logo">
-          <router-link to="/" class="logo router-link-active">
-            <img src="~/static/zazuko-logo.svg">
-            / prefix server
-          </router-link>
-        </div>
+  <nav class="topbar-container">
+    <div class="topbar">
+      <div class="topbar-logo">
+        <router-link to="/" class="logo router-link-active">
+          <img src="~/static/zazuko-logo.svg">
+          / prefix server
+        </router-link>
       </div>
     </div>
   </nav>

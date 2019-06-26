@@ -18,6 +18,13 @@ html, body {
   min-height: 100vh;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
 .layout-width {
   width: $layout-width;
   margin: auto;
@@ -33,8 +40,12 @@ html, body {
 }
 
 .main-container {
-  min-height: calc(100vh - 202px);
+  flex: 1;
   background-color: $bck-light;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .no-mobile {
