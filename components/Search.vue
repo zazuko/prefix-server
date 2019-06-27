@@ -19,7 +19,7 @@
         </div>
         <div class="flex-item desc">
           <div>
-            Data based on <span>@zazuko/rdf-vocabularies</span>
+            Data based on <a href="https://github.com/zazuko/rdf-vocabularies">@zazuko/rdf-vocabularies</a>
           </div>
           <div class="tail"></div>
         </div>
