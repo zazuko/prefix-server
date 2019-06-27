@@ -69,23 +69,19 @@ export default {
       if (this.clipboardPrefixed.status === 'success') {
         return 'Copied!'
       }
-      else if (this.clipboardPrefixed.status === 'error') {
+      if (this.clipboardPrefixed.status === 'error') {
         return 'Error'
       }
-      else {
-        return 'Click to Copy'
-      }
+      return 'Click to Copy'
     },
     clipboardIriMessage () {
       if (this.clipboardIri.status === 'success') {
         return 'Copied!'
       }
-      else if (this.clipboardIri.status === 'error') {
+      if (this.clipboardIri.status === 'error') {
         return 'Error'
       }
-      else {
-        return 'Click to Copy'
-      }
+      return 'Click to Copy'
     }
   },
   methods: {
