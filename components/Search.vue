@@ -12,7 +12,6 @@
           </div>
         </div>
         <div class="flex-item">
-          <!-- TODO: autocomplete -->
           <autocomplete
             :entries="entries"
             :search-input.sync="search" />
