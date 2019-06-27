@@ -13,6 +13,7 @@
       placeholder="Start typing to search…"
       name="q"
       autocomplete="off"
+      autofocus
       @input="$emit('update:searchInput', $event.target.value)"
       @focus="elementFocus"
       @blur="elementBlur" />
