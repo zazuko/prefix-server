@@ -182,6 +182,11 @@ export default {
       return false
     }
     return true
+  },
+  head () {
+    return {
+      title: 'Resolve RDF namespaces'
+    }
   }
 }
 </script>

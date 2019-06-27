@@ -25,6 +25,11 @@ export default {
     return {
       summary
     }
+  },
+  head () {
+    return {
+      title: 'List of RDF Vocabularies'
+    }
   }
 }
 </script>

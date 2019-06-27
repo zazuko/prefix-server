@@ -100,6 +100,11 @@ export default {
       }
       return `${origin}${path}`
     }
+  },
+  head () {
+    return {
+      title: 'API'
+    }
   }
 }
 </script>
