@@ -58,7 +58,7 @@
           &::after {
             left: -$off;
             right: -$off;
-            bottom: -3px - $off;
+            bottom: - $stroke - $off;
             height: $line-height + 2 * ($off + $stroke);
           }
         }
