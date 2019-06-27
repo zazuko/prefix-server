@@ -4,7 +4,7 @@
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm run install
 
@@ -14,9 +14,19 @@ $ npm run dev
 # build for production and launch server
 $ npm run build
 $ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+## Tests
+
+```bash
+# run the dev server
+$ npm run dev
+
+# run the tests in a window
+$ npm run e2e:open
+
+## OR
+
+# run the tests headless
+$ npm run e2e:test
+```
