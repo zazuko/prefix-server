@@ -27,6 +27,7 @@ html, body {
 
 .layout-width {
   width: $layout-width;
+  max-width: 100vw;
   margin: auto;
 
   @media screen and (max-width: $mq-l) {

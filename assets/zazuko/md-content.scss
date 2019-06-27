@@ -30,6 +30,61 @@
     hyphens: none;
     font-size: 0.9em;
     padding: 2px;
+
+    &.example {
+      margin-bottom: 16px;
+      padding: 0;
+      display: block;
+      white-space: normal;
+      position: relative;
+
+      &:hover {
+        .copy {
+          opacity: 1;
+        }
+      }
+
+      .copy {
+        opacity: 0;
+        position: absolute;
+        border-left: solid 1px #CCC;
+        border-bottom: solid 1px #CCC;
+        top: 0;
+        right: 0;
+        padding: 6px 12px;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+
+        &:hover, &:focus {
+          outline: 0;
+          opacity: 1;
+          background-color: $color-secondary;
+          border-color: $color-secondary;
+          color: white;
+        }
+      }
+
+      .scroller {
+        padding: 1.5em;
+        overflow-x: auto;
+
+        .line {
+          max-width: 100%;
+          white-space: nowrap;
+          padding: 0 2em;
+          &::before {
+            margin-left: -2em;
+            content: '$ '
+          }
+        }
+
+        .result {
+          margin-top: 0.5em;
+          white-space: pre;
+        }
+      }
+    }
   }
 
   @media screen and (max-width: $mq-s) {
