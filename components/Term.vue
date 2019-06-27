@@ -8,15 +8,13 @@
       <div v-if="isExternalIRI">
         <a
           :href="value"
-          target="_blank"
-        >
+          target="_blank">
           {{ value }}
         </a>
       </div>
       <router-link
         v-else-if="term.objectIRI && !value.endsWith(':')"
-        :to="{ path: `/${value}` }"
-      >
+        :to="{ path: `/${value}` }">
         {{ value }}
       </router-link>
       <div v-else>
@@ -49,7 +47,7 @@ export default {
       }
       return false
     },
-    value() {
+    value () {
       const object = this.term.object
       if (typeof object === 'object') {
         return object.value
