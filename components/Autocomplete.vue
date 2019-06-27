@@ -65,6 +65,14 @@ export default {
       return this.focused && this.results.length > 0
     }
   },
+  watch: {
+    searchInput () {
+      // Autofocus does not trigger `focus` events. Let's check whenever the input changes.
+      if (document.querySelector(':focus') === this.$refs.input) {
+        this.focused = true
+      }
+    }
+  },
   methods: {
     focusNext (event) {
       // The input is focused, focus the first element of the list
