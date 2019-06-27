@@ -24,13 +24,14 @@
               <code>'xsd:dateTime'</code> →<br>
               <code>'http://www.w3.org/2001/XMLSchema#dateTime'</code>.
               <br>
-              It is the opposite of <a href="#shrink-endpoint"><strong>shrink</strong></a>ing.
+              It is the opposite of <a href="#shrink-endpoint"><strong>/shrink</strong></a>ing.
             </p>
 
             <h3>Examples</h3>
             <p>
-              Success:
-              <pre><code>$ curl --silent \
+              Success: <code>HTTP200</code>
+            </p>
+            <pre><code>$ curl --silent \
   "https://prefix.zazuko.com/api/v1/expand?q=schema:Person" \
   | jq .
 {
@@ -38,15 +39,16 @@
   "value": "http://schema.org/Person"
 }
 </code></pre>
-              Failure:
-              <pre><code>$ curl --silent \
+            <p>
+              Failure: <code>HTTP404</code>
+            </p>
+            <pre><code>$ curl --silent \
   "https://prefix.zazuko.com/api/v1/expand?q=hello:World" \
   | jq .
 {
   "success": false
 }
 </code></pre>
-            </p>
 
             <h2 id="shrink-endpoint">
               Shrinking an IRI
@@ -57,22 +59,23 @@
               <code>'http://www.w3.org/2001/XMLSchema#dateTime'</code> → <br>
               <code>'xsd:dateTime'</code>.
               <br>
-              It is the opposite of <a href="#expand-endpoint"><strong>expand</strong></a>ing.
+              It is the opposite of <a href="#expand-endpoint"><strong>/expand</strong></a>ing.
             </p>
 
             <p>
               IRI containing a <strong>#</strong>fragment such as <br><code>http://www.w3.org/2001/XMLSchema#dateTime</code>
               will have to be URI encoded:
-              <pre><code>$ curl --silent \
+            </p>
+            <pre><code>$ curl --silent \
   "https://prefix.zazuko.com/api/v1/shrink?q=http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23dateTime" \
   | jq .
 </code></pre>
-            </p>
 
             <h3>Examples</h3>
             <p>
-              Success:
-              <pre><code>$ curl --silent \
+              Success: <code>HTTP200</code>
+            </p>
+            <pre><code>$ curl --silent \
   "https://prefix.zazuko.com/api/v1/shrink?q=http://schema.org/Person" \
   | jq .
 {
@@ -80,15 +83,16 @@
   "value": "schema:Person"
 }
 </code></pre>
-              Failure:
-              <pre><code>$ curl --silent \
+            <p>
+              Failure: <code>HTTP404</code>
+            </p>
+            <pre><code>$ curl --silent \
   "https://prefix.zazuko.com/api/v1/shrink?q=http://example.org/Hello" \
   | jq .
 {
   "success": false
 }
 </code></pre>
-            </p>
           </div>
         </section>
       </div>
