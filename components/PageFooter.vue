@@ -1,6 +1,9 @@
 <template>
   <footer>
     <div class="footer-container">
+      <router-link to="/about" class="link">
+        About
+      </router-link>
       <router-link to="/namespaces" class="link">
         Vocabularies
       </router-link>
