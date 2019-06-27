@@ -169,11 +169,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.v-menu {
-  position: fixed;
-  left: 0;
-  top: 24px;
-}
-</style>
