@@ -120,11 +120,14 @@
         @media screen and (max-width: $mq-s) {
           flex-basis: 500px;
         }
+      }
 
-        @media screen and (max-width: 500px + 55px) {
+      @media screen and (max-width: 500px + 55px) {
+        border-bottom-color: #999;
+
+        .terms {
           flex-basis: 100%;
           border-left: 0;
-          border-bottom: 1px solid $line-light;
 
           .term {
             padding: 10px 0;
