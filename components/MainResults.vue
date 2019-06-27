@@ -5,8 +5,7 @@
         v-clipboard="() => model.prefixed"
         v-clipboard:success="clipboardSuccesPrefixed"
         v-clipboard:error="clipboardErrorPrefixed"
-        class="line"
-      >
+        class="line">
         <div class="tooltip">
           {{ clipboardPrefixedMessage }}
         </div>
@@ -16,8 +15,7 @@
         v-clipboard="() => model.iri.value"
         v-clipboard:success="clipboardSuccesIri"
         v-clipboard:error="clipboardErrorIri"
-        class="line"
-      >
+        class="line">
         <div class="tooltip">
           {{ clipboardIriMessage }}
         </div>
@@ -54,7 +52,7 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       clipboardPrefixed: {
         status: false,
@@ -67,19 +65,31 @@ export default {
     }
   },
   computed: {
-    clipboardPrefixedMessage() {
-      if (this.clipboardPrefixed.value === 'success') return 'Copied!'
-      else if (this.clipboardPrefixed.value === 'error') return 'Error'
-      else return 'Click to Copy'
+    clipboardPrefixedMessage () {
+      if (this.clipboardPrefixed.value === 'success') {
+        return 'Copied!'
+      }
+      else if (this.clipboardPrefixed.value === 'error') {
+        return 'Error'
+      }
+      else {
+        return 'Click to Copy'
+      }
     },
-    clipboardIriMessage() {
-      if (this.clipboardIri.value === 'success') return 'Copied!'
-      else if (this.clipboardIri.value === 'error') return 'Error'
-      else return 'Click to Copy'
+    clipboardIriMessage () {
+      if (this.clipboardIri.value === 'success') {
+        return 'Copied!'
+      }
+      else if (this.clipboardIri.value === 'error') {
+        return 'Error'
+      }
+      else {
+        return 'Click to Copy'
+      }
     }
   },
   methods: {
-    clipboardTimeoutPrefixed() {
+    clipboardTimeoutPrefixed () {
       if (this.clipboardPrefixed.timeout !== null) {
         clearTimeout(this.clipboardPrefixed.timeout)
       }
@@ -89,15 +99,15 @@ export default {
         this.clipboardPrefixed.timeout = null
       }, 3000)
     },
-    clipboardSuccesPrefixed() {
+    clipboardSuccesPrefixed () {
       this.clipboardPrefixed.value = 'success'
       this.clipboardTimeoutPrefixed()
     },
-    clipboardErrorPrefixed() {
+    clipboardErrorPrefixed () {
       this.clipboardPrefixed.value = 'error'
       this.clipboardTimeoutPrefixed()
     },
-    clipboardTimeoutIri() {
+    clipboardTimeoutIri () {
       if (this.clipboardIri.timeout !== null) {
         clearTimeout(this.clipboardIri.timeout)
       }
@@ -107,11 +117,11 @@ export default {
         this.clipboardIri.timeout = null
       }, 3000)
     },
-    clipboardSuccesIri() {
+    clipboardSuccesIri () {
       this.clipboardIri.value = 'success'
       this.clipboardTimeoutIri()
     },
-    clipboardErrorIri() {
+    clipboardErrorIri () {
       this.clipboardIri.value = 'error'
       this.clipboardTimeoutIri()
     }
