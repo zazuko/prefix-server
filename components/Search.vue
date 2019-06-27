@@ -13,7 +13,9 @@
         </div>
         <div class="flex-item">
           <!-- TODO: autocomplete -->
-          <autocomplete />
+          <autocomplete
+            :entries="entries"
+            :search-input.sync="search" />
         </div>
         <div class="flex-item desc">
           <div>
@@ -31,8 +33,7 @@
     <div class="search-results">
       <detail-results
         v-if="model"
-        :model="model"
-      />
+        :model="model" />
     </div>
   </div>
 </template>

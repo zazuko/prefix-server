@@ -4,9 +4,12 @@
     :class="{ open }"
     @keydown.38="focusPrevious"
     @keydown.40="focusNext">
+    <!-- TODO(sandhose): redirect on enter -->
     <input
       ref="input"
+      :value="searchInput"
       placeholder="Start typing to search…"
+      @input="$emit('update:searchInput', $event.target.value)"
       @focus="elementFocus"
       @blur="elementBlur" />
     <ul ref="list" class="results">
@@ -27,11 +30,26 @@
 <script>
 export default {
   name: 'Autocomplete',
+  props: {
+    entries: {
+      type: Array,
+      default: () => []
+    },
+    searchInput: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       open: false,
-      timeout: null,
-      results: ['foaf:Document', 'foo:Bar', 'baz:Foobar']
+      timeout: null
+    }
+  },
+  computed: {
+    results () {
+      // TODO(sandhose): filtering, highlighting
+      return this.entries.map(({ itemText }) => itemText)
     }
   },
   methods: {
