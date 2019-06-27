@@ -36,7 +36,7 @@
         text-decoration: none;
         font-family: monospace;
         white-space: nowrap;
-        z-index: 1;
+        z-index: 0;
         transition: color .1s ease;
 
         &::after {
@@ -93,7 +93,7 @@
           outline: 0;
           border-color: $color-secondary;
           box-shadow: inset 0 0 0 2px $color-secondary;
-          z-index: 2;
+          z-index: 1;
         }
       }
 
@@ -105,7 +105,7 @@
         border: solid 1px #979797;
         margin-left: -1px;
         transition: color .15s ease;
-        z-index: 1;
+        z-index: 0;
 
         &::after {
           position: absolute;
@@ -124,7 +124,7 @@
           outline: 0;
           border-color: $color-secondary;
           color: white;
-          z-index: 2;
+          z-index: 1;
 
           &::after {
             height: 46px;
