@@ -14,7 +14,7 @@
         </a>
       </div>
       <router-link
-        v-else-if="term.objectIRI"
+        v-else-if="term.objectIRI && !value.endsWith(':')"
         :to="{ path: `/${value}` }"
       >
         {{ value }}
