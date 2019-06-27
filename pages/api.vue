@@ -21,7 +21,7 @@
 
             <p>
               <strong>expand</strong>ing means the following operation:<br>
-              <code>'xsd:dateTime'</code> →<br>
+              <code>'xsd:dateTime'</code>&nbsp;→
               <code>'http://www.w3.org/2001/XMLSchema#dateTime'</code>.
               <br>
               It is the opposite of <a href="#shrink-endpoint"><strong>/shrink</strong></a>ing.
