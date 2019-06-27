@@ -44,8 +44,10 @@
 
     .autocomplete {
       position: relative;
+      display: flex;
 
       input {
+        flex: 1;
         position: relative;
         background-color: #FFF;
         border: 1px solid #979797;
@@ -58,6 +60,23 @@
           outline: 0;
           border-color: $color-secondary;
           box-shadow: inset 0 0 0 2px $color-secondary;
+          z-index: 2;
+        }
+      }
+
+      button {
+        flex: 0;
+        position: relative;
+        background-color: white;
+        padding: 0 12px;
+        border: solid 1px #979797;
+        margin-left: -1px;
+
+        &:focus {
+          outline: 0;
+          border-color: $color-secondary;
+          background-color: $color-secondary;
+          color: white;
           z-index: 2;
         }
       }
