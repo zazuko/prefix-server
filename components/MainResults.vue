@@ -66,10 +66,10 @@ export default {
   },
   computed: {
     clipboardPrefixedMessage () {
-      if (this.clipboardPrefixed.value === 'success') {
+      if (this.clipboardPrefixed.status === 'success') {
         return 'Copied!'
       }
-      else if (this.clipboardPrefixed.value === 'error') {
+      else if (this.clipboardPrefixed.status === 'error') {
         return 'Error'
       }
       else {
@@ -77,10 +77,10 @@ export default {
       }
     },
     clipboardIriMessage () {
-      if (this.clipboardIri.value === 'success') {
+      if (this.clipboardIri.status === 'success') {
         return 'Copied!'
       }
-      else if (this.clipboardIri.value === 'error') {
+      else if (this.clipboardIri.status === 'error') {
         return 'Error'
       }
       else {
@@ -95,16 +95,16 @@ export default {
       }
 
       this.clipboardPrefixed.timeout = setTimeout(() => {
-        this.clipboardPrefixed.value = false
+        this.clipboardPrefixed.status = false
         this.clipboardPrefixed.timeout = null
       }, 3000)
     },
     clipboardSuccesPrefixed () {
-      this.clipboardPrefixed.value = 'success'
+      this.clipboardPrefixed.status = 'success'
       this.clipboardTimeoutPrefixed()
     },
     clipboardErrorPrefixed () {
-      this.clipboardPrefixed.value = 'error'
+      this.clipboardPrefixed.status = 'error'
       this.clipboardTimeoutPrefixed()
     },
     clipboardTimeoutIri () {
@@ -113,16 +113,16 @@ export default {
       }
 
       this.clipboardIri.timeout = setTimeout(() => {
-        this.clipboardIri.value = false
+        this.clipboardIri.status = false
         this.clipboardIri.timeout = null
       }, 3000)
     },
     clipboardSuccesIri () {
-      this.clipboardIri.value = 'success'
+      this.clipboardIri.status = 'success'
       this.clipboardTimeoutIri()
     },
     clipboardErrorIri () {
-      this.clipboardIri.value = 'error'
+      this.clipboardIri.status = 'error'
       this.clipboardTimeoutIri()
     }
   }
