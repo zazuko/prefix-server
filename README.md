@@ -1,4 +1,5 @@
 # prefix-server
+[![Build Status](https://travis-ci.org/zazuko/prefix-server.svg?branch=master)](https://travis-ci.org/zazuko/prefix-server) 
 
 > RDF prefix / namespaces resolution
 
