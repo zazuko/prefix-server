@@ -40,7 +40,11 @@
               <a href="https://github.com/zazuko/rdf-vocabularies#adding-new-prefixes">issue and pull-request</a>
               on the vocabulary repository or
               <a href="https://github.com/zazuko/prefix-server">fork the service</a>
-              and run your own instance. This service is created and maintained by
+              and run your own instance.
+            </p>
+
+            <p>
+              This service is created and maintained by
               <a href="http://zazuko.com">Zazuko</a>,
               your trusted partner for everything around knowledge graphs, linked data, and RDF.
             </p>
