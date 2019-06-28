@@ -1,13 +1,5 @@
 <template>
   <div class="main">
-    <a href="https://github.com/zazuko/prefix-server">
-      <img
-        width="139"
-        height="100"
-        src="~/static/github-ribbon.png"
-        class="ribbon"
-        alt="Fork me on GitHub">
-    </a>
     <page-header />
     <nuxt />
     <page-footer />
