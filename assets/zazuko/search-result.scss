@@ -18,10 +18,10 @@
   .big {
     white-space: nowrap;
     margin: 0 20px;
-    cursor: pointer;
 
     .line {
       position: relative;
+      cursor: pointer;
 
       & > span {
         color: #5D5D5D;
@@ -55,6 +55,14 @@
     font-size: 20px;
     line-height: 28px;
     font-weight: 500;
+
+    @media screen and (max-width: $mq-s) {
+      text-align: left;
+      .line .tooltip {
+        right: unset;
+        left: 0;
+      }
+    }
   }
 
   .small {
