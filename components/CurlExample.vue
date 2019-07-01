@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     command () {
-      return `curl --silent ${this.url} | jq .`
+      return `curl --silent "${this.url}" | jq .`
     },
     copyMessage () {
       if (this.copy.state === 'success') {
