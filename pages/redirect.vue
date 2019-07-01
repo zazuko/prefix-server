@@ -4,10 +4,9 @@ export default {
   asyncData ({ redirect, query }) {
     if (query.q) {
       redirect('/' + query.q)
+      return
     }
-    else {
-      redirect('/')
-    }
+    redirect('/')
   }
 }
 </script>

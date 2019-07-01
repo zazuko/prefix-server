@@ -27,6 +27,7 @@ module.exports = {
         "org:memberOf (member of)"
       ],
       "3": [
+        "rdfs:",
         "rdfs:Class (Class)",
         "rdfs:Container (Container)",
         "rdfs:ContainerMembershipProperty (ContainerMembershipProperty)",
@@ -35,8 +36,7 @@ module.exports = {
         "rdfs:Resource (Resource)",
         "rdfs:comment (comment)",
         "rdfs:domain (domain)",
-        "rdfs:isDefinedBy (isDefinedBy)",
-        "rdfs:label (label)"
+        "rdfs:isDefinedBy (isDefinedBy)"
       ]
     }
   }

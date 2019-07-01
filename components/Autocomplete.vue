@@ -21,17 +21,35 @@
       ref="button"
       type="submit"
       @focus="elementFocus"
-      @blur="elementBlur">Submit</button>
+      @blur="elementBlur">
+      Submit
+    </button>
     <ul ref="list" class="results">
       <template v-for="result in results">
-        <li :key="result.value">
-          <a
-            :href="'/' + result.value"
-            :data-target="result.value"
-            @click="linkClick"
-            @focus="elementFocus"
-            @blur="elementBlur">{{ result.text }}</a>
-        </li>
+        <template v-if="result && result.value && result.value.endsWith(':')">
+          <li :key="result.value">
+            <a
+              :href="'/prefix/' + result.value"
+              :data-target="'prefix/' + result.value"
+              @click="linkClick"
+              @focus="elementFocus"
+              @blur="elementBlur">
+              {{ result.text }}
+            </a>
+          </li>
+        </template>
+        <template v-else>
+          <li :key="result.value">
+            <a
+              :href="'/' + result.value"
+              :data-target="result.value"
+              @click="linkClick"
+              @focus="elementFocus"
+              @blur="elementBlur">
+              {{ result.text }}
+            </a>
+          </li>
+        </template>
       </template>
     </ul>
   </form>

@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express = require('express')
 const Fuse = require('fuse.js')
 const { vocabularies, shrink, expand, prefixes } = require('@zazuko/rdf-vocabularies')
@@ -50,19 +51,22 @@ const expandAndCache = (term) => {
     expandedCache[term.value] = expanded
   }
   catch (err) {
-    // TODO: track what people are failing to expand?
+    //
   }
   return expanded
 }
 
 (async () => {
-  const summary = []
+  let summary = []
   let loadedPrefixesCount = 0
   let loadedTermsCount = 0
 
   const datasets = await vocabularies()
   const now = Date.now()
   const searchArrayByPrefix = {}
+  const prefixEndpointData = {}
+  const prefixedEndpointPredicates = ['rdfs:Class', 'rdf:Property']
+
   const searchArray = Object.entries(datasets)
     .reduce((acc, [prefix, dataset]) => {
       const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
@@ -105,9 +109,7 @@ const expandAndCache = (term) => {
         const iriSplitA = termToAdd.iri.value.split(prefixedSplitB)[0]
         Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB })
 
-        if (!termToAdd.prefixed.endsWith(':')) {
-          obj.push(termToAdd)
-        }
+        obj.push(termToAdd)
       }
       return obj
     }, [])
@@ -127,13 +129,17 @@ const expandAndCache = (term) => {
         }
         return labels
       }, {})
+      // choose the best label to display
       if (labels.en) {
+        // 1st priority is English
         term.label = labels.en
       }
       else if (labels['']) {
+        // sometimes the English label has an empty language
         term.label = labels['']
       }
       else if (labels['no language']) {
+        // last resort, a label with no specified language
         term.label = labels['no language'].join('\n')
       }
 
@@ -144,7 +150,7 @@ const expandAndCache = (term) => {
       }
 
       // create the prefix-specific search array
-      const prefix = term.prefixed.split(':')[0]
+      const prefix = term.prefixedSplitA
       if (!searchArrayByPrefix[prefix]) {
         searchArrayByPrefix[prefix] = []
       }
@@ -155,8 +161,30 @@ const expandAndCache = (term) => {
 
   const fuse = new Fuse(searchArray, options)
   for (const prefix in searchArrayByPrefix) {
+    prefixEndpointData[prefix] = {
+      'rdfs:Class': [],
+      'rdf:Property': []
+    }
+    searchArrayByPrefix[prefix].forEach((term) => {
+      const termToAdd = {
+        itemText: term.itemText,
+        iri: term.iri,
+        label: term.label,
+        prefixed: term.prefixed
+      }
+      const typePart = term.parts.find(({ predicate }) => predicate === 'rdf:type')
+      if (!typePart || !prefixedEndpointPredicates.includes(typePart.object)) {
+        return
+      }
+
+      prefixEndpointData[prefix][typePart.object].push(termToAdd)
+    })
+    prefixEndpointData[prefix]['rdfs:Class'] = _.sortBy(prefixEndpointData[prefix]['rdfs:Class'], 'prefixed')
+    prefixEndpointData[prefix]['rdf:Property'] = _.sortBy(prefixEndpointData[prefix]['rdf:Property'], 'prefixed')
+
     searchArrayByPrefix[prefix] = new Fuse(searchArrayByPrefix[prefix], options)
   }
+  summary = _.sortBy(summary, 'prefix')
   debug(`API ready in ${Date.now() - now}ms, loaded ${loadedPrefixesCount} prefixes for a total of ${loadedTermsCount} triples`)
 
   router.get('/search', (req, res) => {
@@ -179,6 +207,16 @@ const expandAndCache = (term) => {
     }
 
     res.json(fuse.search(query).slice(0, 10))
+  })
+
+  router.get('/prefix', (req, res) => {
+    const query = (req.query.q || '').trim()
+    const prefix = query.split(':')[0]
+
+    if (!prefix || !prefixEndpointData[prefix]) {
+      res.status(404).json([])
+    }
+    res.json(prefixEndpointData[prefix])
   })
 
   router.get('/summary', (req, res) => {
