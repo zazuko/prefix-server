@@ -9,7 +9,7 @@
               <li v-for="namespace in summary" :key="namespace.prefix">
                 <nuxt-link :to="{ path: `/prefix/${namespace.prefix}:` }">
                   <code>{{ namespace.prefix }}:</code>
-                  {{ namespace.terms }} terms
+                  {{ namespace.terms }} triples
                 </nuxt-link>
               </li>
             </ul>
