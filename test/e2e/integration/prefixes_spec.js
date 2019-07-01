@@ -48,22 +48,22 @@ describe('Prefixes', () => {
 
   it('should list classes and properties of a single prefix', () => {
     cy.get('#prefixes li').first().click()
-    cy.get('h2 > code').invoke('text').then((prefix) => {
+    cy.get('h1 > code').invoke('text').then((prefix) => {
       cy.url().should('include', `/prefix/${prefix}`)
     })
-    cy.get('ul#classes li').then((list) => {
+    cy.get('#rdfs-class ul li').then((list) => {
       expect(list).to.have.length.of.at.least(1)
     })
-    cy.get('ul#properties li').then((list) => {
+    cy.get('#rdf-property ul li').then((list) => {
       expect(list).to.have.length.of.at.least(1)
     })
   })
 
   it('should lead to individual terms', () => {
     cy.get('#prefixes li').first().click()
-    cy.get('h2 > code').invoke('text').then((prefix) => {
-      cy.get('ul#classes li').first().invoke('text').then((term) => {
-        cy.get('ul#classes li').first().click()
+    cy.get('h1 > code').invoke('text').then((prefix) => {
+      cy.get('#rdfs-class ul li').first().invoke('text').then((term) => {
+        cy.get('#rdfs-class ul li').first().click()
         cy.url().should('include', term.trim())
       })
     })

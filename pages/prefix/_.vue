@@ -4,31 +4,32 @@
       <div class="layout-width">
         <section class="md-content">
           <div class="content default">
-            <h2><code>{{ prefix }}</code> vocabulary</h2>
+            <h1><code>{{ prefix }}</code> RDF prefix</h1>
 
-            <h3>{{ content['rdfs:Class'].length }} Classes</h3>
-            <ul
-              v-for="obj in content['rdfs:Class']"
-              id="classes"
-              :key="obj.prefixed">
-              <li>
-                <nuxt-link :to="{ path: `/${obj.prefixed}`}">
-                  {{ obj.itemText }}
+            <div
+              v-for="prefixedType in prefixedTypes"
+              :id="prefixedType.replace(':', '-').toLowerCase()"
+              :key="prefixedType">
+              <h2 v-show="content[prefixedType].length">
+                {{ content[prefixedType].length }}
+                <nuxt-link :to="{ path: `/${prefixedType}` }">
+                  <code>{{ prefixedType }}</code>
                 </nuxt-link>
-              </li>
-            </ul>
+              </h2>
+              <ul>
+                <li
+                  v-for="obj in content[prefixedType]"
+                  :key="obj.prefixed">
+                  <nuxt-link :to="{ path: `/${obj.prefixed}`}">
+                    {{ obj.itemText }}
+                  </nuxt-link>
+                </li>
+              </ul>
+            </div>
 
-            <h3>{{ content['rdf:Property'].length }} Properties</h3>
-            <ul
-              v-for="obj in content['rdf:Property']"
-              id="properties"
-              :key="obj.prefixed">
-              <li>
-                <nuxt-link :to="{ path: `/${obj.prefixed}`}">
-                  {{ obj.itemText }}
-                </nuxt-link>
-              </li>
-            </ul>
+            <h2 v-show="content.otherTermsCount">
+              {{ content.otherTermsCount }} other terms
+            </h2>
           </div>
         </section>
       </div>
@@ -37,6 +38,13 @@
 </template>
 
 <script>
+const prefixedTypes = [
+  'rdfs:Class',
+  'owl:Class',
+  'rdf:Property',
+  'owl:ObjectProperty'
+]
+
 export default {
   async asyncData ({ $axios, params, redirect, error }) {
     const prefix = params.pathMatch
@@ -52,6 +60,7 @@ export default {
       const content = await $axios.$get(`/api/v1/prefix?q=${prefix}`)
 
       return {
+        prefixedTypes,
         prefix,
         content
       }
@@ -67,3 +76,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+ul {
+  margin-bottom: 25px !important;
+}
+</style>
