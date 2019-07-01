@@ -4,7 +4,7 @@
       <router-link to="/about" class="link">
         About
       </router-link>
-      <router-link to="/namespaces" class="link">
+      <router-link to="/prefixes" class="link">
         Vocabularies
       </router-link>
       <router-link to="/api" class="link">

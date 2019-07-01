@@ -103,7 +103,7 @@ export default {
       await this.doSearch(val)
     }, 250)
   },
-  async asyncData ({ $axios, params, error }) {
+  async asyncData ({ $axios, params, redirect, error }) {
     let entries = []
     const iriFromURL = params.pathMatch
     if (iriFromURL) {
@@ -111,6 +111,13 @@ export default {
       entries = await $axios.$get(`/api/v1/search?q=${val}`)
       const match = pickFromEntries(iriFromURL, entries)
       if (match) {
+        if (iriFromURL !== match.prefixed) {
+          // we don't want `/schema:PERSON` to display the same data as
+          // `/schema/Person`, so always redirect to the right thing
+          redirect(`/${match.prefixed}`)
+          return
+        }
+
         return {
           model: match,
           entries: []
@@ -119,6 +126,11 @@ export default {
       if (!entries.length) {
         return error({ statusCode: 404, message: 'No Result' })
       }
+      // there is no match, we don't want the user to continue from a
+      // URL that has no result, for instance if they typed schema:Lol<enter>
+      // and are stuck on `/schema:Lol`. In this situation, redirect to `/`.
+      redirect('/')
+      return
     }
     return {
       entries
