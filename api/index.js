@@ -1,5 +1,5 @@
 const express = require('express')
-const { cachedShrink, cachedExpand, initializeData } = require('./utils')
+const { cachedShrink, cachedExpand, prepareData } = require('./utils')
 
 const app = express()
 const router = express.Router()
@@ -7,7 +7,7 @@ const router = express.Router()
 module.exports = { path: '/api/v1', handler: app }
 
 ;(async () => {
-  const { fuse, searchArrayByPrefix, prefixEndpointData, summary } = await initializeData()
+  const { fuse, searchArrayByPrefix, prefixEndpointData, summary } = await prepareData()
 
   router.get('/search', (req, res) => {
     const query = (req.query.q || '').replace(/---hash---/g, '#').trim()

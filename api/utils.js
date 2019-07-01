@@ -8,7 +8,7 @@ const { shrink, expand } = require('@zazuko/rdf-vocabularies')
 module.exports = {
   cachedShrink,
   cachedExpand,
-  initializeData
+  prepareData
 }
 
 const shrunkCache = {}
@@ -60,30 +60,70 @@ function cachedExpand (term) {
   return expanded
 }
 
-async function initializeData () {
-  const now = Date.now()
-  let summary = []
+function enrichPrefixSpecificData (searchArrayByPrefix, prefixEndpointData) {
+  const prefixedEndpointPredicates = ['rdfs:Class', 'owl:Class', 'rdf:Property', 'owl:ObjectProperty']
+
+  for (const prefix in searchArrayByPrefix) {
+    prefixEndpointData[prefix] = {
+      'rdfs:Class': [],
+      'owl:Class': [],
+      'rdf:Property': [],
+      'owl:ObjectProperty': [],
+      otherTermsCount: 0
+    }
+    searchArrayByPrefix[prefix].forEach((term) => {
+      const termToAdd = {
+        itemText: term.itemText,
+        iri: term.iri,
+        label: term.label,
+        prefixed: term.prefixed
+      }
+      const typePart = term.parts.find(({ predicate }) => predicate === 'rdf:type')
+      if (!typePart || !prefixedEndpointPredicates.includes(typePart.object)) {
+        prefixEndpointData[prefix].otherTermsCount += 1
+        return
+      }
+
+      prefixEndpointData[prefix][typePart.object].push(termToAdd)
+    })
+    prefixEndpointData[prefix]['rdfs:Class'] = _.sortBy(prefixEndpointData[prefix]['rdfs:Class'], 'prefixed')
+    prefixEndpointData[prefix]['owl:Class'] = _.sortBy(prefixEndpointData[prefix]['owl:Class'], 'prefixed')
+    prefixEndpointData[prefix]['rdf:Property'] = _.sortBy(prefixEndpointData[prefix]['rdf:Property'], 'prefixed')
+    prefixEndpointData[prefix]['owl:ObjectProperty'] = _.sortBy(prefixEndpointData[prefix]['owl:ObjectProperty'], 'prefixed')
+
+    searchArrayByPrefix[prefix] = new Fuse(searchArrayByPrefix[prefix], fuseOptions)
+  }
+}
+
+function createSearchArray (datasets) {
   let loadedPrefixesCount = 0
   let loadedTermsCount = 0
-
-  const datasets = await vocabularies()
   const searchArrayByPrefix = {}
   const prefixEndpointData = {}
-  const prefixedEndpointPredicates = ['rdfs:Class', 'rdf:Property']
+  const summary = []
 
-  const searchArray = Object.entries(datasets)
+  // list all quads from all datasets
+  const quads = Object.entries(datasets)
     .reduce((acc, [prefix, dataset]) => {
+      // some prefix datasets define triples that should not be part of the prefix, for instance we should only
+      // care about triples from `frbr:` for which the subject IRI actually starts with `http://purl.org/vocab/frbr/core#`,
+      // which unfortunately isn't always the case:
+      // https://github.com/zazuko/rdf-vocabularies/blob/3027a5c5aedf0bf0439d68d779856ace9c57b3f7/ontologies/frbr.nq#L348-L350
       const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
+
       if (filtered.length > 0) {
         loadedPrefixesCount += 1
         loadedTermsCount += filtered.length
       }
+
       summary.push({
         prefix,
         terms: filtered.length
       })
       return acc.concat(filtered)
     }, [])
+
+  const searchArray = quads
     .reduce((obj, quad) => {
       let { predicate, object } = quad
       let predicateIRI, objectIRI
@@ -164,33 +204,36 @@ async function initializeData () {
       return term
     })
 
-  const fuse = new Fuse(searchArray, fuseOptions)
-  for (const prefix in searchArrayByPrefix) {
-    prefixEndpointData[prefix] = {
-      'rdfs:Class': [],
-      'rdf:Property': []
+  enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
+
+  return {
+    summary: _.sortBy(summary, 'prefix'),
+    searchArray,
+    searchArrayByPrefix,
+    prefixEndpointData,
+    stats: {
+      loadedPrefixesCount,
+      loadedTermsCount
     }
-    searchArrayByPrefix[prefix].forEach((term) => {
-      const termToAdd = {
-        itemText: term.itemText,
-        iri: term.iri,
-        label: term.label,
-        prefixed: term.prefixed
-      }
-      const typePart = term.parts.find(({ predicate }) => predicate === 'rdf:type')
-      if (!typePart || !prefixedEndpointPredicates.includes(typePart.object)) {
-        return
-      }
-
-      prefixEndpointData[prefix][typePart.object].push(termToAdd)
-    })
-    prefixEndpointData[prefix]['rdfs:Class'] = _.sortBy(prefixEndpointData[prefix]['rdfs:Class'], 'prefixed')
-    prefixEndpointData[prefix]['rdf:Property'] = _.sortBy(prefixEndpointData[prefix]['rdf:Property'], 'prefixed')
-
-    searchArrayByPrefix[prefix] = new Fuse(searchArrayByPrefix[prefix], fuseOptions)
   }
-  summary = _.sortBy(summary, 'prefix')
-  debug(`API ready in ${Date.now() - now}ms, loaded ${loadedPrefixesCount} prefixes for a total of ${loadedTermsCount} triples`)
+}
+
+async function prepareData () {
+  const now = Date.now()
+
+  const datasets = await vocabularies()
+
+  const {
+    summary,
+    searchArray,
+    searchArrayByPrefix,
+    prefixEndpointData,
+    stats
+  } = createSearchArray(datasets)
+
+  const fuse = new Fuse(searchArray, fuseOptions)
+
+  debug(`API ready in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
 
   return {
     fuse,
