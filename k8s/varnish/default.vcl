@@ -4,8 +4,8 @@ import std;
 import bodyaccess;
 
 backend express {
-    .host = "backend";
-    .port = "3000";
+    .host = "server";
+    .port = "80";
 
     .connect_timeout = 10s;
     .first_byte_timeout = 2m;
