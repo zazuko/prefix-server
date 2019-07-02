@@ -5,20 +5,24 @@ metadata:
 spec:
   template:
     spec:
-      securityContext:
-        runAsUser: 65534
-        runAsGroup: 65534
       volumes:
-        - name: varnish-config-volume
-          configMap:
-            name: varnish-config
+      - name: varnish-config-volume
+        configMap:
+          name: varnish-config
+
       containers:
       - name: prefix-server
         image: "docker.io/zazukoians/varnish:5.2.1"
         imagePullPolicy: IfNotPresent
+
+        env:
+        - name: VCL_CONFIG
+          value: /config/default.vcl
+
         volumeMounts:
           - name: varnish-config-volume
-            mountPath: /etc/varnish/
+            mountPath: /config
+
         ports:
         - name: http
           containerPort: 80
