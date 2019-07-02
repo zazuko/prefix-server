@@ -84,8 +84,8 @@
         position: relative;
         background-color: #FFF;
         border: 1px solid #979797;
-        line-height: 46px;
-        padding: 0 12px;
+        line-height: 22px;
+        padding: 12px;
         width: 100%;
         font-size: 16px;
 
@@ -136,7 +136,7 @@
       .results {
         display: none;
         position: absolute;
-        top: 48px;
+        top: 100%;
         left: 0;
         right: 0;
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);

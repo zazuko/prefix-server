@@ -11,7 +11,17 @@
         API
       </router-link>
       <div class="copyright">
-        Copyright <a href="http://zazuko.com">Zazuko</a> GmbH © 2019
+        <template v-if="version">
+          <span class="part">
+            Version&nbsp;<a :href="version.url" class="version">{{ version.name }}</a>
+          </span>
+          <span class="separator">•</span>
+        </template>
+        <span class="part">
+          Copyright
+          <a href="http://zazuko.com">Zazuko</a>
+          GmbH © 2019
+        </span>
       </div>
     </div>
   </footer>
@@ -19,6 +29,9 @@
 
 <script>
 export default {
-  name: 'PageFooter'
+  name: 'PageFooter',
+  data () {
+    return { version: process.env.version }
+  }
 }
 </script>

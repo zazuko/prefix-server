@@ -2,15 +2,15 @@
   * http://cssreset.com
   */
 
-html, body, div, span, applet, object, 
+html, body, div, span, applet, object,
 iframe,h1, h2, h3, h4, h5, h6, p,
-blockquote, pre,a, abbr, acronym, 
-address, big, cite, code,del, dfn, 
-em, img, ins, kbd, q, s, samp, small, 
-strike, strong, sub, sup, tt, var,b, 
-u, i, center,dl, dt, dd, ol, ul, li, 
-fieldset, form, label, legend,table, 
-caption, tbody, tfoot, thead, tr, th, 
+blockquote, pre,a, abbr, acronym,
+address, big, cite, code,del, dfn,
+em, img, ins, kbd, q, s, samp, small,
+strike, strong, sub, sup, tt, var,b,
+u, i, center,dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,table,
+caption, tbody, tfoot, thead, tr, th,
 td,article, aside, canvas, details,
 embed, figure, figcaption, footer,
 header, hgroup, menu, nav, output,
@@ -24,7 +24,7 @@ audio, video {
  }
 
 /**
-  * HTML5 display-role reset for older browsers 
+  * HTML5 display-role reset for older browsers
   */
 
 article, aside, details, figcaption, figure,
@@ -36,7 +36,7 @@ body {
   line-height: 1;
 }
 
-ol, ul { 
+ol, ul {
   list-style: none;
 }
 
@@ -44,7 +44,7 @@ blockquote, q {
   quotes: none;
 }
 
-blockquote:before, 
+blockquote:before,
 blockquote:after,
 q:before, q:after {
   content: '';
@@ -54,6 +54,10 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+input, button {
+  margin: 0;
 }
 
 button {
