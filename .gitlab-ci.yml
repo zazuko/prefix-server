@@ -21,6 +21,8 @@ build:
 deploy:
   image: alpine
   stage: deploy
+  variables:
+    IMAGE_TAG: $CI_COMMIT_REF_NAME
   environment:
     name: production
     url: https://prefix.zazuko.com
@@ -30,8 +32,9 @@ deploy:
     - chmod +x /usr/local/bin/kubectl /usr/local/bin/kustomize
   script:
     - cd k8s
-    - kustomize edit set image registry.zazuko.com/docker/prefix-server=registry.zazuko.com/docker/prefix-server:$CI_COMMIT_REF_NAME
-    - cd ..
-    - kubectl apply -k k8s/
+    - kustomize edit set image registry.zazuko.com/docker/prefix-server=registry.zazuko.com/docker/prefix-server:$IMAGE_TAG
+    - kubectl apply -k .
   only:
     - tags
+    - triggers
+    - web
