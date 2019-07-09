@@ -59,22 +59,9 @@ export default {
       }
       return object
     }
+  },
+  methods: {
+    xss
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.term {
-  color: rgba(0,0,0,0.60);
-  letter-spacing: 0.25px;
-  text-align: justify;
-  line-height: 20px;
-
-  .language {
-    color: #FF441C;
-  }
-  a {
-    color: #FF441C;
-  }
-}
-</style>
