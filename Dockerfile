@@ -31,7 +31,7 @@ RUN npm ci --only=production
 ADD . .
 
 # Copy the built assets from the first step
-COPY --from=builder /src/.nuxt/ ./
+COPY --from=builder /src/.nuxt/ ./.nuxt
 
 ENV HOST 0.0.0.0
 
