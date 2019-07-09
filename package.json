@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "@zazuko/rdf-vocabularies": "^2019.6.27",
+    "@zazuko/rdf-vocabularies": "^2019.7.9",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "fuse.js": "^3.4.5",
