@@ -15,6 +15,7 @@ module.exports = {
         "rdau:P60809 (has writer of foreword (Deprecated))"
       ],
       "2": [
+        "as:Person (Person)",
         "foaf:Person (Person)",
         "foaf:PersonalProfileDocument (PersonalProfileDocument)",
         "foaf:mbox (personal mailbox)",
@@ -23,8 +24,7 @@ module.exports = {
         "schema:Person (Person)",
         "org:hasMember (has member)",
         "org:headOf (head of)",
-        "org:member (member)",
-        "org:memberOf (member of)"
+        "org:member (member)"
       ],
       "3": [
         "rdfs:",
