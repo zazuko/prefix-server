@@ -51,10 +51,10 @@ describe('Prefixes', () => {
     cy.get('h1 > code').invoke('text').then((prefix) => {
       cy.url().should('include', `/prefix/${prefix}`)
     })
-    cy.get('#rdfs-class ul li').then((list) => {
+    cy.get('#owl-class ul li').then((list) => {
       expect(list).to.have.length.of.at.least(1)
     })
-    cy.get('#rdf-property ul li').then((list) => {
+    cy.get('#owl-objectproperty ul li').then((list) => {
       expect(list).to.have.length.of.at.least(1)
     })
   })
@@ -62,9 +62,10 @@ describe('Prefixes', () => {
   it('should lead to individual terms', () => {
     cy.get('#prefixes li').first().click()
     cy.get('h1 > code').invoke('text').then((prefix) => {
-      cy.get('#rdfs-class ul li').first().invoke('text').then((term) => {
-        cy.get('#rdfs-class ul li').first().click()
-        cy.url().should('include', term.trim())
+      cy.get('#owl-class ul li').first().invoke('text').then((term) => {
+        cy.get('#owl-class ul li').first().find('a').click().then(() => {
+          cy.url().should('include', term.trim().split(' ')[0])
+        })
       })
     })
   })
