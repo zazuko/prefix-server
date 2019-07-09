@@ -28,7 +28,9 @@
           Namespace
         </h3>
         <p>
-          {{ model.iriSplitA }}
+          <a :href="model.iriSplitA">
+            {{ model.iriSplitA }}
+          </a>
         </p>
       </div>
       <div>
@@ -36,7 +38,9 @@
           Recommended prefix
         </h3>
         <p>
-          {{ model.prefixedSplitA }}:
+          <router-link :to="{ path: `/prefix/${model.prefixedSplitA}:` }">
+            {{ model.prefixedSplitA }}:
+          </router-link>
         </p>
       </div>
     </div>
