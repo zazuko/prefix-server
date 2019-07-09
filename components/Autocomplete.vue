@@ -80,7 +80,7 @@ export default {
       return this.entries.map(({ itemText, prefixed }) => ({ text: itemText, value: prefixed }))
     },
     open () {
-      return this.focused && this.results.length > 0
+      return this.entries.length || (this.focused && this.results.length > 0)
     }
   },
   watch: {

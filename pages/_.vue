@@ -126,17 +126,30 @@ export default {
       if (!entries.length) {
         return error({ statusCode: 404, message: 'No Result' })
       }
-      // there is no match, we don't want the user to continue from a
-      // URL that has no result, for instance if they typed schema:Lol<enter>
-      // and are stuck on `/schema:Lol`. In this situation, redirect to `/`.
-      redirect('/')
-      return
+
+      if (process.server) {
+        return {
+          entries
+        }
+      }
+
+      return {
+        model: null,
+        entries: []
+      }
     }
     return {
       entries
     }
   },
   async mounted () {
+    if (!this.model) {
+      // there is no match, we don't want the user to continue from a
+      // URL that has no result, for instance if they typed schema:Lol<enter>
+      // and are stuck on `/schema:Lol`. In this situation, redirect to `/`.
+      this.$router.push('/')
+      return
+    }
     this.iriFromURL = this.$route.path + this.$route.hash
     if (this.iriFromURL.startsWith('/')) {
       // this.$route.path often starts with `/`, strip it since
