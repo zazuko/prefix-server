@@ -25,7 +25,8 @@
     "fuse.js": "^3.4.5",
     "nuxt-start": "^2.8.1",
     "query-string": "^6.8.1",
-    "v-clipboard": "^2.2.2"
+    "v-clipboard": "^2.2.2",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "@cypress/browserify-preprocessor": "^2.1.1",

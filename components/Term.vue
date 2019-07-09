@@ -22,14 +22,16 @@
         :to="{ path: `/${value}` }">
         {{ value }}
       </router-link>
-      <div v-else>
-        {{ value }}
+      <div v-else-if="isBlankNode">
+        <em>blank node</em>
       </div>
+      <div v-else v-html="xss(value)" />
     </div>
   </div>
 </template>
 
 <script>
+import xss from 'xss'
 export default {
   name: 'Term',
   props: {
@@ -39,6 +41,9 @@ export default {
     }
   },
   computed: {
+    isBlankNode () {
+      return this.term.object.value.startsWith('b') && this.term.object.value.split('_').length === 2
+    },
     isExternalIRI () {
       return this.term.object === this.term.objectIRI
     },
