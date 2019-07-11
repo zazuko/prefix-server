@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prefix-server
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+  - secretName: prefix-server-cert
+    hosts:
+    - prefix.zazuko.com
+  rules:
+  - host: prefix.zazuko.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: varnish
+          servicePort: 80
