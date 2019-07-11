@@ -81,10 +81,26 @@ describe('Search', () => {
     cy.url().should('equal', 'http://localhost:3000/schema:Person')
   })
 
-  it('should redirect to home when no matching result found', () => {
+  it('should redirect to home when no matching result found and display suggestions', () => {
     searchField().type('schema:Lol')
     suggestionList().should('be.visible')
     cy.get('form').submit()
     cy.url().should('equal', 'http://localhost:3000/')
+    suggestionList().should('be.visible')
+  })
+
+  it('should be case sensitive', () => {
+    searchField().type('qb:Slice')
+    cy.get('form').submit()
+    cy.url().should('equal', 'http://localhost:3000/qb:Slice')
+    cy.get('.main-results section').invoke('text').then((foo) => {
+      searchField().type('qb:slice')
+      cy.get('form').submit()
+      cy.url().should('equal', 'http://localhost:3000/qb:slice')
+      cy.wait(500)
+      cy.get('.main-results section').invoke('text').then((bar) => {
+        expect(foo).not.to.equal(bar)
+      })
+    })
   })
 })
