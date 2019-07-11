@@ -142,34 +142,6 @@ export default {
       entries
     }
   },
-  async mounted () {
-    if (!this.model) {
-      // there is no match, we don't want the user to continue from a
-      // URL that has no result, for instance if they typed schema:Lol<enter>
-      // and are stuck on `/schema:Lol`. In this situation, redirect to `/`.
-      this.$router.push('/')
-      return
-    }
-    this.iriFromURL = this.$route.path + this.$route.hash
-    if (this.iriFromURL.startsWith('/')) {
-      // this.$route.path often starts with `/`, strip it since
-      // no IRI nor any prefix start with /
-      this.iriFromURL = this.iriFromURL.substr(1)
-    }
-
-    const match = pickFromEntries(this.iriFromURL, this.entries)
-    if (match) {
-      this.model = match
-      this.entries = []
-      return
-    }
-
-    await this.doSearch(this.iriFromURL)
-    if (this.entries.length) {
-      this.model = this.entries[0]
-      this.entries = []
-    }
-  },
   methods: {
     async doSearch (val) {
       val = val || ''
