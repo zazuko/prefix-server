@@ -94,8 +94,6 @@ function enrichPrefixSpecificData (searchArrayByPrefix, prefixEndpointData) {
     prefixEndpointData[prefix]['owl:Class'] = _.sortBy(prefixEndpointData[prefix]['owl:Class'], 'prefixed')
     prefixEndpointData[prefix]['rdf:Property'] = _.sortBy(prefixEndpointData[prefix]['rdf:Property'], 'prefixed')
     prefixEndpointData[prefix]['owl:ObjectProperty'] = _.sortBy(prefixEndpointData[prefix]['owl:ObjectProperty'], 'prefixed')
-
-    searchArrayByPrefix[prefix] = new Fuse(searchArrayByPrefix[prefix], fuseOptions)
   }
 }
 
@@ -235,14 +233,13 @@ async function prepareData () {
     stats
   } = createSearchArray(datasets)
 
-  const fuse = new Fuse(searchArray, fuseOptions)
-
-  debug(`API ready in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
+  debug(`API data generated in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
 
   return {
-    fuse,
+    searchArray,
     searchArrayByPrefix,
     prefixEndpointData,
-    summary
+    summary,
+    fuseOptions
   }
 }

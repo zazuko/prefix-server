@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 export default {
   mode: 'universal',
   /*
@@ -67,6 +70,21 @@ export default {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
+    }
+  },
+  hooks: {
+    build: {
+      async before (builder) {
+        const debug = require('debug')('prefix-server')
+        debug('preparing API data')
+        const { prepareData } = require('./api/utils')
+        const zlib = require('zlib')
+        const extraFilePath = path.resolve(__dirname, './api/api-data.json.gz')
+        const data = await prepareData()
+        const gzip = zlib.gzipSync(JSON.stringify(data))
+        fs.writeFileSync(extraFilePath, gzip)
+        debug(`wrote API data to ${extraFilePath}`)
+      }
     }
   }
 }

@@ -1,25 +1,30 @@
+const fs = require('fs')
+const path = require('path')
+const zlib = require('zlib')
 const express = require('express')
-require('express-async-errors')
+const Fuse = require('fuse.js')
 
-const { cachedShrink, cachedExpand, prepareData } = require('./utils')
+const { cachedShrink, cachedExpand } = require('./utils')
 
 const app = express()
 const router = express.Router()
-let initDone = false
-let fuse, searchArrayByPrefix, prefixEndpointData, summary
+const data = zlib.gunzipSync(fs.readFileSync(path.join(__dirname, './api-data.json.gz')))
+const {
+  searchArray,
+  searchArrayByPrefix,
+  prefixEndpointData,
+  summary,
+  fuseOptions
+} = JSON.parse(data)
+
+const fuse = new Fuse(searchArray, fuseOptions)
+Object.keys(searchArrayByPrefix).forEach((key) => {
+  searchArrayByPrefix[key] = new Fuse(searchArrayByPrefix[key], fuseOptions)
+})
 
 module.exports = { path: '/api/v1', handler: app }
 
-async function init () {
-  if (initDone) {
-    return
-  }
-  ({ fuse, searchArrayByPrefix, prefixEndpointData, summary } = await prepareData())
-  initDone = true
-}
-
-router.get('/search', async (req, res) => {
-  await init()
+router.get('/search', (req, res) => {
   const query = (req.query.q || '').replace(/---hash---/g, '#').trim()
 
   if (!query) {
@@ -41,8 +46,7 @@ router.get('/search', async (req, res) => {
   res.json(fuse.search(query).slice(0, 10))
 })
 
-router.get('/prefix', async (req, res) => {
-  await init()
+router.get('/prefix', (req, res) => {
   const query = (req.query.q || '').trim()
   const prefix = query.split(':')[0]
 
@@ -52,13 +56,11 @@ router.get('/prefix', async (req, res) => {
   res.json(prefixEndpointData[prefix])
 })
 
-router.get('/summary', async (req, res) => {
-  await init()
+router.get('/summary', (req, res) => {
   res.json(summary)
 })
 
-router.get('/shrink', async (req, res) => {
-  await init()
+router.get('/shrink', (req, res) => {
   let iri = req.query.q
 
   if (iri) {
@@ -81,8 +83,7 @@ router.get('/shrink', async (req, res) => {
   res.status(400).json({ help: '/api/v1/shrink?q=…' })
 })
 
-router.get('/expand', async (req, res) => {
-  await init()
+router.get('/expand', (req, res) => {
   const prefixed = req.query.q
 
   if (prefixed) {
@@ -101,8 +102,7 @@ router.get('/expand', async (req, res) => {
   res.status(400).json({ help: '/api/v1/expand?q=…' })
 })
 
-router.get('/health', async (req, res) => {
-  await init()
+router.get('/health', (req, res) => {
   res.json('ok')
 })
 
