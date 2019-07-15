@@ -1,9 +1,13 @@
 const _ = require('lodash')
-const Fuse = require('fuse.js')
 const debug = require('debug')('prefix-server')
 
 const { vocabularies, prefixes } = require('@zazuko/rdf-vocabularies')
 const { shrink, expand } = require('@zazuko/rdf-vocabularies')
+
+const labelPredicates = [
+  'http://www.w3.org/2000/01/rdf-schema#label',
+  'http://www.w3.org/2004/02/skos/core#prefLabel'
+]
 
 module.exports = {
   cachedShrink,
@@ -159,7 +163,7 @@ function createSearchArray (datasets) {
     }, [])
     .map((term) => {
       const labels = term.parts.reduce((labels, part) => {
-        if (part.predicateIRI === 'http://www.w3.org/2000/01/rdf-schema#label') {
+        if (labelPredicates.includes(part.predicateIRI)) {
           const language = part.object.language
           if (typeof language === 'string') {
             labels[language] = part.object.value
