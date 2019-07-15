@@ -21,7 +21,6 @@
     "@zazuko/rdf-vocabularies": "^2019.7.9-2",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "express-async-errors": "^3.1.1",
     "fuse.js": "^3.4.5",
     "nuxt-start": "^2.8.1",
     "query-string": "^6.8.1",
