@@ -30,9 +30,9 @@
 <script>
 export default {
   name: 'PageFooter',
-  asyncData ({ env }) {
+  data () {
     return {
-      version: env.version
+      version: process.env.version
     }
   }
 }
