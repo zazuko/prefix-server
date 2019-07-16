@@ -42,6 +42,7 @@ export default {
     '@/assets/zazuko/main.scss'
   ],
   serverMiddleware: [
+    '@/api/etag-middleware',
     '@/api/'
   ],
   /*
@@ -75,6 +76,9 @@ export default {
   hooks: {
     build: {
       async before (builder) {
+        if (process.env.NODE_ENV !== 'production') {
+          return
+        }
         const debug = require('debug')('prefix-server')
         debug('preparing API data')
         const { prepareData } = require('./api/utils')
@@ -86,5 +90,8 @@ export default {
         debug(`wrote API data to ${extraFilePath}`)
       }
     }
+  },
+  render: {
+    etag: false
   }
 }
