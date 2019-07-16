@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const debug = require('debug')('prefix-server')
-const hash = require('string-hash')
 
 const { vocabularies, prefixes } = require('@zazuko/rdf-vocabularies')
 const { shrink, expand } = require('@zazuko/rdf-vocabularies')
@@ -11,7 +10,6 @@ const labelPredicates = [
 ]
 
 module.exports = {
-  etag,
   cachedShrink,
   cachedExpand,
   prepareData
@@ -243,13 +241,5 @@ async function prepareData () {
     prefixEndpointData,
     summary,
     fuseOptions
-  }
-}
-
-function etag (version) {
-  return (req, res, next) => {
-    const resource = `${version}:${req.originalUrl}`
-    res.setHeader('ETag', hash(resource).toString(16))
-    next()
   }
 }

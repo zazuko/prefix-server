@@ -3,9 +3,8 @@ const path = require('path')
 const zlib = require('zlib')
 const express = require('express')
 const Fuse = require('fuse.js')
-const preconditions = require('express-preconditions')
 
-const { cachedShrink, cachedExpand, etag } = require('./utils')
+const { cachedShrink, cachedExpand } = require('./utils')
 
 const app = express()
 const router = express.Router()
@@ -24,9 +23,6 @@ Object.keys(searchArrayByPrefix).forEach((key) => {
 })
 
 module.exports = { path: '/api/v1', handler: app }
-
-app.use(etag(process.env.APP_VERSION || ''))
-app.use(preconditions())
 
 router.get('/search', (req, res) => {
   const query = (req.query.q || '').replace(/---hash---/g, '#').trim()
