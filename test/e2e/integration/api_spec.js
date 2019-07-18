@@ -85,4 +85,45 @@ describe('/api/v1', () => {
       })
     })
   })
+
+  describe('/suggest', () => {
+    it('should suggest empty', () => {
+      cy.request('/api/v1/suggest?q=').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.deep.equal([])
+      })
+    })
+    it('should suggest results', () => {
+      cy.request('/api/v1/suggest?q=Person').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.deep.equal([
+          'as:Person',
+          'foaf:Person',
+          'foaf:PersonalProfileDocument',
+          'prov:Person',
+          'schema:Person',
+          'org:hasMember',
+          'org:headOf',
+          'org:member',
+          'org:memberOf',
+          'ma:Person'
+        ])
+      })
+      cy.request('/api/v1/suggest?q=person').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.deep.equal([
+          'foaf:mbox',
+          'frbr:Person',
+          'qudt:HypersonicAerodynamicsQuantityKind',
+          'dcterms:rightsHolder',
+          'foaf:Person',
+          'foaf:PersonalProfileDocument',
+          'foaf:knows',
+          'ma:Agent',
+          'schema:Person',
+          'schema:athlete'
+        ])
+      })
+    })
+  })
 })

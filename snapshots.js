@@ -18,13 +18,13 @@ module.exports = {
         "as:Person (Person)",
         "foaf:Person (Person)",
         "foaf:PersonalProfileDocument (PersonalProfileDocument)",
-        "foaf:mbox (personal mailbox)",
-        "frbr:Person (person)",
         "prov:Person (Person)",
         "schema:Person (Person)",
         "org:hasMember (has member)",
         "org:headOf (head of)",
-        "org:member (member)"
+        "org:member (member)",
+        "org:memberOf (member of)",
+        "ma:Person"
       ],
       "3": [
         "rdfs:",

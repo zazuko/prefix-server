@@ -18,6 +18,7 @@ module.exports = {
 const shrunkCache = {}
 const expandedCache = {}
 const fuseOptions = {
+  caseSensitive: true,
   shouldSort: true,
   treshold: 0.2,
   distance: 40,

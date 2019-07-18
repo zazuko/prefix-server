@@ -46,12 +46,39 @@ router.get('/search', (req, res) => {
   res.json(fuse.search(query).slice(0, 10))
 })
 
+router.get('/suggest', (req, res) => {
+  const query = (req.query.q || '').replace(/---hash---/g, '#').trim()
+
+  if (!query) {
+    res.json([])
+    return
+  }
+
+  let results
+
+  // detect queries like this: `skos:`, `skos:foo`
+  // do not detect queries containing a URL or spaces
+  if (query.split(' ').length <= 1 && query.split('.').length <= 3 && !query.includes('://')) {
+    const prefix = query.split(':')[0]
+    // scope the search to only this prefix
+    if (searchArrayByPrefix[prefix]) {
+      results = searchArrayByPrefix[prefix].search(query).slice(0, 10)
+    }
+  }
+  if (!results) {
+    results = fuse.search(query).slice(0, 10)
+  }
+
+  res.json(results.map(item => item.prefixed))
+})
+
 router.get('/prefix', (req, res) => {
   const query = (req.query.q || '').trim()
   const prefix = query.split(':')[0]
 
   if (!prefix || !prefixEndpointData[prefix]) {
     res.status(404).json([])
+    return
   }
   res.json(prefixEndpointData[prefix])
 })
