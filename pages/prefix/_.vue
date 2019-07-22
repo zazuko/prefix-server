@@ -6,8 +6,12 @@
           <div class="content default">
             <h1><code>{{ prefix }}</code> RDF prefix</h1>
 
+            <p>
+              What does the <code>{{ prefix }}</code> ontology contain?
+            </p>
+
             <div
-              v-for="prefixedType in prefixedTypes"
+              v-for="prefixedType in sortedKeys"
               :id="prefixedType.replace(':', '-').toLowerCase()"
               :key="prefixedType">
               <h2 v-show="content[prefixedType].length">
@@ -27,8 +31,9 @@
               </ul>
             </div>
 
-            <h2 v-show="content.otherTermsCount">
-              {{ content.otherTermsCount }} other terms
+            <h2 v-show="content.otherTypes.length">
+              {{ content.otherTypes.length }}
+              other term{{ content.otherTypes.length > 1 ? 's' : '' }}
             </h2>
           </div>
         </section>
@@ -38,13 +43,6 @@
 </template>
 
 <script>
-const prefixedTypes = [
-  'rdfs:Class',
-  'owl:Class',
-  'rdf:Property',
-  'owl:ObjectProperty'
-]
-
 export default {
   async asyncData ({ $axios, params, redirect, error }) {
     const prefix = params.pathMatch
@@ -58,11 +56,13 @@ export default {
     }
     try {
       const content = await $axios.$get(`/api/v1/prefix?q=${prefix}`)
+      const sortedKeys = Object.keys(content).filter(key => key !== 'otherTypes')
+      sortedKeys.sort()
 
       return {
-        prefixedTypes,
         prefix,
-        content
+        content,
+        sortedKeys
       }
     }
     catch (err) {

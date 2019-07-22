@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
 export default {
   mode: 'universal',
   /*
@@ -86,18 +83,10 @@ export default {
   hooks: {
     build: {
       async before (builder) {
-        if (process.env.NODE_ENV !== 'production') {
-          return
+        if (process.env.NODE_ENV === 'production') {
+          const buildResources = require('./build-resources')
+          await buildResources()
         }
-        const debug = require('debug')('prefix-server')
-        debug('preparing API data')
-        const { prepareData } = require('./api/utils')
-        const zlib = require('zlib')
-        const extraFilePath = path.resolve(__dirname, './api/api-data.json.gz')
-        const data = await prepareData()
-        const gzip = zlib.gzipSync(JSON.stringify(data))
-        fs.writeFileSync(extraFilePath, gzip)
-        debug(`wrote API data to ${extraFilePath}`)
       }
     }
   },

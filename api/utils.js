@@ -66,35 +66,44 @@ function cachedExpand (term) {
 }
 
 function enrichPrefixSpecificData (searchArrayByPrefix, prefixEndpointData) {
-  const prefixedEndpointPredicates = ['rdfs:Class', 'owl:Class', 'rdf:Property', 'owl:ObjectProperty']
-
   for (const prefix in searchArrayByPrefix) {
     prefixEndpointData[prefix] = {
-      'rdfs:Class': [],
-      'owl:Class': [],
-      'rdf:Property': [],
-      'owl:ObjectProperty': [],
-      otherTermsCount: 0
+      otherTypes: []
     }
-    searchArrayByPrefix[prefix].forEach((term) => {
+    for (const term of searchArrayByPrefix[prefix]) {
+      if (!term.prefixed.startsWith(prefix)) {
+        // for instance if the ontology `foo:` contains triples indicating its author:
+        //          <http://example.com/me> rdf:type foaf:Person .
+        // we want to filter it out.
+        continue
+      }
       const termToAdd = {
         itemText: term.itemText,
         iri: term.iri,
         label: term.label,
         prefixed: term.prefixed
       }
-      const typePart = term.parts.find(({ predicate }) => predicate === 'rdf:type')
-      if (!typePart || !prefixedEndpointPredicates.includes(typePart.object)) {
-        prefixEndpointData[prefix].otherTermsCount += 1
-        return
-      }
 
-      prefixEndpointData[prefix][typePart.object].push(termToAdd)
+      // some terms have several types
+      const typeParts = term.parts.filter(({ predicate }) => predicate === 'rdf:type')
+
+      for (const typePart of typeParts) {
+        const type = typePart.object
+
+        if (type.startsWith('http://') || type.startsWith('https://')) {
+          prefixEndpointData[prefix].otherTypes.push(type)
+          continue
+        }
+
+        if (!prefixEndpointData[prefix][type]) {
+          prefixEndpointData[prefix][type] = []
+        }
+        prefixEndpointData[prefix][type].push(termToAdd)
+      }
+    }
+    Object.keys(prefixEndpointData[prefix]).forEach((term) => {
+      prefixEndpointData[prefix][term] = _.sortBy(prefixEndpointData[prefix][term], 'prefixed')
     })
-    prefixEndpointData[prefix]['rdfs:Class'] = _.sortBy(prefixEndpointData[prefix]['rdfs:Class'], 'prefixed')
-    prefixEndpointData[prefix]['owl:Class'] = _.sortBy(prefixEndpointData[prefix]['owl:Class'], 'prefixed')
-    prefixEndpointData[prefix]['rdf:Property'] = _.sortBy(prefixEndpointData[prefix]['rdf:Property'], 'prefixed')
-    prefixEndpointData[prefix]['owl:ObjectProperty'] = _.sortBy(prefixEndpointData[prefix]['owl:ObjectProperty'], 'prefixed')
   }
 }
 
