@@ -1,7 +1,7 @@
 <template>
   <form
     method="GET"
-    action="/redirect"
+    action="/search"
     class="autocomplete"
     :class="{ open }"
     @submit="formSubmit"
@@ -89,6 +89,14 @@ export default {
       if (document.querySelector(':focus') === this.$refs.input) {
         this.focused = true
       }
+    }
+  },
+  mounted () {
+    this.$refs.input.selectionStart = this.searchInput.length
+    this.$refs.input.selectionEnd = this.searchInput.length
+    if (this.results.length) {
+      this.$refs.input.focus()
+      this.focused = true
     }
   },
   methods: {

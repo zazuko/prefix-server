@@ -81,7 +81,7 @@ export default {
     return {
       isLoading: false,
       model: null,
-      search: null,
+      search: '',
       iriFromURL: ''
     }
   },
@@ -92,7 +92,7 @@ export default {
   },
   watch: {
     model () {
-      // only redirect to result when user search something, otherwise people hitting
+      // only redirect to result when user searches something, otherwise people hitting
       // http://localhost:3000/http://www.w3.org/ns/rdfa#PrefixOrTermMapping
       // will also be redirected
       if (this.model && this.search) {
@@ -127,15 +127,9 @@ export default {
         return error({ statusCode: 404, message: 'No Result' })
       }
 
-      if (process.server) {
-        return {
-          entries
-        }
-      }
-
       return {
-        model: null,
-        entries: []
+        search: decodeURIComponent(iriFromURL),
+        entries
       }
     }
     return {
