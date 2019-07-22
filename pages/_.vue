@@ -168,12 +168,6 @@ export default {
       this.$router.push('/')
     }
   },
-  validate ({ params }) {
-    if (params.pathMatch && params.pathMatch.endsWith(':')) {
-      return false
-    }
-    return true
-  },
   head () {
     return {
       title: 'Resolve RDF namespaces'

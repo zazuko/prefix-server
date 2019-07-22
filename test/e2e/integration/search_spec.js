@@ -81,12 +81,16 @@ describe('Search', () => {
     cy.url().should('equal', 'http://localhost:3000/schema:Person')
   })
 
-  it('should redirect to home when no matching result found and display suggestions', () => {
-    searchField().type('schema:Lol')
-    suggestionList().should('be.visible')
-    cy.get('form').submit()
-    cy.url().should('equal', 'http://localhost:3000/')
-    suggestionList().should('be.visible')
+  const searchTerms = ['schema:Lol', 'schema:', 'foo', ':']
+
+  searchTerms.forEach((term) => {
+    it(`should search for ${term} on submit, redirect and display suggestions`, () => {
+      searchField().type(term)
+      suggestionList().should('be.visible')
+      cy.get('form').submit()
+      suggestionList().should('be.visible')
+      cy.url().should('equal', `http://localhost:3000/${term}`)
+    })
   })
 
   it('should be case sensitive', () => {
