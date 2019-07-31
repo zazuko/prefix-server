@@ -3,7 +3,6 @@ kind: Kustomization
 
 namespace: prefix-server
 resources:
-  - namespace.yaml
   - ingress.yaml
 
 commonLabels:
