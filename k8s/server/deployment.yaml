@@ -11,7 +11,7 @@ spec:
         runAsGroup: 65534
       containers:
       - name: prefix-server
-        image: "registry.zazuko.com/docker/prefix-server:latest"
+        image: prefix-server
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
