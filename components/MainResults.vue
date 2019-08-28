@@ -28,7 +28,7 @@
           Namespace
         </h3>
         <p>
-          <a :href="model.iriSplitA">
+          <a :href="model.iriSplitA" target="_blank">
             {{ model.iriSplitA }}
           </a>
         </p>
