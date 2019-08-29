@@ -78,7 +78,8 @@ export default {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
+    },
+    transpile: ['feather-icon-literals']
   },
   hooks: {
     build: {
