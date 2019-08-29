@@ -28,8 +28,8 @@
           Namespace
         </h3>
         <p>
-          <a :href="model.iriSplitA" target="_blank">
-            {{ model.iriSplitA }}
+          <a :href="model.iriSplitA" >
+            {{ model.iriSplitA }} <span v-html="ExternalLink({ height: 15, width: 15 })"></span>
           </a>
         </p>
       </div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { ExternalLink } from 'feather-icon-literals'
+
 export default {
   name: 'MainResults',
   props: {
@@ -65,7 +67,8 @@ export default {
       clipboardIri: {
         status: false,
         timeout: null
-      }
+      },
+      ExternalLink
     }
   },
   computed: {
