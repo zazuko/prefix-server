@@ -84,10 +84,10 @@ export default {
   hooks: {
     build: {
       async before (builder) {
-        if (process.env.NODE_ENV === 'production') {
-          const buildResources = require('./build-resources')
-          await buildResources()
-        }
+        // if (process.env.NODE_ENV === 'production') {
+        //   const buildResources = require('./build-resources')
+        //   await buildResources()
+        // }
       }
     }
   },
