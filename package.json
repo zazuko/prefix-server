@@ -23,6 +23,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "express-preconditions": "^1.0.5",
+    "feather-icon-literals": "^1.0.0-rc.8",
     "fuse.js": "^3.4.5",
     "nuxt-start": "^2.9.2",
     "query-string": "^6.8.2",
