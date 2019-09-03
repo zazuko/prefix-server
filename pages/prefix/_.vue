@@ -4,10 +4,15 @@
       <div class="layout-width">
         <section class="md-content">
           <div class="content default">
-            <h1><code>{{ prefix }}</code> RDF prefix</h1>
+            <h1><code>{{ prefix }}</code> RDF Prefix</h1>
+            <h3 v-if="metadata.title" v-html="metadata.title"></h3>
+            <h3>Namespace: <code>{{ metadata.namespace }}</code></h3>
+            <h4 v-if="metadata.description" v-html="metadata.description"></h4>
 
             <p>
-              What does the <code>{{ prefix }}</code> ontology contain?
+              <em>
+                What does this namespace contain?
+              </em>
             </p>
 
             <div
@@ -55,12 +60,13 @@ export default {
       return
     }
     try {
-      const content = await $axios.$get(`/api/v1/prefix?q=${prefix}`)
+      const { data: content, metadata } = await $axios.$get(`/api/v1/prefix?q=${prefix}`)
       const sortedKeys = Object.keys(content).filter(key => key !== 'otherTypes')
       sortedKeys.sort()
 
       return {
         prefix,
+        metadata,
         content,
         sortedKeys
       }
