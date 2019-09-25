@@ -89,3 +89,6 @@ sw.*
 
 # Cypress videos
 /test/e2e/videos/*.mp4
+
+# build artifacts
+/api/datafiles/*.gz
