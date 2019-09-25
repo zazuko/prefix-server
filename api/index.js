@@ -6,16 +6,18 @@ const Fuse = require('fuse.js')
 
 const { cachedShrink, cachedExpand } = require('./utils')
 
+const loadDataFile = file =>
+  JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(__dirname, `./datafiles/${file}.json.gz`))))
+
 const app = express()
 const router = express.Router()
-const data = zlib.gunzipSync(fs.readFileSync(path.join(__dirname, './api-data.json.gz')))
-const {
-  searchArray,
-  searchArrayByPrefix,
-  prefixEndpointData,
-  summary,
-  fuseOptions
-} = JSON.parse(data)
+
+const searchArray = loadDataFile('searchArray')
+const searchArrayByPrefix = loadDataFile('searchArrayByPrefix')
+const prefixEndpointData = loadDataFile('prefixEndpointData')
+const prefixMetadata = loadDataFile('prefixMetadata')
+const summary = loadDataFile('summary')
+const fuseOptions = loadDataFile('fuseOptions')
 
 const fuse = new Fuse(searchArray, fuseOptions)
 Object.keys(searchArrayByPrefix).forEach((key) => {
@@ -80,7 +82,10 @@ router.get('/prefix', (req, res) => {
     res.status(404).json([])
     return
   }
-  res.json(prefixEndpointData[prefix])
+  res.json({
+    data: prefixEndpointData[prefix],
+    metadata: prefixMetadata[prefix]
+  })
 })
 
 router.get('/summary', (req, res) => {
@@ -114,7 +119,7 @@ router.get('/expand', (req, res) => {
   const prefixed = req.query.q
 
   if (prefixed) {
-    const attempt = cachedExpand({ value: prefixed })
+    const attempt = cachedExpand(prefixed)
     if (attempt !== prefixed) {
       return res.json({
         success: true,

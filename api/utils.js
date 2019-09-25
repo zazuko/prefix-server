@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const debug = require('debug')('prefix-server')
+const { namedNode } = require('@rdfjs/data-model')
 
 const { vocabularies, prefixes } = require('@zazuko/rdf-vocabularies')
 const { shrink, expand } = require('@zazuko/rdf-vocabularies')
@@ -49,15 +50,15 @@ function cachedShrink (term) {
   return shrunk
 }
 
-function cachedExpand (term) {
-  const cached = expandedCache[term.value]
+function cachedExpand (prefixed) {
+  const cached = expandedCache[prefixed]
   if (cached) {
     return cached
   }
-  let expanded = term.value
+  let expanded = prefixed
   try {
-    expanded = expand(term.value) || term.value
-    expandedCache[term.value] = expanded
+    expanded = expand(prefixed) || prefixed
+    expandedCache[prefixed] = expanded
   }
   catch (err) {
     //
@@ -216,8 +217,6 @@ function createSearchArray (datasets) {
       return term
     })
 
-  enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
-
   return {
     summary: _.sortBy(summary, 'prefix'),
     searchArray,
@@ -228,6 +227,45 @@ function createSearchArray (datasets) {
       loadedTermsCount
     }
   }
+}
+
+function firstVal (dataset) {
+  if (dataset.size) {
+    return dataset.toArray()[0].object.value
+  }
+}
+
+function getTitle (dataset) {
+  const potentialValues = [
+    firstVal(dataset.match(null, namedNode(cachedExpand('dc11:title')))),
+    firstVal(dataset.match(null, namedNode(cachedExpand('dcterms:title')))),
+    firstVal(dataset.match(null, namedNode(cachedExpand('rdfs:label'))))
+  ].filter(Boolean)
+  return potentialValues.length ? potentialValues[0] : ''
+}
+
+function getDescription (dataset) {
+  const potentialValues = [
+    firstVal(dataset.match(null, namedNode(cachedExpand('dc11:description')))),
+    firstVal(dataset.match(null, namedNode(cachedExpand('dcterms:description')))),
+    firstVal(dataset.match(null, namedNode(cachedExpand('rdfs:comment'))))
+  ].filter(Boolean)
+  return potentialValues.length ? potentialValues[0] : ''
+}
+
+function findPrefixMetadata (datasets) {
+  const output = {}
+  Object.entries(datasets).forEach(([prefix, dataset]) => {
+    const namespace = prefixes[prefix]
+    const namespaceDataset = dataset.match(namedNode(namespace))
+
+    output[prefix] = {
+      namespace,
+      title: getTitle(namespaceDataset),
+      description: getDescription(namespaceDataset)
+    }
+  })
+  return output
 }
 
 async function prepareData () {
@@ -242,12 +280,16 @@ async function prepareData () {
     prefixEndpointData,
     stats
   } = createSearchArray(datasets)
+  enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
+
+  const prefixMetadata = findPrefixMetadata(datasets)
 
   debug(`API data generated in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
 
   return {
     searchArray,
     searchArrayByPrefix,
+    prefixMetadata,
     prefixEndpointData,
     summary,
     fuseOptions
