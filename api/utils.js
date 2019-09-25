@@ -163,7 +163,8 @@ function createSearchArray (datasets) {
           parts: [part]
         }
         const [prefixedSplitA, prefixedSplitB] = termToAdd.prefixed.split(':')
-        const iriSplitA = termToAdd.iri.value.split(prefixedSplitB)[0]
+        // see https://github.com/zazuko/prefix-server/issues/26
+        const iriSplitA = prefixedSplitB ? termToAdd.iri.value.split(prefixedSplitB)[0] : termToAdd.iri.value
         Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB })
 
         obj.push(termToAdd)
