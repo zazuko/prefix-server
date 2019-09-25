@@ -14,6 +14,7 @@ RUN npm ci
 
 ADD . .
 ENV NODE_ENV=production
+ENV DEBUG=prefix-server
 # this ENV var needs to be adapted at image build time => cannot be adjusted at runtime
 ENV API_URL_BROWSER=${API_URL_BROWSER}
 ENV APP_VERSION=${VERSION}
