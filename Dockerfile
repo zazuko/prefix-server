@@ -19,6 +19,7 @@ ENV API_URL_BROWSER=${API_URL_BROWSER}
 ENV APP_VERSION=${VERSION}
 ENV APP_COMMIT=${COMMIT}
 
+RUN npm run prepare
 RUN npm run build:modern
 
 # Second step: only install runtime dependencies
@@ -26,12 +27,12 @@ FROM node:lts-alpine
 
 WORKDIR /src
 
-ADD package.json package-lock.json ./
-RUN npm ci --only=production
 ADD . .
+RUN npm ci --only=production
 
 # Copy the built assets from the first step
 COPY --from=builder /src/.nuxt/ ./.nuxt
+COPY --from=builder /src/api/datafiles ./api/datafiles
 
 ENV HOST 0.0.0.0
 

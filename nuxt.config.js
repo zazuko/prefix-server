@@ -82,14 +82,7 @@ export default {
     transpile: ['feather-icon-literals']
   },
   hooks: {
-    build: {
-      async before (builder) {
-        if (process.env.NODE_ENV === 'production') {
-          const buildResources = require('./build-resources')
-          await buildResources()
-        }
-      }
-    }
+    build: {}
   },
   render: {
     etag: false
