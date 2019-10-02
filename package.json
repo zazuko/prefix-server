@@ -26,7 +26,7 @@
     "express-preconditions": "^1.0.5",
     "feather-icon-literals": "^1.0.0-rc.8",
     "fuse.js": "^3.4.5",
-    "nuxt-start": "^2.9.2",
+    "nuxt-start": "^2.10.0",
     "query-string": "^6.8.2",
     "string-hash": "^1.1.3",
     "v-clipboard": "^2.2.2",
@@ -41,7 +41,7 @@
     "cypress": "^3.4.1",
     "eslint": "^5.15.1",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-cypress": "^2.6.1",
+    "eslint-plugin-cypress": "^2.7.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.15.2",
     "eslint-plugin-node": "^9.2.0",
@@ -50,7 +50,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
-    "nuxt": "^2.9.2",
+    "nuxt": "^2.10.0",
     "sass-loader": "^7.3.1"
   },
   "engines": {
