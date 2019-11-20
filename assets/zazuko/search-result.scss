@@ -23,6 +23,44 @@
       position: relative;
       cursor: pointer;
 
+      a {
+        $off: 2px;
+        $line-height: 28px;
+        $stroke: 2px;
+        display: inline-block;
+        position: relative;
+        color: inherit;
+        text-decoration: none;
+        // font-family: monospace;
+        white-space: nowrap;
+        z-index: 0;
+        transition: color .1s ease;
+
+        &::after {
+          position: absolute;
+          content: '';
+          display: block;
+          height: $stroke;
+          bottom: -$stroke;
+          left: 0;
+          right: 0;
+          background-color: $color-secondary;
+          z-index: -1;
+          transition: all .15s ease;
+        }
+
+        &:focus, &:hover {
+          color: white;
+          outline: 0;
+          &::after {
+            left: -$off;
+            right: -$off;
+            bottom: - $stroke - $off;
+            height: $line-height + 2 * ($off + $stroke);
+          }
+        }
+      }
+
       & > span {
         color: #5D5D5D;
       }

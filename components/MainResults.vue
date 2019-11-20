@@ -1,6 +1,19 @@
 <template>
   <section>
     <div class="big">
+      <div class="line">
+        <span>Defined by</span>
+        <router-link
+          v-show="model.ontologyTitle"
+          :to="{ path: `/prefix/${model.prefixedSplitA}:` }">
+          {{ model.ontologyTitle }}
+        </router-link>
+        <router-link
+          v-show="!model.ontologyTitle"
+          :to="{ path: `/prefix/${model.prefixedSplitA}:` }">
+          {{ model.prefixedSplitA }}:
+        </router-link>
+      </div>
       <div
         v-clipboard="() => model.prefixed"
         v-clipboard:success="clipboardSuccesPrefixed"
@@ -28,7 +41,7 @@
           Namespace
         </h3>
         <p>
-          <a :href="model.iriSplitA" >
+          <a :href="model.iriSplitA">
             {{ model.iriSplitA }} <span v-html="ExternalLink({ height: 15, width: 15 })"></span>
           </a>
         </p>
