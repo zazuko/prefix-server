@@ -46,15 +46,22 @@
           </a>
         </p>
       </div>
-      <div>
+      <div
+        v-clipboard="() => `PREFIX ${model.prefixedSplitA}: <${model.iriSplitA}>`"
+        v-clipboard:success="clipboardSuccesDeclaration"
+        v-clipboard:error="clipboardErrorDeclaration"
+        class="prefix-clipboard-container">
         <h3>
           Recommended prefix
         </h3>
-        <p>
-          <router-link :to="{ path: `/prefix/${model.prefixedSplitA}:` }">
-            {{ model.prefixedSplitA }}:
-          </router-link>
-        </p>
+        <div>
+          <div class="tooltip">
+            {{ clipboardDeclarationMessage }}
+          </div>
+          <p>
+            <a>{{ model.prefixedSplitA }}:</a>
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -81,6 +88,10 @@ export default {
         status: false,
         timeout: null
       },
+      clipboardDeclaration: {
+        status: false,
+        timeout: null
+      },
       ExternalLink
     }
   },
@@ -102,6 +113,15 @@ export default {
         return 'Error'
       }
       return 'Click to Copy'
+    },
+    clipboardDeclarationMessage () {
+      if (this.clipboardDeclaration.status === 'success') {
+        return 'Copied!'
+      }
+      if (this.clipboardDeclaration.status === 'error') {
+        return 'Error'
+      }
+      return `Copy 'PREFIX ${this.model.prefixedSplitA}: <${this.model.iriSplitA}>'`
     }
   },
   methods: {
@@ -139,6 +159,24 @@ export default {
     },
     clipboardErrorIri () {
       this.clipboardIri.status = 'error'
+      this.clipboardTimeoutIri()
+    },
+    clipboardTimeoutDeclaration () {
+      if (this.clipboardDeclaration.timeout !== null) {
+        clearTimeout(this.clipboardDeclaration.timeout)
+      }
+
+      this.clipboardDeclaration.timeout = setTimeout(() => {
+        this.clipboardDeclaration.status = false
+        this.clipboardDeclaration.timeout = null
+      }, 3000)
+    },
+    clipboardSuccesDeclaration () {
+      this.clipboardDeclaration.status = 'success'
+      this.clipboardTimeoutIri()
+    },
+    clipboardErrorDeclaration () {
+      this.clipboardDeclaration.status = 'error'
       this.clipboardTimeoutIri()
     }
   }
