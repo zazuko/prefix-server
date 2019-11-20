@@ -108,7 +108,7 @@ function enrichPrefixSpecificData (searchArrayByPrefix, prefixEndpointData) {
   }
 }
 
-function createSearchArray (datasets) {
+function createSearchArray (datasets, prefixMetadata) {
   let loadedPrefixesCount = 0
   let loadedTermsCount = 0
   const searchArrayByPrefix = {}
@@ -165,7 +165,8 @@ function createSearchArray (datasets) {
         const [prefixedSplitA, prefixedSplitB] = termToAdd.prefixed.split(':')
         // see https://github.com/zazuko/prefix-server/issues/26
         const iriSplitA = prefixedSplitB ? termToAdd.iri.value.split(prefixedSplitB)[0] : termToAdd.iri.value
-        Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB })
+        const ontologyTitle = prefixMetadata[prefixedSplitA].title || ''
+        Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB, ontologyTitle })
 
         obj.push(termToAdd)
       }
@@ -273,6 +274,7 @@ async function prepareData () {
   const now = Date.now()
 
   const datasets = await vocabularies()
+  const prefixMetadata = findPrefixMetadata(datasets)
 
   const {
     summary,
@@ -280,10 +282,8 @@ async function prepareData () {
     searchArrayByPrefix,
     prefixEndpointData,
     stats
-  } = createSearchArray(datasets)
+  } = createSearchArray(datasets, prefixMetadata)
   enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
-
-  const prefixMetadata = findPrefixMetadata(datasets)
 
   debug(`API data generated in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
 
