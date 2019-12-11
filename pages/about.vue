@@ -33,8 +33,8 @@
             </ul>
 
             <p>
-              This service is opinionated, it is based on a selected list of
-              vocabularies with fix prefixes maintained in
+              This service is opinionated, it is based on a curated list of
+              vocabularies with prefixes maintained in
               <a href="https://github.com/zazuko/rdf-vocabularies">a separate GitHub repository</a>.
               If you would like to add additional vocabularies to the service, either create an
               <a href="https://github.com/zazuko/rdf-vocabularies#adding-new-prefixes">issue and pull-request</a>

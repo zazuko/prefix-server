@@ -77,7 +77,7 @@ export default {
   },
   head () {
     return {
-      title: `RDF ${this.prefix} prefix`
+      title: `RDF prefix ${this.prefix} lookup`
     }
   }
 }

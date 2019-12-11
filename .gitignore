@@ -91,4 +91,4 @@ sw.*
 /test/e2e/videos/*.mp4
 
 # build artifacts
-/api/datafiles/*.gz
+/api/datafiles/

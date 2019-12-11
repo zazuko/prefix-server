@@ -170,7 +170,7 @@ export default {
   },
   head () {
     return {
-      title: 'Resolve RDF namespaces'
+      title: this.model ? `${this.model.prefixed} lookup - Resolve RDF namespaces` : 'Resolve RDF namespaces'
     }
   }
 }

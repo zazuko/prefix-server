@@ -103,7 +103,7 @@ export default {
   },
   head () {
     return {
-      title: 'API'
+      title: 'RDF namespace lookup API'
     }
   }
 }

@@ -30,7 +30,7 @@ export default {
   },
   head () {
     return {
-      title: 'List of RDF Vocabularies'
+      title: 'List of RDF Vocabularies or Namespaces'
     }
   }
 }
