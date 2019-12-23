@@ -102,26 +102,26 @@ describe('/api/v1', () => {
           'foaf:PersonalProfileDocument',
           'prov:Person',
           'schema:Person',
-          'org:hasMember',
-          'org:headOf',
-          'org:member',
-          'org:memberOf',
-          'ma:Person'
+          'dbo:Person',
+          'dbo:firstAscentPerson',
+          'dbo:individualisedPnd',
+          'dbo:numberOfStaff',
+          'dbo:person'
         ])
       })
       cy.request('/api/v1/suggest?q=person').then((response) => {
         expect(response.status).to.eq(200)
         expect(response.body).to.deep.equal([
+          'dbo:Person',
+          'dbo:PersonFunction',
+          'dbo:PersonalEvent',
+          'dbo:firstAscentPerson',
+          'dbo:person',
+          'dbo:personFunction',
+          'dbo:personName',
           'foaf:mbox',
           'frbr:Person',
-          'qudt:HypersonicAerodynamicsQuantityKind',
-          'dcterms:rightsHolder',
-          'foaf:Person',
-          'foaf:PersonalProfileDocument',
-          'foaf:knows',
-          'ma:Agent',
-          'schema:Person',
-          'schema:athlete'
+          'dbo:AnimangaCharacter'
         ])
       })
     })

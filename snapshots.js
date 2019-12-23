@@ -1,5 +1,5 @@
 module.exports = {
-  "__version": "3.6.1",
+  "__version": "3.8.0",
   "Search": {
     "should be available on homepage": {
       "1": [
@@ -20,11 +20,11 @@ module.exports = {
         "foaf:PersonalProfileDocument (PersonalProfileDocument)",
         "prov:Person (Person)",
         "schema:Person (Person)",
-        "org:hasMember (has member)",
-        "org:headOf (head of)",
-        "org:member (member)",
-        "org:memberOf (member of)",
-        "ma:Person"
+        "dbo:Person (person)",
+        "dbo:firstAscentPerson (person that first ascented a mountain)",
+        "dbo:individualisedPnd (individualised PND number)",
+        "dbo:numberOfStaff (number of staff)",
+        "dbo:person (person)"
       ],
       "3": [
         "rdfs:",
