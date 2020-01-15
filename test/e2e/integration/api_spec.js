@@ -126,4 +126,88 @@ describe('/api/v1', () => {
       })
     })
   })
+
+  describe('/autocomplete', () => {
+    it('should suggest prefixes starting with query', () => {
+      cy.request('/api/v1/autocomplete?q=').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('rdf:')
+        expect(response.body).to.contain('schema:')
+        expect(response.body).to.contain('xsd:')
+      })
+      cy.request('/api/v1/autocomplete?q=r').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body.filter(p => p.startsWith('r'))).to.have.length(response.body.length)
+      })
+    })
+    it('should be case insensitive', () => {
+      cy.request('/api/v1/autocomplete?q=schema:a').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('schema:about')
+        expect(response.body).to.contain('schema:AboutPage')
+      })
+    })
+    it('should be case sensitive', () => {
+      cy.request('/api/v1/autocomplete?q=schema:a&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('schema:about')
+        expect(response.body).not.to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).not.to.contain('schema:about')
+        expect(response.body).to.contain('schema:AboutPage')
+      })
+    })
+    it('should match type', () => {
+      cy.request('/api/v1/autocomplete?q=schema:a&type=rdf:Property').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('schema:about')
+        expect(response.body).not.to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&type=rdfs:Class').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).not.to.contain('schema:about')
+        expect(response.body).to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:a&type=rdf:property').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('schema:about')
+        expect(response.body).not.to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&type=rdfs:class').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).not.to.contain('schema:about')
+        expect(response.body).to.contain('schema:AboutPage')
+      })
+    })
+    it('should match type and case', () => {
+      cy.request('/api/v1/autocomplete?q=schema:a&type=rdf:Property&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.contain('schema:about')
+        expect(response.body).not.to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&type=rdfs:Class&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).not.to.contain('schema:about')
+        expect(response.body).to.contain('schema:AboutPage')
+      })
+      cy.request('/api/v1/autocomplete?q=schema:a&type=rdfs:Class&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.length(0)
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&type=rdf:Property&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.length(0)
+      })
+      cy.request('/api/v1/autocomplete?q=schema:a&type=rdf:property&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.length(0)
+      })
+      cy.request('/api/v1/autocomplete?q=schema:A&type=rdfs:class&case=true').then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.length(0)
+      })
+    })
+  })
 })

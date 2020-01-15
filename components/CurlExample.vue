@@ -11,15 +11,16 @@
       {{ copyMessage }}
     </a>
     <div class="scroller">
+      <div class="line">DOMAIN={{ apiBase() }}</div>
       <div class="line">
         curl --silent \
         <br />
-        <a :href="url" target="_blank">"{{ url }}"</a> \
+        <a :href="url" target="_blank">"${DOMAIN}{{ path }}<span class="hl">?{{ query }}</span>"</a> \
         <br />
         | jq .
       </div>
       <template v-if="result">
-        <div class="result">{{ JSON.stringify(result, null, 2) }}</div>
+        <div class="result">{{ JSON.stringify(result, null, 2).replace('"…"', '…') }}</div>
       </template>
     </div>
   </code>
@@ -34,7 +35,7 @@ export default {
       required: true
     },
     result: {
-      type: Object,
+      type: [Object, Array],
       default: null
     }
   },
@@ -43,7 +44,7 @@ export default {
   },
   computed: {
     command () {
-      return `curl --silent "${this.url}" | jq .`
+      return `curl --silent "${this.apiBase()}${this.url}" | jq .`
     },
     copyMessage () {
       if (this.copy.state === 'success') {
@@ -53,9 +54,21 @@ export default {
         return 'Error'
       }
       return 'Copy'
+    },
+    path () {
+      const [path] = this.url.split('?')
+      return path
+    },
+    query () {
+      const [, ...queryString] = this.url.split('?')
+      return queryString.join('?')
     }
   },
   methods: {
+    apiBase (path, query, encode = false) {
+      const origin = (this.$axios.defaults.baseURL || '').replace(/\/$/, '')
+      return origin
+    },
     copySuccess () {
       this.copy.state = 'success'
       this.copyTimeout()
@@ -79,3 +92,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.hl {
+  color: #ff7657;
+}
+</style>

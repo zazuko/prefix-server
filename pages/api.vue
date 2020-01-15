@@ -13,6 +13,7 @@
             <ul>
               <li><a href="#expand-endpoint"><code>/api/v1/expand?q=…</code></a></li>
               <li><a href="#shrink-endpoint"><code>/api/v1/shrink?q=…</code></a></li>
+              <li><a href="#autocomplete-endpoint"><code>/api/v1/autocomplete?q=…</code></a></li>
             </ul>
 
             <h2 id="expand-endpoint">
@@ -32,14 +33,14 @@
               Success: <code>HTTP200</code>
             </p>
             <curl-example
-              :url="apiUrl('/api/v1/expand', { q: 'schema:Person' })"
+              :url="apiPath('/api/v1/expand', { q: 'schema:Person' })"
               :result="{success: true, value: 'http://schema.org/Person'}" />
 
             <p>
               Failure: <code>HTTP404</code>
             </p>
             <curl-example
-              :url="apiUrl('/api/v1/expand', { q: 'hello:World' })"
+              :url="apiPath('/api/v1/expand', { q: 'hello:World' })"
               :result="{success: false}" />
 
             <h2 id="shrink-endpoint">
@@ -59,22 +60,80 @@
               will have to be URI encoded:
             </p>
             <curl-example
-              :url="apiUrl('/api/v1/shrink', { q: 'http://www.w3.org/2001/XMLSchema#dateTime' }, true)" />
+              :url="apiPath('/api/v1/shrink', { q: 'http://www.w3.org/2001/XMLSchema#dateTime' }, true)" />
 
             <h3>Examples</h3>
             <p>
               Success: <code>HTTP200</code>
             </p>
             <curl-example
-              :url="apiUrl('/api/v1/shrink', { q: 'http://schema.org/Person' })"
+              :url="apiPath('/api/v1/shrink', { q: 'http://schema.org/Person' })"
               :result="{success: true, value: 'schema:Person'}" />
 
             <p>
               Failure: <code>HTTP404</code>
             </p>
             <curl-example
-              :url="apiUrl('/api/v1/shrink', { q: 'http://example.org/Hello' })"
+              :url="apiPath('/api/v1/shrink', { q: 'http://example.org/Hello' })"
               :result="{success: false}" />
+
+            <h2 id="autocomplete-endpoint">
+              Autocomplete a prefixed term
+            </h2>
+
+            <p>
+              This endpoint lets you implement RDF terms autocompletion.
+            </p>
+
+            <p>
+              By default, this endpoint is <strong>case-insensitive</strong>.
+              Use <code>&case=true</code> to make it <strong>case-sensitive</strong>.
+            </p>
+
+            <h3>Examples</h3>
+
+            <p>
+              Autocomplete a prefix or find matching namespaces:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'r' })"
+              :result="['rdf:','rdau:','rdfa:','rdfs:','rr:','rss:']" />
+
+            <p>
+              Autocomplete a prefix or find matching namespaces:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdf' })"
+              :result="['rdf:','rdfa:','rdfs:']" />
+
+            <p>
+              Autocomplete the content of a namespace:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:' })"
+              :result="['rdfs:','rdfs:Class','rdfs:Container','rdfs:ContainerMembershipProperty','…']" />
+
+            <p>
+              Autocomplete a partial term:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:co' })"
+              :result="['rdfs:Container','rdfs:ContainerMembershipProperty','rdfs:comment']" />
+
+            <p>
+              Autocomplete a partial term, case-sensitive:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:co', case: 'true' })"
+              :result="['rdfs:comment']" />
+
+            <p>
+              Autocomplete a partial term or the content of a namespace, for a given RDF type:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:', type: 'rdf:Property' })"
+              :result="['rdfs:comment','rdfs:domain','rdfs:isDefinedBy','rdfs:label','…']" />
+
           </div>
         </section>
       </div>
@@ -92,13 +151,12 @@ export default {
     CurlExample
   },
   methods: {
-    apiUrl (path, query, encode = false) {
-      const origin = (this.$axios.defaults.baseURL || '').replace(/\/$/, '')
+    apiPath (path, query, encode = false) {
       const querystring = qs.stringify(query, { encode })
       if (querystring) {
-        return `${origin}${path}?${querystring}`
+        return `${path}?${querystring}`
       }
-      return `${origin}${path}`
+      return `${path}`
     }
   },
   head () {

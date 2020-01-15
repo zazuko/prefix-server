@@ -301,14 +301,20 @@
     }
 
     th, td {
-      &:first-child {
-        text-align: right;
-        border-right: 1px solid #e5e5e5;
-        a {
-          text-decoration: none;
-        }
-      }
       padding: 5px 16px;
+    }
+
+    &.toc {
+      th, td {
+        &:first-child {
+          text-align: right;
+          border-right: 1px solid #e5e5e5;
+          a {
+            text-decoration: none;
+          }
+        }
+        padding: 5px 16px;
+      }
     }
   }
 

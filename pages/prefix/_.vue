@@ -10,7 +10,7 @@
 
             <h3>The <code>{{ metadata.namespace }}</code> namespace defines:</h3>
 
-            <table v-show="sortedKeys.length > 1">
+            <table v-show="sortedKeys.length > 1" class="toc">
               <tr
                 v-for="prefixedType in sortedKeys"
                 v-show="content[prefixedType].length"

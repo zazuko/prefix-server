@@ -270,6 +270,25 @@ function findPrefixMetadata (datasets) {
   return output
 }
 
+function preparePrefixComplete (searchArrayByPrefix) {
+  const prefixComplete = {}
+  for (const prefix in searchArrayByPrefix) {
+    const terms = searchArrayByPrefix[prefix]
+    const obj = {}
+    prefixComplete[prefix] = obj
+    for (const term of terms) {
+      const types = term.parts.reduce((acc, { predicate, object, objectIRI }) => {
+        if (predicate === 'rdf:type') {
+          acc.push(object)
+        }
+        return acc
+      }, [])
+      obj[term.prefixedSplitB] = types
+    }
+  }
+  return prefixComplete
+}
+
 async function prepareData () {
   const now = Date.now()
 
@@ -285,6 +304,8 @@ async function prepareData () {
   } = createSearchArray(datasets, prefixMetadata)
   enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
 
+  const prefixComplete = preparePrefixComplete(searchArrayByPrefix)
+
   debug(`API data generated in ${Date.now() - now}ms, loaded ${stats.loadedPrefixesCount} prefixes for a total of ${stats.loadedTermsCount} triples`)
 
   return {
@@ -293,6 +314,7 @@ async function prepareData () {
     prefixMetadata,
     prefixEndpointData,
     summary,
-    fuseOptions
+    fuseOptions,
+    prefixComplete
   }
 }

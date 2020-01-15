@@ -17,27 +17,13 @@ async function buildResources () {
   debug('preparing API data')
   const { prepareData } = require('./api/utils')
 
-  const {
-    searchArray,
-    searchArrayByPrefix,
-    prefixEndpointData,
-    prefixMetadata,
-    summary,
-    fuseOptions
-  } = await prepareData()
+  const dataFiles = await prepareData()
 
-  const fileNames = Object.entries({
-    searchArray,
-    searchArrayByPrefix,
-    prefixEndpointData,
-    prefixMetadata,
-    summary,
-    fuseOptions
-  })
+  const fileNames = Object.entries(dataFiles)
 
-  for (const [key, val] of fileNames) {
-    const extraFilePath = path.resolve(__dirname, `./api/datafiles/${key}.json.gz`)
-    const compressed = await gzip(JSON.stringify(val))
+  for (const [keyName, data] of fileNames) {
+    const extraFilePath = path.resolve(__dirname, `./api/datafiles/${keyName}.json.gz`)
+    const compressed = await gzip(JSON.stringify(data))
     await writeFile(extraFilePath, compressed)
     debug(`wrote API data to ${extraFilePath}`)
   }

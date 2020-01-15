@@ -18,6 +18,7 @@ const prefixEndpointData = loadDataFile('prefixEndpointData')
 const prefixMetadata = loadDataFile('prefixMetadata')
 const summary = loadDataFile('summary')
 const fuseOptions = loadDataFile('fuseOptions')
+const prefixComplete = loadDataFile('prefixComplete')
 
 const fuse = new Fuse(searchArray, fuseOptions)
 Object.keys(searchArrayByPrefix).forEach((key) => {
@@ -132,6 +133,49 @@ router.get('/expand', (req, res) => {
   }
 
   res.status(400).json({ help: '/api/v1/expand?q=…' })
+})
+
+router.get('/autocomplete', (req, res) => {
+  const matchCase = req.query.case === 'true'
+  const query = req.query.q
+  const type = req.query.type
+
+  if (!('q' in req.query)) {
+    return res.status(400).json({ help: '/api/v1/autocomplete?q=…[&type=…][&case=true]' })
+  }
+  if (!query.includes(':')) {
+    const potentialPrefixes = Object.keys(prefixComplete)
+      .filter(prefix => prefix.startsWith(query))
+      .map(prefix => `${prefix}:`)
+    return res.json(potentialPrefixes)
+  }
+  const [searchPrefix, searchTerm] = query.split(':')
+  const vocab = prefixComplete[matchCase ? searchPrefix : searchPrefix.toLowerCase()]
+  if (!vocab) {
+    return res.status(404).json({
+      success: false
+    })
+  }
+
+  if (type && !type.includes(':')) {
+    return res.json([])
+  }
+  const results = Object.entries(vocab)
+    .reduce((acc, [term, types]) => {
+      if (!(matchCase ? term.startsWith(searchTerm) : term.toLowerCase().startsWith(searchTerm.toLowerCase()))) {
+        return acc
+      }
+      if (type) {
+        if (types.find(t => matchCase ? t === type : t.toLowerCase() === type.toLowerCase())) {
+          acc.push(`${searchPrefix}:${term}`)
+        }
+      }
+      else {
+        acc.push(`${searchPrefix}:${term}`)
+      }
+      return acc
+    }, [])
+  return res.json(results)
 })
 
 router.get('/health', (req, res) => {
