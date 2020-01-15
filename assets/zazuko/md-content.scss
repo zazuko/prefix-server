@@ -292,8 +292,8 @@
     width: 100%;
     margin-bottom: 16px;
 
-    tr {
-      border-top: 1px solid $line-light;
+    td {
+      border-bottom: 1px solid #e5e5e5;
     }
 
     th {
@@ -301,8 +301,14 @@
     }
 
     th, td {
-      border: 1px solid $line-light;
-      padding: 8px 16px;
+      &:first-child {
+        text-align: right;
+        border-right: 1px solid #e5e5e5;
+        a {
+          text-decoration: none;
+        }
+      }
+      padding: 5px 16px;
     }
   }
 

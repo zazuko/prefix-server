@@ -6,14 +6,27 @@
           <div class="content default">
             <h1><code>{{ prefix }}</code> RDF Prefix</h1>
             <h3 v-if="metadata.title" v-html="metadata.title"></h3>
-            <h3>Namespace: <code>{{ metadata.namespace }}</code></h3>
             <h4 v-if="metadata.description" v-html="metadata.description"></h4>
 
-            <p>
-              <em>
-                What does this namespace contain?
-              </em>
-            </p>
+            <h3>The <code>{{ metadata.namespace }}</code> namespace defines:</h3>
+
+            <table v-show="sortedKeys.length > 1">
+              <tr
+                v-for="prefixedType in sortedKeys"
+                v-show="content[prefixedType].length"
+                :key="prefixedType">
+                <td>
+                  <nuxt-link :to="{ hash: prefixedType.replace(':', '-').toLowerCase() }">
+                    {{ content[prefixedType].length }}
+                  </nuxt-link>
+                </td>
+                <td>
+                  <nuxt-link :to="{ hash: prefixedType.replace(':', '-').toLowerCase() }">
+                    {{ prefixedType }}
+                  </nuxt-link>
+                </td>
+              </tr>
+            </table>
 
             <div
               v-for="prefixedType in sortedKeys"
