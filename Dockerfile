@@ -5,6 +5,9 @@ ARG VERSION
 ARG COMMIT
 ARG API_URL_BROWSER=https://prefix.zazuko.com/
 
+RUN apk add --no-cache bash python make g++
+RUN npm install -g npm@6.13.7
+
 WORKDIR /src
 
 ADD package.json package-lock.json ./
@@ -28,7 +31,7 @@ FROM node:lts-alpine
 WORKDIR /src
 
 ADD . .
-RUN npm ci --only=production
+RUN npm ci --production --no-optional
 
 # Copy the built assets from the first step
 COPY --from=builder /src/.nuxt/ ./.nuxt
