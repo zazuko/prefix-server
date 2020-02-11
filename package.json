@@ -11,7 +11,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "build:modern": "nuxt build --modern=server",
-    "prepare": "DEBUG=prefix-server node ./build-resources",
+    "build-data": "DEBUG=prefix-server node ./build-resources",
     "start": "nuxt-start",
     "generate": "nuxt generate",
     "e2e:open": "cypress open",

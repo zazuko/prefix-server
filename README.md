@@ -8,6 +8,7 @@
 ```bash
 # install dependencies
 $ npm run install
+$ npm run build-data
 
 # serve with hot reload at localhost:3000
 $ npm run dev
@@ -34,7 +35,7 @@ $ npm run e2e:test
 
 ## Building the resources used by the API
 
-The resources are automatically built by `npm run build`.
+The resources can be rebuilt using `npm run build-data`.
 
 They are not built by the hot-reload dev server because building the resources
-takes time. For this reason, you can build them manually using `npm prepare`.
+takes time.
