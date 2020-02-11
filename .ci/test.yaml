@@ -27,7 +27,7 @@ run:
     cd repo
     npm ci
     export NODE_ENV=production
-    npm run prepare
+    npm run build-data
     npm run build:modern
     npm run start &
     sleep 20
