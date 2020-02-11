@@ -13,15 +13,26 @@ spec:
       - name: prefix-server
         image: prefix-server
         imagePullPolicy: IfNotPresent
+
         ports:
         - name: http
           containerPort: 3000
           protocol: TCP
+
         livenessProbe:
           httpGet:
             path: /api/v1/health
             port: http
+
         readinessProbe:
           httpGet:
             path: /api/v1/health
             port: http
+
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "50m"
+          limits:
+            memory: "350Mi"
+            cpu: "100m"
