@@ -39,7 +39,7 @@ COPY --from=builder /src/api/datafiles ./api/datafiles
 
 ENV HOST 0.0.0.0
 
-USER nobody:nobody
+USER node
 
 ENTRYPOINT []
 
