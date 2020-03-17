@@ -1,5 +1,4 @@
 module.exports = {
-  "__version": "3.8.3",
   "Search": {
     "should be available on homepage": {
       "1": [
@@ -15,18 +14,19 @@ module.exports = {
         "rdau:P60809 (has writer of foreword (Deprecated))"
       ],
       "2": [
-        "as:Person (Person)",
-        "foaf:Person (Person)",
-        "foaf:PersonalProfileDocument (PersonalProfileDocument)",
         "prov:Person (Person)",
+        "as:Person (Person)",
         "schema:Person (Person)",
+        "foaf:Person (Person)",
         "dbo:Person (person)",
+        "dbo:person (person)",
+        "foaf:PersonalProfileDocument (PersonalProfileDocument)",
         "dbo:firstAscentPerson (person that first ascented a mountain)",
-        "dbo:individualisedPnd (individualised PND number)",
-        "dbo:numberOfStaff (number of staff)",
-        "dbo:person (person)"
+        "dbo:PersonFunction (person function)",
+        "dbo:PersonalEvent (personal event)"
       ],
       "3": [
+        "rdfs:comment (comment)",
         "rdfs:",
         "rdfs:Class (Class)",
         "rdfs:Container (Container)",
@@ -34,10 +34,10 @@ module.exports = {
         "rdfs:Datatype (Datatype)",
         "rdfs:Literal (Literal)",
         "rdfs:Resource (Resource)",
-        "rdfs:comment (comment)",
         "rdfs:domain (domain)",
         "rdfs:isDefinedBy (isDefinedBy)"
       ]
     }
-  }
+  },
+  "__version": "4.2.0"
 }

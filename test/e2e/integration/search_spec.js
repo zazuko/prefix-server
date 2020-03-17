@@ -67,7 +67,7 @@ describe('Search', () => {
   })
 
   it('should navigate to a single prefix', () => {
-    searchField().type('rdfs')
+    searchField().type('rdfs:')
     suggestionList().should('be.visible')
     keys.downArrow()
     cy.focused().click()

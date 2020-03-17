@@ -96,33 +96,15 @@ describe('/api/v1', () => {
     it('should suggest results', () => {
       cy.request('/api/v1/suggest?q=Person').then((response) => {
         expect(response.status).to.eq(200)
-        expect(response.body).to.deep.equal([
-          'as:Person',
-          'foaf:Person',
-          'foaf:PersonalProfileDocument',
-          'prov:Person',
-          'schema:Person',
-          'dbo:Person',
-          'dbo:firstAscentPerson',
-          'dbo:individualisedPnd',
-          'dbo:numberOfStaff',
-          'dbo:person'
-        ])
+        response.body.slice(0, 8).forEach((term) => {
+          expect(term.toLowerCase()).to.contain('person')
+        })
       })
       cy.request('/api/v1/suggest?q=person').then((response) => {
         expect(response.status).to.eq(200)
-        expect(response.body).to.deep.equal([
-          'dbo:Person',
-          'dbo:PersonFunction',
-          'dbo:PersonalEvent',
-          'dbo:firstAscentPerson',
-          'dbo:person',
-          'dbo:personFunction',
-          'dbo:personName',
-          'foaf:mbox',
-          'frbr:Person',
-          'dbo:AnimangaCharacter'
-        ])
+        response.body.slice(0, 8).forEach((term) => {
+          expect(term.toLowerCase()).to.contain('person')
+        })
       })
     })
   })
