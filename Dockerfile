@@ -5,9 +5,9 @@ ARG VERSION
 ARG COMMIT
 ARG API_URL_BROWSER=https://prefix.zazuko.com/
 
-RUN apk add --no-cache bash python make g++
+RUN apk add --no-cache bash python make g++ git
 RUN npm set unsafe-perm true
-RUN npm install -g npm@6.13.7
+RUN npm install -g npm@6.14.2
 
 WORKDIR /src
 
@@ -30,6 +30,8 @@ RUN npm run build:modern
 
 # Second step: only install runtime dependencies
 FROM node:12-alpine
+
+RUN npm install -g npm@6.14.2
 
 WORKDIR /src
 
