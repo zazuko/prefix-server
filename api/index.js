@@ -41,12 +41,12 @@ router.get('/search', (req, res) => {
     const prefix = query.split(':')[0]
     // scope the search to only this prefix
     if (searchArrayByPrefix[prefix]) {
-      res.json(searchArrayByPrefix[prefix].search(query).slice(0, 10))
+      res.json(searchArrayByPrefix[prefix].search(query).slice(0, 10).map(({ item }) => item))
       return
     }
   }
 
-  res.json(fuse.search(query).slice(0, 10))
+  res.json(fuse.search(query).slice(0, 10).map(({ item }) => item))
 })
 
 router.get('/suggest', (req, res) => {
@@ -65,11 +65,11 @@ router.get('/suggest', (req, res) => {
     const prefix = query.split(':')[0]
     // scope the search to only this prefix
     if (searchArrayByPrefix[prefix]) {
-      results = searchArrayByPrefix[prefix].search(query).slice(0, 10)
+      results = searchArrayByPrefix[prefix].search(query).slice(0, 10).map(({ item }) => item)
     }
   }
   if (!results) {
-    results = fuse.search(query).slice(0, 10)
+    results = fuse.search(query).slice(0, 10).map(({ item }) => item)
   }
 
   res.json(results.map(item => item.prefixed))
