@@ -81,7 +81,7 @@ describe('Search', () => {
     cy.url().should('equal', 'http://localhost:3000/schema:Person')
   })
 
-  const searchTerms = ['schema:Lol', 'schema:', 'foo', ':']
+  const searchTerms = ['schema:Lol', 'schema:', 'foo']
 
   searchTerms.forEach((term) => {
     it(`should search for ${term} on submit, redirect and display suggestions`, () => {
