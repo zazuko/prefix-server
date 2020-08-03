@@ -1,8 +1,9 @@
 const _ = require('lodash')
 const debug = require('debug')('prefix-server')
 const { namedNode } = require('@rdfjs/data-model')
+const rdf = require('rdf-ext')
 
-const { vocabularies, prefixes } = require('@zazuko/rdf-vocabularies')
+const { vocabularies, prefixes, loadFile } = require('@zazuko/rdf-vocabularies')
 const { shrink, expand } = require('@zazuko/rdf-vocabularies')
 
 const labelPredicates = [
@@ -231,40 +232,17 @@ function createSearchArray (datasets, prefixMetadata) {
   }
 }
 
-function firstVal (dataset) {
-  if (dataset.size) {
-    return dataset.toArray()[0].object.value
-  }
-}
-
-function getTitle (dataset) {
-  const potentialValues = [
-    firstVal(dataset.match(null, namedNode(cachedExpand('dc11:title')))),
-    firstVal(dataset.match(null, namedNode(cachedExpand('dcterms:title')))),
-    firstVal(dataset.match(null, namedNode(cachedExpand('rdfs:label'))))
-  ].filter(Boolean)
-  return potentialValues.length ? potentialValues[0] : ''
-}
-
-function getDescription (dataset) {
-  const potentialValues = [
-    firstVal(dataset.match(null, namedNode(cachedExpand('dc11:description')))),
-    firstVal(dataset.match(null, namedNode(cachedExpand('dcterms:description')))),
-    firstVal(dataset.match(null, namedNode(cachedExpand('rdfs:comment'))))
-  ].filter(Boolean)
-  return potentialValues.length ? potentialValues[0] : ''
-}
-
-function findPrefixMetadata (datasets) {
+function findPrefixMetadata (datasets, index) {
   const output = {}
   Object.entries(datasets).forEach(([prefix, dataset]) => {
     const namespace = prefixes[prefix]
-    const namespaceDataset = dataset.match(namedNode(namespace))
+    const title = index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/title')).toArray()
+    const description = index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/description')).toArray()
 
     output[prefix] = {
       namespace,
-      title: getTitle(namespaceDataset),
-      description: getDescription(namespaceDataset)
+      title: (title.length && title[0].object.value) || '',
+      description: (description.length && description[0].object.value) || ''
     }
   })
   return output
@@ -293,7 +271,8 @@ async function prepareData () {
   const now = Date.now()
 
   const datasets = await vocabularies()
-  const prefixMetadata = findPrefixMetadata(datasets)
+  const index = await loadFile('_index', { factory: rdf })
+  const prefixMetadata = findPrefixMetadata(datasets, index)
 
   const {
     summary,
