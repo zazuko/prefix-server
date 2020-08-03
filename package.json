@@ -26,6 +26,7 @@
     "express-preconditions": "^1.0.5",
     "feather-icon-literals": "^1.0.0-rc.10",
     "fuse.js": "^6.4.1",
+    "lodash": "^4.17.19",
     "nuxt-start": "^2.14.0",
     "query-string": "^6.13.1",
     "string-hash": "^1.1.3",
