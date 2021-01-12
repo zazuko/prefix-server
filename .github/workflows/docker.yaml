@@ -11,6 +11,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -30,11 +34,19 @@ jobs:
         with:
           images: docker.io/zazuko/prefix-server
 
+      - name: Tag
+        id: tag
+        run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
+
       - name: Build and push Docker images
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: .
+          push: true
           file: ./Dockerfile
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          build-args: |
+            COMMIT=${{ github.sha }}
+            VERSION=${{ steps.tag.outputs.tag }}
