@@ -10,26 +10,26 @@ spec:
         runAsUser: 65534
         runAsGroup: 65534
       containers:
-      - name: prefix-server
-        image: prefix-server
-        imagePullPolicy: IfNotPresent
+        - name: prefix-server
+          image: docker.io/zazuko/prefix-server
+          imagePullPolicy: IfNotPresent
 
-        ports:
-        - name: http
-          containerPort: 3000
-          protocol: TCP
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
 
-        livenessProbe:
-          httpGet:
-            path: /api/v1/health
-            port: http
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
 
-        readinessProbe:
-          httpGet:
-            path: /api/v1/health
-            port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
 
-        resources:
-          requests:
-            memory: "250Mi"
-            cpu: "50m"
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "50m"

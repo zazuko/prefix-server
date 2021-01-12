@@ -5,5 +5,5 @@ commonLabels:
   app.kubernetes.io/component: server
 
 resources:
-- deployment.yaml
-- service.yaml
+  - deployment.yaml
+  - service.yaml

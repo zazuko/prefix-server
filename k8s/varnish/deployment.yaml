@@ -6,32 +6,32 @@ spec:
   template:
     spec:
       volumes:
-      - name: varnish-config-volume
-        configMap:
-          name: varnish-config
+        - name: varnish-config-volume
+          configMap:
+            name: varnish-config
 
       containers:
-      - name: prefix-server
-        image: "docker.io/zazukoians/varnish:5.2.1"
-        imagePullPolicy: IfNotPresent
+        - name: prefix-server
+          image: "docker.io/zazukoians/varnish:5.2.1"
+          imagePullPolicy: IfNotPresent
 
-        env:
-        - name: VCL_CONFIG
-          value: /config/default.vcl
+          env:
+            - name: VCL_CONFIG
+              value: /config/default.vcl
 
-        volumeMounts:
-          - name: varnish-config-volume
-            mountPath: /config
+          volumeMounts:
+            - name: varnish-config-volume
+              mountPath: /config
 
-        ports:
-        - name: http
-          containerPort: 80
-          protocol: TCP
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
 
-        resources:
-          requests:
-            memory: "50Mi"
-            cpu: "25m"
-          limits:
-            memory: "150Mi"
-            cpu: "50m"
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "25m"
+            limits:
+              memory: "150Mi"
+              cpu: "50m"
