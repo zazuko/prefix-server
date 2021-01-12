@@ -7,6 +7,7 @@ commonLabels:
 resources:
   - deployment.yaml
   - service.yaml
+  - poddisruptionbudget.yaml
 
 configMapGenerator:
   - name: varnish-config
