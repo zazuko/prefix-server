@@ -5,8 +5,8 @@ commonLabels:
   app.kubernetes.io/component: varnish
 
 resources:
-- deployment.yaml
-- service.yaml
+  - deployment.yaml
+  - service.yaml
 
 configMapGenerator:
   - name: varnish-config
