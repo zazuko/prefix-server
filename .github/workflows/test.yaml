@@ -1,0 +1,34 @@
+name: Test
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: E2E
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the app
+        run: |
+          npm run build-data
+          NODE_ENV=production npm run build:modern
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        env:
+          NODE_ENV: production
+        with:
+          install: false
+          start: npm start
+          wait-on: "http://localhost:3000"
