@@ -1,5 +1,5 @@
 # First step: build the assets
-FROM node:12-alpine AS builder
+FROM node:14-alpine AS builder
 
 ARG VERSION
 ARG COMMIT
@@ -7,7 +7,7 @@ ARG API_URL_BROWSER=https://prefix.zazuko.com/
 
 RUN apk add --no-cache bash python make g++ git
 RUN npm set unsafe-perm true
-RUN npm install -g npm@6.14.2
+RUN npm install -g npm@6.14.11
 
 WORKDIR /src
 
@@ -29,9 +29,9 @@ RUN npm run build-data
 RUN npm run build:modern
 
 # Second step: only install runtime dependencies
-FROM node:12-alpine
+FROM node:14-alpine
 
-RUN npm install -g npm@6.14.2
+RUN npm install -g npm@6.14.11
 
 WORKDIR /src
 
