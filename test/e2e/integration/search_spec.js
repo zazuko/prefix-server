@@ -1,12 +1,17 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 
-const collectResults = (result) => {
+const collectResults = n => (result) => {
   const results = Cypress._
     .chain(result)
     .map('textContent')
     .map(x => x.trim())
     .value()
-  cy.wrap(results).snapshot()
+  if (n) {
+    cy.wrap(results.slice(0, n)).snapshot()
+  }
+  else {
+    cy.wrap(results).snapshot()
+  }
 }
 
 const searchField = () => cy.get('.search-field-container input')
@@ -33,19 +38,19 @@ describe('Search', () => {
   it('should be available on homepage', () => {
     searchField().type('rdau:P608')
     suggestionList().should('be.visible')
-    suggestedElements().then(collectResults)
+    suggestedElements().then(collectResults())
     searchField().clear()
     suggestionList().should('not.be.visible')
 
     searchField().type('Person')
     suggestionList().should('be.visible')
-    suggestedElements().then(collectResults)
+    suggestedElements().then(collectResults(6))
     searchField().clear()
     suggestionList().should('not.be.visible')
 
     searchField().type('rdfs')
     suggestionList().should('be.visible')
-    suggestedElements().then(collectResults)
+    suggestedElements().then(collectResults())
     searchField().clear()
     suggestionList().should('not.be.visible')
   })
