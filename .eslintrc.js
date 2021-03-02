@@ -36,11 +36,11 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-lonely-if': 'error',
-    quotes: ['error', 'single', { 'avoidEscape': true }],
+    quotes: ['error', 'single', { avoidEscape: true }],
     'callback-return': ['error', ['done', 'callback', 'cb', 'send']],
     'object-shorthand': 'error',
-    'no-multi-spaces': ['error', { 'ignoreEOLComments': true }],
-    'brace-style': ['error', 'stroustrup', { 'allowSingleLine': false }],
-    'curly': ['error', 'all']
+    'no-multi-spaces': ['error', { ignoreEOLComments: true }],
+    'brace-style': ['error', 'stroustrup', { allowSingleLine: false }],
+    curly: ['error', 'all']
   }
 }

@@ -31,11 +31,13 @@ export default {
     ]
   },
   env: {
-    version: process.env.APP_VERSION ? {
-      name: process.env.APP_VERSION,
-      commit: process.env.APP_COMMIT,
-      url: `https://github.com/zazuko/prefix-server/tree/${process.env.APP_COMMIT}`
-    } : null
+    version: process.env.APP_VERSION
+      ? {
+          name: process.env.APP_VERSION,
+          commit: process.env.APP_COMMIT,
+          url: `https://github.com/zazuko/prefix-server/tree/${process.env.APP_COMMIT}`
+        }
+      : null
   },
   /*
   ** Customize the progress-bar color

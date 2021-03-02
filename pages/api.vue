@@ -150,6 +150,11 @@ export default {
   components: {
     CurlExample
   },
+  head () {
+    return {
+      title: 'RDF namespace lookup API'
+    }
+  },
   methods: {
     apiPath (path, query, encode = false) {
       const querystring = qs.stringify(query, { encode })
@@ -157,11 +162,6 @@ export default {
         return `${path}?${querystring}`
       }
       return `${path}`
-    }
-  },
-  head () {
-    return {
-      title: 'RDF namespace lookup API'
     }
   }
 }
