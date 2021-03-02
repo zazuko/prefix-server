@@ -5,8 +5,8 @@ vcl 4.0;
 import bodyaccess;
 
 backend express {
-  .host = "server";
-  .port = "80";
+  .host = "localhost";
+  .port = "3000";
 
   .connect_timeout = 10s;
   .first_byte_timeout = 2m;

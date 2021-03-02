@@ -1,7 +1,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: varnish
+  name: prefix-server
 spec:
   selector:
     matchLabels: {}
