@@ -20,7 +20,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "@rdfjs/data-model": "^1.2.0",
-    "@zazuko/rdf-vocabularies": "^2021.3.2",
+    "@zazuko/rdf-vocabularies": "^2021.3.8",
     "debug": "^4.3.1",
     "express": "^4.17.1",
     "express-preconditions": "^1.0.5",
