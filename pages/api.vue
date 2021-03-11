@@ -86,8 +86,10 @@
             </p>
 
             <p>
-              By default, this endpoint is <strong>case-insensitive</strong>.
+              By default, this endpoint is <strong>case-insensitive</strong> and responds with a list of prefixed terms.
               Use <code>&case=true</code> to make it <strong>case-sensitive</strong>.
+              <br>
+              Use <code>&expand=true</code> to make it return <strong>full IRIs</strong> instead of prefixed terms.
             </p>
 
             <h3>Examples</h3>
@@ -126,6 +128,13 @@
             <curl-example
               :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:co', case: 'true' })"
               :result="['rdfs:comment']" />
+
+            <p>
+              Autocomplete a partial term, case-sensitive and expanded:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:co', case: 'true', expand: 'true' })"
+              :result="['http://www.w3.org/2000/01/rdf-schema#comment']" />
 
             <p>
               Autocomplete a partial term or the content of a namespace, for a given RDF type:

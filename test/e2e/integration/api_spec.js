@@ -191,5 +191,28 @@ describe('/api/v1', () => {
         expect(response.body).to.have.length(0)
       })
     })
+    describe('expands', () => {
+      it('prefixes starting with query', () => {
+        cy.request('/api/v1/autocomplete?q=rd&expand=true').then((response) => {
+          expect(response.status).to.eq(200)
+          expect(response.body).to.contain('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+          expect(response.body).to.contain('http://www.w3.org/2000/01/rdf-schema#')
+        })
+      })
+      it('case sensitive', () => {
+        cy.request('/api/v1/autocomplete?expand=true&q=schema:a&case=true').then((response) => {
+          expect(response.status).to.eq(200)
+          expect(response.body).to.contain('http://schema.org/about')
+          expect(response.body).not.to.contain('http://schema.org/AboutPage')
+        })
+      })
+      it('match type and case', () => {
+        cy.request('/api/v1/autocomplete?q=schema:a&type=rdf:Property&expand=true&case=true').then((response) => {
+          expect(response.status).to.eq(200)
+          expect(response.body).to.contain('http://schema.org/about')
+          expect(response.body).not.to.contain('http://schema.org/AboutPage')
+        })
+      })
+    })
   })
 })
