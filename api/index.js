@@ -3,6 +3,7 @@ const path = require('path')
 const zlib = require('zlib')
 const express = require('express')
 const Fuse = require('fuse.js')
+const { prefixes } = require('@zazuko/rdf-vocabularies')
 
 const { cachedShrink, cachedExpand } = require('./utils')
 
@@ -137,17 +138,21 @@ router.get('/expand', (req, res) => {
 
 router.get('/autocomplete', (req, res) => {
   const matchCase = req.query.case === 'true'
+  const expand = req.query.expand === 'true'
   const query = req.query.q
   const type = req.query.type
 
   if (!('q' in req.query)) {
-    return res.status(400).json({ help: '/api/v1/autocomplete?q=…[&type=…][&case=true]' })
+    return res.status(400).json({ help: '/api/v1/autocomplete?q=…[&type=…][&case=true][&expand]' })
   }
   if (!query.includes(':')) {
     const potentialPrefixes = Object.keys(prefixComplete)
       .filter(prefix => prefix.startsWith(query))
-      .map(prefix => `${prefix}:`)
-    return res.json(potentialPrefixes)
+
+    if (expand) {
+      return res.json(potentialPrefixes.map(item => prefixes[item]))
+    }
+    return res.json(potentialPrefixes.map(prefix => `${prefix}:`))
   }
   const [searchPrefix, searchTerm] = query.split(':')
   const vocab = prefixComplete[matchCase ? searchPrefix : searchPrefix.toLowerCase()]
@@ -175,7 +180,12 @@ router.get('/autocomplete', (req, res) => {
       }
       return acc
     }, [])
-  return res.json(results)
+
+  if (expand) {
+    return res.json(results.map(item => cachedExpand(item)))
+  }
+
+  res.json(results)
 })
 
 router.get('/health', (req, res) => {
