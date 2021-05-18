@@ -7,7 +7,7 @@
 
 ```bash
 # install dependencies
-$ npm run install
+$ npm ci
 $ npm run build-data
 
 # serve with hot reload at localhost:3000
