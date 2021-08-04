@@ -33,7 +33,10 @@ spec:
 
           resources:
             requests:
-              memory: "250Mi"
+              memory: "500Mi"
+              cpu: "50m"
+            limits:
+              memory: "500Mi"
               cpu: "50m"
 
         - name: varnish
@@ -55,8 +58,8 @@ spec:
 
           resources:
             requests:
-              memory: "50Mi"
-              cpu: "25m"
+              memory: "150Mi"
+              cpu: "50m"
             limits:
               memory: "150Mi"
               cpu: "50m"
