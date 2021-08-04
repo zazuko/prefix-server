@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: prefix-server
-          image: docker.io/zazuko/prefix-server
+          image: ghcr.io/zazuko/prefix-server
           imagePullPolicy: IfNotPresent
 
           securityContext:
