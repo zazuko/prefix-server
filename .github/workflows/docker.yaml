@@ -22,17 +22,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
         uses: zazuko/action-docker-meta@main
         id: docker_meta
         with:
-          images: docker.io/zazuko/prefix-server
+          images: ghcr.io/zazuko/prefix-server
 
       - name: Tag
         id: tag
@@ -75,6 +76,6 @@ jobs:
       - name: Run Kubernetes tools
         run: |
           cd k8s/
-          kustomize edit set image "docker.io/zazuko/prefix-server:pipeline-${GITHUB_RUN_ID}"
+          kustomize edit set image "ghcr.io/zazuko/prefix-server:pipeline-${GITHUB_RUN_ID}"
           kustomize build | tee manifest.yaml
           kubectl apply -f manifest.yaml
