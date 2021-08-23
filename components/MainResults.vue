@@ -42,6 +42,7 @@
         </h3>
         <p>
           <a :href="model.iriSplitA">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             {{ model.iriSplitA }} <span v-html="ExternalLink({ height: 15, width: 15 })"></span>
           </a>
         </p>

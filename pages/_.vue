@@ -77,32 +77,6 @@ export default {
     DetailResults,
     Autocomplete
   },
-  data () {
-    return {
-      isLoading: false,
-      model: null,
-      search: '',
-      iriFromURL: ''
-    }
-  },
-  computed: {
-    items () {
-      return this.entries
-    }
-  },
-  watch: {
-    model () {
-      // only redirect to result when user searches something, otherwise people hitting
-      // http://localhost:3000/http://www.w3.org/ns/rdfa#PrefixOrTermMapping
-      // will also be redirected
-      if (this.model && this.search) {
-        this.$router.push(`/${this.model.prefixed}`)
-      }
-    },
-    search: _debounce(async function (val) {
-      await this.doSearch(val)
-    }, 250)
-  },
   async asyncData ({ $axios, params, redirect, error }) {
     let entries = []
     const iriFromURL = params.pathMatch
@@ -136,6 +110,37 @@ export default {
       entries
     }
   },
+  data () {
+    return {
+      isLoading: false,
+      model: null,
+      search: '',
+      iriFromURL: ''
+    }
+  },
+  head () {
+    return {
+      title: this.model ? `${this.model.prefixed} lookup - Resolve RDF namespaces` : 'Resolve RDF namespaces'
+    }
+  },
+  computed: {
+    items () {
+      return this.entries
+    }
+  },
+  watch: {
+    model () {
+      // only redirect to result when user searches something, otherwise people hitting
+      // http://localhost:3000/http://www.w3.org/ns/rdfa#PrefixOrTermMapping
+      // will also be redirected
+      if (this.model && this.search) {
+        this.$router.push(`/${this.model.prefixed}`)
+      }
+    },
+    search: _debounce(async function (val) {
+      await this.doSearch(val)
+    }, 250)
+  },
   methods: {
     async doSearch (val) {
       val = val || ''
@@ -160,17 +165,13 @@ export default {
         this.entries = await this.$axios.$get(`/api/v1/search?q=${val}`)
       }
       catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err)
       }
       this.isLoading = false
     },
     clear () {
       this.$router.push('/')
-    }
-  },
-  head () {
-    return {
-      title: this.model ? `${this.model.prefixed} lookup - Resolve RDF namespaces` : 'Resolve RDF namespaces'
     }
   }
 }

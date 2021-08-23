@@ -5,9 +5,6 @@ module.exports = {
     node: true,
     'cypress/globals': true
   },
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
   plugins: [
     'vue',
     'cypress'

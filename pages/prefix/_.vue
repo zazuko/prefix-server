@@ -5,7 +5,9 @@
         <section class="md-content">
           <div class="content default">
             <h1><code>{{ prefix }}</code> RDF Prefix</h1>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <h3 v-if="metadata.title" v-html="metadata.title"></h3>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <h4 v-if="metadata.description" v-html="metadata.description"></h4>
 
             <h3>The <code>{{ metadata.namespace }}</code> namespace defines:</h3>

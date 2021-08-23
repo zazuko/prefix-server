@@ -25,6 +25,7 @@
       <div v-else-if="isBlankNode">
         <em>blank node</em>
       </div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-else v-html="xss(value)" />
     </div>
   </div>
