@@ -3,16 +3,16 @@ module.exports = {
   "Search": {
     "should be available on homepage": {
       "1": [
-        "rdau:P60800 (has details of type of recording)",
-        "rdau:P60801 (has details of video characteristic)",
-        "rdau:P60802 (has details of video format)",
-        "rdau:P60803 (has details of generation)",
-        "rdau:P60804 (has details of illustrative content)",
-        "rdau:P60805 (has subject)",
-        "rdau:P60806 (is subject of)",
-        "rdau:P60807 (has graduate)",
-        "rdau:P60808 (is graduate of)",
-        "rdau:P60809 (has writer of foreword (Deprecated))"
+        "rdau:P60827 (is commissioning body of)",
+        "rdau:P60881 (is remix artist of)",
+        "rdau:P60882 (is casting director of)",
+        "rdau:P60816 (is degree committee member of)",
+        "rdau:P60835 (is participant in treaty of)",
+        "rdau:P60837 (is researcher of)",
+        "rdau:P60850 (is organizer of)",
+        "rdau:P60870 (is editorial director of)",
+        "rdau:P60872 (is founder agent of resource of)",
+        "rdau:P60843 (is choral conductor of)"
       ],
       "2": [
         "dbo:Person (person)",
@@ -26,13 +26,13 @@ module.exports = {
         "rdfs:",
         "rdfs:Container (Container)",
         "rdfs:Datatype (Datatype)",
-        "rdfs:Class (Class)",
-        "rdfs:ContainerMembershipProperty (ContainerMembershipProperty)",
-        "rdfs:Literal (Literal)",
-        "rdfs:Resource (Resource)",
+        "rdfs:seeAlso (seeAlso)",
         "rdfs:comment (comment)",
+        "rdfs:isDefinedBy (isDefinedBy)",
+        "rdfs:label (label)",
         "rdfs:domain (domain)",
-        "rdfs:isDefinedBy (isDefinedBy)"
+        "rdfs:Resource (Resource)",
+        "rdfs:range (range)"
       ]
     }
   }
