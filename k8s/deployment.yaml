@@ -40,10 +40,10 @@ spec:
           resources:
             requests:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "1"
             limits:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "1"
 
         - name: varnish
           image: docker.io/zazukoians/varnish:5.2.1
@@ -65,10 +65,10 @@ spec:
           resources:
             requests:
               memory: "150Mi"
-              cpu: "50m"
+              cpu: "200m"
             limits:
               memory: "150Mi"
-              cpu: "50m"
+              cpu: "200m"
 
       volumes:
         - name: varnish-config-volume
