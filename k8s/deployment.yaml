@@ -31,13 +31,19 @@ spec:
               path: /api/v1/health
               port: http
 
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /api/v1/health
+              port: http
+
           resources:
             requests:
-              memory: "500Mi"
-              cpu: "50m"
+              memory: "1Gi"
+              cpu: "500m"
             limits:
-              memory: "500Mi"
-              cpu: "50m"
+              memory: "1Gi"
+              cpu: "500m"
 
         - name: varnish
           image: docker.io/zazukoians/varnish:5.2.1
