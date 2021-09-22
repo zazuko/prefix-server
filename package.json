@@ -1,6 +1,6 @@
 {
   "name": "prefix-server",
-  "version": "2021.9.22-4",
+  "version": "2021.9.22-5",
   "license": "AGPLv3",
   "description": "RDF prefix / namespaces resolution",
   "author": "Victor Felder",
