@@ -20,7 +20,7 @@
         <span class="part">
           Copyright
           <a href="http://zazuko.com">Zazuko</a>
-          GmbH © 2019
+          GmbH © 2021
         </span>
       </div>
     </div>
