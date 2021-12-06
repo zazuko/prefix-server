@@ -5,7 +5,7 @@ ARG VERSION
 ARG COMMIT
 ARG API_URL_BROWSER=https://prefix.zazuko.com/
 
-RUN apk add --no-cache bash python make g++ git
+RUN apk add --no-cache bash python3 make g++ git
 
 WORKDIR /src
 
