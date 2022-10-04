@@ -1,6 +1,6 @@
 {
   "name": "prefix-server",
-  "version": "2022.2.13",
+  "version": "2022.10.4",
   "license": "AGPLv3",
   "description": "RDF prefix / namespaces resolution",
   "author": "Zazuko GmbH",
