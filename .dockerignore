@@ -1,5 +1,4 @@
 /node_modules
 /.nuxt
-/k8s
 /api/datafiles/*
 Dockerfile
