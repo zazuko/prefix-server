@@ -3,7 +3,7 @@
   "version": "2022.2.13",
   "license": "AGPLv3",
   "description": "RDF prefix / namespaces resolution",
-  "author": "Victor Felder",
+  "author": "Zazuko GmbH",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue .",
