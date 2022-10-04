@@ -1,4 +1,4 @@
-name: Build and push Docker image and deploy it to Kubernetes
+name: Build and push Docker image
 
 on:
   push:
@@ -57,31 +57,3 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64/v8
-
-  deploy:
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs:
-      - docker
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set Kubernetes context
-        uses: azure/k8s-set-context@v1
-        with:
-          method: service-account
-          k8s-url: ${{ secrets.K8S_URL }}
-          k8s-secret: ${{ secrets.K8S_SECRET }}
-
-      - name: Run Kubernetes tools
-        run: |
-          cd k8s/
-          kustomize edit set image "ghcr.io/zazuko/prefix-server:pipeline-${GITHUB_RUN_ID}"
-          kustomize build | tee manifest.yaml
-          kubectl apply -f manifest.yaml
