@@ -1,10 +1,6 @@
 const _ = require('lodash')
 const debug = require('debug')('prefix-server')
 const { namedNode } = require('@rdfjs/data-model')
-const rdf = require('rdf-ext')
-
-const { vocabularies, prefixes, loadFile } = require('@zazuko/rdf-vocabularies')
-const { shrink, expand } = require('@zazuko/rdf-vocabularies')
 
 const labelPredicates = [
   'http://www.w3.org/2000/01/rdf-schema#label',
@@ -41,7 +37,9 @@ const fuseOptions = {
   }]
 }
 
-function cachedShrink (term) {
+async function cachedShrink (term) {
+  const { shrink } = await import('@zazuko/vocabularies')
+
   const cached = shrunkCache[term.value]
   if (cached) {
     return cached
@@ -51,7 +49,9 @@ function cachedShrink (term) {
   return shrunk
 }
 
-function cachedExpand (prefixed) {
+async function cachedExpand (prefixed) {
+  const { expand } = await import('@zazuko/vocabularies')
+
   const cached = expandedCache[prefixed]
   if (cached) {
     return cached
@@ -109,7 +109,9 @@ function enrichPrefixSpecificData (searchArrayByPrefix, prefixEndpointData) {
   }
 }
 
-function createSearchArray (datasets, prefixMetadata) {
+async function createSearchArray (datasets, prefixMetadata) {
+  const { prefixes } = await import('@zazuko/vocabularies')
+
   let loadedPrefixesCount = 0
   let loadedTermsCount = 0
   const searchArrayByPrefix = {}
@@ -123,7 +125,7 @@ function createSearchArray (datasets, prefixMetadata) {
       // care about triples from `frbr:` for which the subject IRI actually starts with `http://purl.org/vocab/frbr/core#`,
       // which unfortunately isn't always the case:
       // https://github.com/zazuko/rdf-vocabularies/blob/3027a5c5aedf0bf0439d68d779856ace9c57b3f7/ontologies/frbr.nq#L348-L350
-      const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
+      const filtered = [...dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix]))]
 
       if (filtered.length > 0) {
         loadedPrefixesCount += 1
@@ -232,7 +234,9 @@ function createSearchArray (datasets, prefixMetadata) {
   }
 }
 
-function findPrefixMetadata (datasets, index) {
+async function findPrefixMetadata (datasets, index) {
+  const { prefixes } = await import('@zazuko/vocabularies')
+
   const output = {}
   Object.entries(datasets).forEach(([prefix, dataset]) => {
     const namespace = prefixes[prefix]
@@ -270,9 +274,10 @@ function preparePrefixComplete (searchArrayByPrefix) {
 async function prepareData () {
   const now = Date.now()
 
+  const { vocabularies } = await import('@zazuko/vocabularies')
   const datasets = await vocabularies()
-  const index = await loadFile('_index', { factory: rdf })
-  const prefixMetadata = findPrefixMetadata(datasets, index)
+  const index = (await import('@zazuko/vocabularies/meta')).default()
+  const prefixMetadata = await findPrefixMetadata(datasets, index)
 
   const {
     summary,
@@ -280,7 +285,7 @@ async function prepareData () {
     searchArrayByPrefix,
     prefixEndpointData,
     stats
-  } = createSearchArray(datasets, prefixMetadata)
+  } = await createSearchArray(datasets, prefixMetadata)
   enrichPrefixSpecificData(searchArrayByPrefix, prefixEndpointData)
 
   const prefixComplete = preparePrefixComplete(searchArrayByPrefix)
