@@ -3,7 +3,7 @@ const path = require('path')
 const zlib = require('zlib')
 const express = require('express')
 const Fuse = require('fuse.js')
-const middlewareAsync = require('middleware-async')
+const { asyncMiddleware } = require('middleware-async')
 
 const { cachedShrink, cachedExpand } = require('./utils')
 
@@ -94,7 +94,7 @@ router.get('/summary', (req, res) => {
   res.json(summary)
 })
 
-router.get('/shrink', middlewareAsync(async (req, res) => {
+router.get('/shrink', asyncMiddleware(async (req, res) => {
   let iri = req.query.q
 
   if (iri) {
@@ -117,7 +117,7 @@ router.get('/shrink', middlewareAsync(async (req, res) => {
   res.status(400).json({ help: '/api/v1/shrink?q=…' })
 }))
 
-router.get('/expand', middlewareAsync(async (req, res) => {
+router.get('/expand', asyncMiddleware(async (req, res) => {
   const prefixed = req.query.q
 
   if (prefixed) {
@@ -136,7 +136,7 @@ router.get('/expand', middlewareAsync(async (req, res) => {
   res.status(400).json({ help: '/api/v1/expand?q=…' })
 }))
 
-router.get('/autocomplete', middlewareAsync(async (req, res) => {
+router.get('/autocomplete', asyncMiddleware(async (req, res) => {
   const { prefixes } = await import('@zazuko/vocabularies')
 
   const matchCase = req.query.case === 'true'
