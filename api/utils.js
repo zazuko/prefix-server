@@ -125,7 +125,7 @@ async function createSearchArray (datasets, prefixMetadata) {
       // care about triples from `frbr:` for which the subject IRI actually starts with `http://purl.org/vocab/frbr/core#`,
       // which unfortunately isn't always the case:
       // https://github.com/zazuko/rdf-vocabularies/blob/3027a5c5aedf0bf0439d68d779856ace9c57b3f7/ontologies/frbr.nq#L348-L350
-      const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
+      const filtered = [...dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix]))]
 
       if (filtered.length > 0) {
         loadedPrefixesCount += 1
@@ -139,88 +139,94 @@ async function createSearchArray (datasets, prefixMetadata) {
       return acc.concat(filtered)
     }, [])
 
-  const searchArray = quads
-    .reduce((obj, quad) => {
-      let { predicate, object } = quad
-      let predicateIRI, objectIRI
+  const obj = []
+  for (const quad of quads) {
+    let { predicate, object } = quad
+    let predicateIRI, objectIRI
 
-      if (predicate.termType === 'NamedNode') {
-        predicateIRI = predicate.value
-        predicate = cachedShrink(predicate)
-      }
-      if (object.termType === 'NamedNode') {
-        objectIRI = object.value
-        object = cachedShrink(object)
-      }
-      const part = { predicate, predicateIRI, object, objectIRI, quad }
+    if (predicate.termType === 'NamedNode') {
+      predicateIRI = predicate.value
+      predicate = await cachedShrink(predicate)
+    }
+    if (object.termType === 'NamedNode') {
+      objectIRI = object.value
+      object = await cachedShrink(object)
+    }
+    const part = { predicate, predicateIRI, object, objectIRI, quad }
 
-      const index = obj.findIndex(x => x.iri.equals(quad.subject))
-      if (index !== -1) {
-        obj[index].parts.push(part)
+    const index = obj.findIndex(x => x.iri.equals(quad.subject))
+    if (index !== -1) {
+      obj[index].parts.push(part)
+    }
+    else {
+      const termToAdd = {
+        iri: quad.subject,
+        prefixed: await cachedShrink(quad.subject),
+        graph: quad.graph,
+        parts: [part]
       }
-      else {
-        const termToAdd = {
-          iri: quad.subject,
-          prefixed: cachedShrink(quad.subject),
-          graph: quad.graph,
-          parts: [part]
+      const [prefixedSplitA, prefixedSplitB] = termToAdd.prefixed.split(':')
+      // see https://github.com/zazuko/prefix-server/issues/26
+      const iriSplitA = prefixedSplitB ? termToAdd.iri.value.split(prefixedSplitB)[0] : termToAdd.iri.value
+      const ontologyTitle = prefixMetadata[prefixedSplitA].title || ''
+      Object.assign(termToAdd, {
+        prefixedSplitA,
+        prefixedSplitB,
+        iriSplitA,
+        iriSplitB: prefixedSplitB,
+        ontologyTitle
+      })
+
+      obj.push(termToAdd)
+    }
+  }
+
+  const searchArray = obj.map((term) => {
+    const labels = term.parts.reduce((labels, part) => {
+      if (labelPredicates.includes(part.predicateIRI)) {
+        const language = part.object.language
+        if (typeof language === 'string') {
+          labels[language] = part.object.value
         }
-        const [prefixedSplitA, prefixedSplitB] = termToAdd.prefixed.split(':')
-        // see https://github.com/zazuko/prefix-server/issues/26
-        const iriSplitA = prefixedSplitB ? termToAdd.iri.value.split(prefixedSplitB)[0] : termToAdd.iri.value
-        const ontologyTitle = prefixMetadata[prefixedSplitA].title || ''
-        Object.assign(termToAdd, { prefixedSplitA, prefixedSplitB, iriSplitA, iriSplitB: prefixedSplitB, ontologyTitle })
-
-        obj.push(termToAdd)
-      }
-      return obj
-    }, [])
-    .map((term) => {
-      const labels = term.parts.reduce((labels, part) => {
-        if (labelPredicates.includes(part.predicateIRI)) {
-          const language = part.object.language
-          if (typeof language === 'string') {
-            labels[language] = part.object.value
+        else {
+          if (!labels['no language']) {
+            labels['no language'] = []
           }
-          else {
-            if (!labels['no language']) {
-              labels['no language'] = []
-            }
-            labels['no language'].push(part.object.value)
-          }
+          labels['no language'].push(part.object.value)
         }
-        return labels
-      }, {})
+      }
+      return labels
+    }, {})
 
-      // choose the best label to display
-      if (labels.en) {
-        // 1st priority is English
-        term.label = labels.en
-      }
-      else if (labels['']) {
-        // sometimes the English label has an empty language
-        term.label = labels['']
-      }
-      else if (labels['no language']) {
-        // last resort, a label with no specified language
-        term.label = labels['no language'].join('\n')
-      }
+    // choose the best label to display
+    if (labels.en) {
+      // 1st priority is English
+      term.label = labels.en
+    }
+    else if (labels['']) {
+      // sometimes the English label has an empty language
+      term.label = labels['']
+    }
+    else if (labels['no language']) {
+      // last resort, a label with no specified language
+      term.label = labels['no language'].join('\n')
+    }
 
-      term.itemText = term.prefixed
-      if (term.label) {
-        // ―
-        term.itemText += ` (${term.label})`
-      }
+    term.itemText = term.prefixed
+    if (term.label) {
+      // ―
+      term.itemText += ` (${term.label})`
+    }
 
-      // create the prefix-specific search array
-      const prefix = term.prefixedSplitA
-      if (!searchArrayByPrefix[prefix]) {
-        searchArrayByPrefix[prefix] = []
-      }
-      searchArrayByPrefix[prefix].push(term)
+    // create the prefix-specific search array
+    const prefix = term.prefixedSplitA
+    if (!searchArrayByPrefix[prefix]) {
+      searchArrayByPrefix[prefix] = []
+    }
+    searchArrayByPrefix[prefix].push(term)
 
-      return term
-    })
+    return term
+  })
 
   return {
     summary: _.sortBy(summary, 'prefix'),
@@ -240,8 +246,8 @@ async function findPrefixMetadata (datasets, index) {
   const output = {}
   Object.entries(datasets).forEach(([prefix, dataset]) => {
     const namespace = prefixes[prefix]
-    const title = index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/title')).toArray()
-    const description = index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/description')).toArray()
+    const title = [...index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/title'))]
+    const description = [...index.match(namedNode(`https://prefix.zazuko.com/${prefix}:`), namedNode('http://purl.org/dc/terms/description'))]
 
     output[prefix] = {
       namespace,
@@ -276,7 +282,7 @@ async function prepareData () {
 
   const { vocabularies } = await import('@zazuko/vocabularies')
   const datasets = await vocabularies()
-  const index = (await import('@zazuko/vocabularies/meta')).default()
+  const index = await (await import('@zazuko/vocabularies/meta')).default()
   const prefixMetadata = await findPrefixMetadata(datasets, index)
 
   const {
