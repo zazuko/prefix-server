@@ -125,7 +125,7 @@ async function createSearchArray (datasets, prefixMetadata) {
       // care about triples from `frbr:` for which the subject IRI actually starts with `http://purl.org/vocab/frbr/core#`,
       // which unfortunately isn't always the case:
       // https://github.com/zazuko/rdf-vocabularies/blob/3027a5c5aedf0bf0439d68d779856ace9c57b3f7/ontologies/frbr.nq#L348-L350
-      const filtered = [...dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix]))]
+      const filtered = dataset.filter(({ subject }) => subject.value.startsWith(prefixes[prefix])).toArray()
 
       if (filtered.length > 0) {
         loadedPrefixesCount += 1
