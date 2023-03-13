@@ -1,5 +1,5 @@
 module.exports = {
-  "__version": "8.4.1",
+  "__version": "8.7.0",
   "Search": {
     "should be available on homepage": {
       "1": [
@@ -16,11 +16,11 @@ module.exports = {
       ],
       "2": [
         "dbo:Person (person)",
+        "crm:E21_Person (Person)",
         "dbo:person (person)",
         "as:Person (Person)",
         "prov:Person (Person)",
-        "foaf:Person (Person)",
-        "schema:Person (Person)"
+        "foaf:Person (Person)"
       ],
       "3": [
         "rdfs:",

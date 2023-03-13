@@ -3,7 +3,7 @@ const path = require('path')
 const zlib = require('zlib')
 const express = require('express')
 const Fuse = require('fuse.js')
-const { prefixes } = require('@zazuko/rdf-vocabularies')
+const middlewareAsync = require('middleware-async')
 
 const { cachedShrink, cachedExpand } = require('./utils')
 
@@ -94,7 +94,7 @@ router.get('/summary', (req, res) => {
   res.json(summary)
 })
 
-router.get('/shrink', (req, res) => {
+router.get('/shrink', middlewareAsync(async (req, res) => {
   let iri = req.query.q
 
   if (iri) {
@@ -102,7 +102,7 @@ router.get('/shrink', (req, res) => {
     if (iri.includes('%3A%2F%2F')) {
       iri = decodeURIComponent(iri)
     }
-    const attempt = cachedShrink({ value: iri })
+    const attempt = await cachedShrink({ value: iri })
     if (attempt !== iri) {
       return res.json({
         success: true,
@@ -115,13 +115,13 @@ router.get('/shrink', (req, res) => {
   }
 
   res.status(400).json({ help: '/api/v1/shrink?q=…' })
-})
+}))
 
-router.get('/expand', (req, res) => {
+router.get('/expand', middlewareAsync(async (req, res) => {
   const prefixed = req.query.q
 
   if (prefixed) {
-    const attempt = cachedExpand(prefixed)
+    const attempt = await cachedExpand(prefixed)
     if (attempt !== prefixed) {
       return res.json({
         success: true,
@@ -134,9 +134,11 @@ router.get('/expand', (req, res) => {
   }
 
   res.status(400).json({ help: '/api/v1/expand?q=…' })
-})
+}))
 
-router.get('/autocomplete', (req, res) => {
+router.get('/autocomplete', middlewareAsync(async (req, res) => {
+  const { prefixes } = await import('@zazuko/vocabularies')
+
   const matchCase = req.query.case === 'true'
   const expand = req.query.expand === 'true'
   const query = req.query.q
@@ -182,11 +184,11 @@ router.get('/autocomplete', (req, res) => {
     }, [])
 
   if (expand) {
-    return res.json(results.map(item => cachedExpand(item)))
+    return res.json(await Promise.all(results.map(item => cachedExpand(item))))
   }
 
   res.json(results)
-})
+}))
 
 router.get('/health', (req, res) => {
   res.json('ok')
