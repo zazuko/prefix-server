@@ -20,9 +20,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -41,11 +38,11 @@ jobs:
 
       - name: Tag
         id: tag
-        run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
+        run: echo "{tag}=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker images
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
@@ -57,4 +54,3 @@ jobs:
             VERSION=${{ steps.tag.outputs.tag }}
           platforms: |
             linux/amd64
-            linux/arm64/v8
