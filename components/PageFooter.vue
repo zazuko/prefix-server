@@ -20,7 +20,7 @@
         <span class="part">
           Copyright
           <a href="https://zazuko.com">Zazuko</a>
-          GmbH © 2022
+          GmbH © 2023
         </span>
       </div>
     </div>
