@@ -1,5 +1,5 @@
 # First step: build the assets
-FROM docker.io/library/node:16-alpine AS builder
+FROM docker.io/library/node:20-alpine AS builder
 
 ARG VERSION
 ARG COMMIT
@@ -27,7 +27,7 @@ RUN npm run build-data
 RUN npm run build:modern
 
 # Second step: only install runtime dependencies
-FROM docker.io/library/node:16-alpine
+FROM docker.io/library/node:20-alpine
 
 WORKDIR /src
 
