@@ -14,6 +14,7 @@
               <li><a href="#expand-endpoint"><code>/api/v1/expand?q=…</code></a></li>
               <li><a href="#shrink-endpoint"><code>/api/v1/shrink?q=…</code></a></li>
               <li><a href="#autocomplete-endpoint"><code>/api/v1/autocomplete?q=…</code></a></li>
+              <li><a href="#prefixes"><code>/api/v1/prefixes</code></a></li>
             </ul>
 
             <h2 id="expand-endpoint">
@@ -142,6 +143,33 @@
             <curl-example
               :url="apiPath('/api/v1/autocomplete', {q: 'rdfs:', type: 'rdf:Property' })"
               :result="['rdfs:comment','rdfs:domain','rdfs:isDefinedBy','rdfs:label','…']" />
+
+            <h2 id="prefixes">
+              Prefixes
+            </h2>
+
+            <p>
+              This endpoint returns the list of all known prefixes.
+              This can be used to implement a prefix selector.
+            </p>
+
+            <h3>Examples</h3>
+
+            <p>
+              How to get the list of all known prefixes:
+            </p>
+            <curl-example
+              :url="apiPath('/api/v1/prefixes')"
+              :result="{
+                'acl':'http://www.w3.org/ns/auth/acl#',
+                'as':'https://www.w3.org/ns/activitystreams#',
+                'bibo':'http://purl.org/ontology/bibo/',
+                'cc':'http://creativecommons.org/ns#',
+                'cert':'http://www.w3.org/ns/auth/cert#',
+                'cnt':'http://www.w3.org/2011/content#',
+                'constant':'http://qudt.org/vocab/constant/',
+                '…': '…'
+              }" />
 
           </div>
         </section>
