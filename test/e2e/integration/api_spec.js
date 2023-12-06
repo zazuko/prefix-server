@@ -214,5 +214,13 @@ describe('/api/v1', () => {
         })
       })
     })
+    describe('prefixes', () => {
+      it('get a list of prefixes', () => {
+        cy.request('/api/v1/prefixes').then((response) => {
+          expect(response.status).to.eq(200)
+          expect(Object.entries(response.body).length).to.be.greaterThan(0)
+        })
+      })
+    })
   })
 })
