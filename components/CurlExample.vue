@@ -15,7 +15,7 @@
       <div class="line">
         curl --silent \
         <br />
-        <a :href="url" target="_blank">"${DOMAIN}{{ path }}<span class="hl">?{{ query }}</span>"</a> \
+        <a :href="url" target="_blank">"${DOMAIN}{{ path }}<span v-if="query" class="hl">?{{ query }}</span>"</a> \
         <br />
         | jq .
       </div>
