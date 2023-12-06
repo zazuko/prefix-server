@@ -8,7 +8,7 @@
               RDF Prefix Resolve API
             </h1>
 
-            <p>We provide two API endpoints:</p>
+            <p>We provide the following API endpoints:</p>
 
             <ul>
               <li><a href="#expand-endpoint"><code>/api/v1/expand?q=…</code></a></li>
