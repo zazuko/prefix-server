@@ -90,6 +90,10 @@ router.get('/prefix', (req, res) => {
   })
 })
 
+router.get('/prefixes', (req, res) => {
+  res.json(Object.fromEntries(Object.entries(prefixMetadata).map(([prefix, value]) => [prefix, value.namespace])))
+})
+
 router.get('/summary', (req, res) => {
   res.json(summary)
 })
