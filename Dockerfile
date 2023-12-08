@@ -32,7 +32,7 @@ FROM docker.io/library/node:20-alpine
 WORKDIR /src
 
 ADD . .
-RUN npm ci --production --no-optional
+RUN npm ci --omit=dev --no-optional
 
 # Copy the built assets from the first step
 COPY --from=builder /src/.nuxt/ ./.nuxt
