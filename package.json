@@ -46,7 +46,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-unicorn": "^35.0.0",
     "eslint-plugin-vue": "^7.20.0",
-    "nuxt": "^2.16.3",
+    "nuxt": "^3.8.2",
     "sass": "^1.55.0",
     "sass-loader": "^10.3.1"
   },
