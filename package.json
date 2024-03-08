@@ -39,7 +39,7 @@
     "@cypress/browserify-preprocessor": "^3.0.2",
     "@cypress/snapshot": "^2.1.7",
     "@nuxtjs/eslint-config": "^6.0.1",
-    "cypress": "^8.7.0",
+    "cypress": "^13.6.2",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-cypress": "^2.12.1",
