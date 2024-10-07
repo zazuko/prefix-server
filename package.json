@@ -23,7 +23,7 @@
     "@rdfjs/to-ntriples": "^2",
     "@zazuko/vocabularies": "^2.1.0",
     "debug": "^4.3.4",
-    "express": "^4.18.1",
+    "express": "^4.20.0",
     "express-preconditions": "^1.0.5",
     "feather-icon-literals": "^1.0.0-rc.11",
     "fuse.js": "^6.6.2",
