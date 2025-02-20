@@ -18,9 +18,9 @@ module.exports = {
         "dbo:Person (person)",
         "crm:E21_Person (Person)",
         "dbo:person (person)",
+        "rico:Person (Person)",
         "as:Person (Person)",
-        "prov:Person (Person)",
-        "foaf:Person (Person)"
+        "prov:Person (Person)"
       ],
       "3": [
         "rdfs:",
