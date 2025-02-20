@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    ignore:
+    - dependency-name: "nuxt"
+      versions: [ ">=3.0.0" ]
+    - dependency-name: "webpack"
+      versions: [ ">=5.0.0" ]
