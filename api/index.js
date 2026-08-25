@@ -194,8 +194,4 @@ router.get('/autocomplete', asyncMiddleware(async (req, res) => {
   res.json(results)
 }))
 
-router.get('/health', (req, res) => {
-  res.json('ok')
-})
-
 app.use(router)

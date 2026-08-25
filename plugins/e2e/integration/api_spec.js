@@ -6,6 +6,14 @@ describe('/api/v1', () => {
     })
   })
 
+  it('/health on the dedicated health port', () => {
+    const healthPort = Cypress.env('HEALTH_PORT') || 3001
+    cy.request(`http://localhost:${healthPort}/api/v1/health`).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.eq('ok')
+    })
+  })
+
   describe('/expand', () => {
     it('should fail on bad requests', () => {
       cy.request({

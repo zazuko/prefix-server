@@ -82,14 +82,14 @@ export default {
         Object
           .entries(prefixedPredicates)
           .filter(([predicate, value]) => !(importantPredicates.includes(predicate)))
-          .map(([predicate, values]) => ({ predicate, values }))
-        , 'predicate')
+          .map(([predicate, values]) => ({ predicate, values })),
+        'predicate')
 
       const sortedIriPredicates = _sortBy(
         Object
           .entries(iriPredicates)
-          .map(([predicate, values]) => ({ predicate, values }))
-        , 'predicate')
+          .map(([predicate, values]) => ({ predicate, values })),
+        'predicate')
 
       return {
         prefixedPredicates,

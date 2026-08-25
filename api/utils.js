@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const debug = require('debug')('prefix-server')
-const { namedNode } = require('@rdfjs/data-model')
 
 const labelPredicates = [
   'http://www.w3.org/2000/01/rdf-schema#label',
@@ -242,6 +241,8 @@ async function createSearchArray (datasets, prefixMetadata) {
 
 async function findPrefixMetadata (datasets, index) {
   const { prefixes } = await import('@zazuko/vocabularies')
+  const { default: rdf } = await import('@rdfjs/data-model')
+  const { namedNode } = rdf
 
   const output = {}
   Object.entries(datasets).forEach(([prefix, dataset]) => {

@@ -63,9 +63,8 @@ describe('Prefixes', () => {
     cy.get('#prefixes li').first().click()
     cy.get('h1 > code').invoke('text').then((prefix) => {
       cy.get('#rdfs-class ul li').first().invoke('text').then((term) => {
-        cy.get('#rdfs-class ul li').first().find('a').click().then(() => {
-          cy.url().should('include', term.trim().split(' ')[0])
-        })
+        cy.get('#rdfs-class ul li').first().find('a').click()
+        cy.url().should('include', term.trim().split(' ')[0])
       })
     })
   })

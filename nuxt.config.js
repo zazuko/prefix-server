@@ -63,7 +63,9 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    // `/api/v1/health` on the main port (first middleware) and on a dedicated port (worker thread)
+    '~/modules/health'
   ],
   /*
   ** Axios module configuration
@@ -80,7 +82,30 @@ export default {
     */
     extend (config, ctx) {
     },
-    transpile: ['feather-icon-literals']
+    transpile: [
+      'feather-icon-literals',
+      // ESM-only packages using syntax webpack 4 cannot parse
+      'query-string',
+      'filter-obj',
+      'split-on-first',
+      'decode-uri-component'
+    ],
+    babel: {
+      plugins: [
+        // webpack 4 cannot parse logical assignment operators (`??=`, `||=`, `&&=`) and
+        // the server build targets the current node version, so babel must transpile them.
+        // Nuxt's preset already takes care of `?.` and `??` for the server build.
+        '@babel/plugin-transform-logical-assignment-operators'
+      ]
+    },
+    loaders: {
+      scss: {
+        sassOptions: {
+          // sass-loader 10 (the last one for webpack 4) only supports the legacy sass JS API
+          silenceDeprecations: ['legacy-js-api', 'import']
+        }
+      }
+    }
   },
   hooks: {
     build: {}

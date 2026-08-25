@@ -92,3 +92,6 @@ sw.*
 
 # build artifacts
 /api/datafiles/
+
+# Cypress screenshots
+/test/e2e/screenshots/
