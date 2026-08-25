@@ -91,7 +91,9 @@ sw.*
 /test/e2e/videos/*.mp4
 
 # build artifacts
-/api/datafiles/
+/server/assets/datafiles/
+.output
+.data
 
 # Cypress screenshots
 /test/e2e/screenshots/

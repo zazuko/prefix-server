@@ -1,30 +1,24 @@
-// only do the thing when called directly (node this-script)
-if (require.main === module) {
-  Promise.resolve().then(buildResources)
-}
+/*
+ * Generates the data files used by the API into `server/assets/datafiles`.
+ * They are bundled into the server output by `nuxt build` as server assets.
+ */
+import { mkdir, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { promisify } from 'node:util'
+import zlib from 'node:zlib'
+import createDebug from 'debug'
+import { prepareData } from './scripts/prepare-data.js'
 
-module.exports = buildResources
+const debug = createDebug('prefix-server')
+const gzip = promisify(zlib.gzip)
+const outputDir = path.resolve(import.meta.dirname, 'server/assets/datafiles')
 
-async function buildResources () {
-  const debug = require('debug')('prefix-server')
-  const path = require('path')
-  const fs = require('fs')
-  const { promisify } = require('util')
-  const zlib = require('zlib')
-  const writeFile = promisify(fs.writeFile)
-  const gzip = promisify(zlib.gzip)
+debug('preparing API data')
+const dataFiles = await prepareData()
 
-  debug('preparing API data')
-  const { prepareData } = require('./api/utils')
-
-  const dataFiles = await prepareData()
-
-  const fileNames = Object.entries(dataFiles)
-
-  for (const [keyName, data] of fileNames) {
-    const extraFilePath = path.resolve(__dirname, `./api/datafiles/${keyName}.json.gz`)
-    const compressed = await gzip(JSON.stringify(data))
-    await writeFile(extraFilePath, compressed)
-    debug(`wrote API data to ${extraFilePath}`)
-  }
+await mkdir(outputDir, { recursive: true })
+for (const [name, data] of Object.entries(dataFiles)) {
+  const file = path.join(outputDir, `${name}.json.gz`)
+  await writeFile(file, await gzip(JSON.stringify(data)))
+  debug(`wrote API data to ${file}`)
 }

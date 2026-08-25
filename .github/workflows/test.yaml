@@ -20,15 +20,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build the app
         run: |
           npm run build-data
-          NODE_ENV=production npm run build:modern
+          npm run build
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v7
-        env:
-          NODE_ENV: production
         with:
           install: false
           start: npm start

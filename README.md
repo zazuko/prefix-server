@@ -15,7 +15,7 @@ $ npm run dev
 
 # build for production and launch server
 $ npm run build
-$ npm run start
+$ npm start
 ```
 
 ## Tests
@@ -57,7 +57,8 @@ JSON body describing the problem, so a hung process still gets restarted.
 
 ## Building the resources used by the API
 
-The resources can be rebuilt using `npm run build-data`.
+The resources can be rebuilt using `npm run build-data`. They are written to
+`server/assets/datafiles/` and bundled into the server output by `npm run build`.
 
 They are not built by the hot-reload dev server because building the resources
 takes time.
