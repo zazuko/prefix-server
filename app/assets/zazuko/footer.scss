@@ -1,10 +1,13 @@
+@use 'variables' as *;
+@use 'mixins';
+
 footer {
   background: $color-primary;
   border-top: solid 1px rgba(0, 0, 0, .2);
 
 
   .footer-container {
-    @include container;
+    @include mixins.container;
 
     line-height: 50px;
     min-height: 100px;

@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 *::selection {
   background: $color-secondary;
   color: white;

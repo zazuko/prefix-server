@@ -60,16 +60,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2026-08-25',
 
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          silenceDeprecations: ['import']
-        }
-      }
-    }
-  },
-
   eslint: {
     config: {
       stylistic: {

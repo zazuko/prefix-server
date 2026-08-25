@@ -1,9 +1,12 @@
+@use 'variables' as *;
+@use 'mixins';
+
 .topbar-container {
   background-color: $color-primary;
   border-bottom: solid 1px rgba(0, 0, 0, 0.2);
 
   .topbar {
-    @include container;
+    @include mixins.container;
   }
 
   .logo {

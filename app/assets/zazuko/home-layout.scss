@@ -1,5 +1,8 @@
+@use 'variables' as *;
+@use 'mixins';
+
 .home-header {
-  @include container(460px);
+  @include mixins.container(460px);
   margin-top: 40px;
   margin-bottom: 40px;
 
