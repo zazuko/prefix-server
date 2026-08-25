@@ -1,4 +1,7 @@
+/.git
 /node_modules
 /.nuxt
-/api/datafiles/*
+/.output
+/server/assets/datafiles/*
+/cypress
 Dockerfile

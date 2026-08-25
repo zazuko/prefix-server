@@ -1,5 +1,5 @@
 module.exports = {
-  "__version": "8.7.0",
+  "__version": "15.21.0",
   "Search": {
     "should be available on homepage": {
       "1": [
@@ -16,9 +16,9 @@ module.exports = {
       ],
       "2": [
         "dbo:Person (person)",
+        "rico:Person (Person)",
         "crm:E21_Person (Person)",
         "dbo:person (person)",
-        "rico:Person (Person)",
         "as:Person (Person)",
         "prov:Person (Person)"
       ],

@@ -1,0 +1,209 @@
+@use 'variables' as *;
+@use 'mixins';
+
+.home-header {
+  @include mixins.container(460px);
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  @media screen and (max-width: $mq-s) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-item {
+    margin: 10px 0;
+
+    &.desc {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+
+      font-size: 20px;
+      line-height: 24px;
+      padding-bottom: 5px;
+
+      a {
+        $off: 3px;
+        $line-height: 24px;
+        $stroke: 2px;
+        display: inline-block;
+        position: relative;
+        color: inherit;
+        text-decoration: none;
+        font-family: monospace;
+        white-space: nowrap;
+        z-index: 0;
+        transition: color .1s ease;
+
+        &::after {
+          position: absolute;
+          content: '';
+          display: block;
+          height: $stroke;
+          bottom: -$stroke;
+          left: 0;
+          right: 0;
+          background-color: $color-secondary;
+          z-index: -1;
+          transition: all .15s ease;
+        }
+
+        &:focus, &:hover {
+          color: white;
+          outline: 0;
+          &::after {
+            left: -$off;
+            right: -$off;
+            bottom: - $stroke - $off;
+            height: $line-height + 2 * ($off + $stroke);
+          }
+        }
+      }
+
+      .tail {
+        flex: 0 0 18px;
+        width: 18px; height: 18px;
+        background: $color-secondary;
+
+        @media screen and (max-width: 460px + 2*20px) {
+          display: none;
+        }
+      }
+    }
+
+    .autocomplete {
+      position: relative;
+      display: flex;
+
+      input {
+        flex: 1;
+        position: relative;
+        background-color: #FFF;
+        border: 1px solid #979797;
+        line-height: 22px;
+        padding: 12px;
+        width: 100%;
+        font-size: 16px;
+
+        &:focus {
+          outline: 0;
+          border-color: $color-secondary;
+          box-shadow: inset 0 0 0 2px $color-secondary;
+          z-index: 2;
+        }
+      }
+
+      button {
+        flex: 0;
+        position: relative;
+        background-color: white;
+        padding: 0 12px;
+        border: solid 1px #979797;
+        margin-left: -1px;
+        transition: color .15s ease;
+        z-index: 0;
+
+        &::after {
+          position: absolute;
+          content: '';
+          display: block;
+          height: 0px;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: $color-secondary;
+          z-index: -1;
+          transition: height .15s ease;
+        }
+
+        &:focus, &:hover {
+          outline: 0;
+          border-color: $color-secondary;
+          color: white;
+          z-index: 1;
+
+          &::after {
+            height: 46px;
+          }
+        }
+      }
+
+      &.open .results { display: block; }
+      .results {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
+
+        li a {
+          color: black;
+          text-decoration: none;
+          background: white;
+          border: 1px solid #979797;
+          margin-top: -1px;
+          display: block;
+          padding: 0 12px;
+          font-size: 16px;
+          line-height: 30px;
+
+          // Small detail but I want to have those borders correctly displayed
+          position: relative;
+          z-index: 1;
+
+          &:hover {
+            border-left: solid 5px $color-secondary;
+            padding-left: 12px - 4px;
+          }
+
+          &:focus {
+            z-index: 2;
+            background: $color-secondary;
+            border-color: $color-secondary;
+            color: white;
+            outline: 0;
+          }
+        }
+      }
+    }
+
+    &.title {
+      display: flex;
+      padding: 0;
+
+      div {
+        align-self: flex-end;
+
+        h1 {
+          position: relative;
+          font-size: $fs-header;
+          line-height: $fs-header;
+          font-family: $font-header;
+          font-weight: 700;
+
+          @media screen and (max-width: $mq-s) {
+            font-size: $fs-header - 20px;
+            line-height: $fs-header - 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.home-content {
+  padding-bottom: 100px;
+  background: $color-primary;
+
+  @media screen and (max-width: $mq-l) {
+    padding-bottom: 0;
+  }
+}
