@@ -11,7 +11,7 @@
         API
       </NuxtLink>
       <div class="copyright">
-        <template v-if="version">
+        <template v-if="version.name">
           <span class="part">
             Version&nbsp;<a :href="version.url" class="version">{{ version.name }}</a>
           </span>
@@ -20,13 +20,13 @@
         <span class="part">
           Copyright
           <a href="https://zazuko.com">Zazuko</a>
-          GmbH © 2023
+          GmbH © 2026
         </span>
       </div>
     </div>
   </footer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { version } = useRuntimeConfig().public
 </script>

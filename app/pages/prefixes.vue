@@ -20,8 +20,10 @@
   </div>
 </template>
 
-<script setup>
-const { data: summary } = await useFetch('/api/v1/summary')
+<script setup lang="ts">
+import type { SummaryEntry } from '#shared/types/api'
+
+const { data: summary } = await useFetch('/api/v1/summary', { default: (): SummaryEntry[] => [] })
 
 useHead({
   title: 'List of RDF Vocabularies or Namespaces'

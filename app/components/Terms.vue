@@ -4,11 +4,10 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  terms: {
-    type: Array,
-    required: true
-  }
-})
+<script setup lang="ts">
+import type { TermPart } from '#shared/types/api'
+
+defineProps<{
+  terms: TermPart[]
+}>()
 </script>

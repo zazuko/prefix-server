@@ -31,15 +31,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import xss from 'xss'
+import type { TermPart } from '#shared/types/api'
 
-const props = defineProps({
-  term: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  term: TermPart
+}>()
 
 // the object is either a prefixed IRI (string) or a serialized RDF/JS term
 const object = computed(() => props.term.object)
@@ -47,27 +45,26 @@ const object = computed(() => props.term.object)
 const isExternalIRI = computed(() => object.value === props.term.objectIRI)
 
 const isBlankNode = computed(() => {
-  if (typeof object.value !== 'object' || object.value === null) {
+  const term = object.value
+  if (typeof term === 'string') {
     return false
   }
-  if (object.value.termType) {
-    return object.value.termType === 'BlankNode'
+  if (term.termType) {
+    return term.termType === 'BlankNode'
   }
-  const { value } = object.value
-  return typeof value === 'string' && value.startsWith('b') && value.split('_').length === 2
+  return term.value.startsWith('b') && term.value.split('_').length === 2
 })
 
 const language = computed(() => {
-  if (typeof object.value === 'object' && object.value !== null && typeof object.value.language === 'string') {
-    return `lang:${object.value.language || '""'}`
+  const term = object.value
+  if (typeof term !== 'string' && typeof term.language === 'string') {
+    return `lang:${term.language || '""'}`
   }
   return false
 })
 
 const value = computed(() => {
-  if (typeof object.value === 'object' && object.value !== null) {
-    return object.value.value
-  }
-  return object.value
+  const term = object.value
+  return typeof term === 'string' ? term : term.value
 })
 </script>

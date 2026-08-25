@@ -20,13 +20,10 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  term: {
-    type: String,
-    required: true
-  }
-})
+<script setup lang="ts">
+const props = defineProps<{
+  term: string
+}>()
 
 const isIRI = computed(() => props.term.includes('://'))
 const prefixSplitA = computed(() => `${props.term.split(':')[0]}:`)

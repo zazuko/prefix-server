@@ -12,15 +12,14 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  error: {
-    type: Object,
-    default: null
-  }
-})
+<script setup lang="ts">
+import type { NuxtError } from '#app'
+
+const props = defineProps<{
+  error: NuxtError
+}>()
 
 useHead({
-  title: props.error && props.error.statusCode === 404 ? '404 Not Found' : 'An error occurred'
+  title: props.error.statusCode === 404 ? '404 Not Found' : 'An error occurred'
 })
 </script>

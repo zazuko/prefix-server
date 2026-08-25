@@ -8,6 +8,11 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: read
+  # push the image to ghcr.io with GITHUB_TOKEN
+  packages: write
+
 jobs:
   docker:
     runs-on: ubuntu-latest

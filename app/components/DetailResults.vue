@@ -19,8 +19,9 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { sortBy } from 'lodash-es'
+import type { TermEntry, TermPart } from '#shared/types/api'
 
 const importantPredicates = [
   'rdf:type',
@@ -39,36 +40,35 @@ const importantPredicates = [
   'owl:equivalentClass'
 ]
 
-const props = defineProps({
-  model: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  model: TermEntry
+}>()
+
+interface PredicateGroup {
+  predicate: string
+  values: TermPart[]
+}
 
 const predicates = computed(() => {
-  const [prefixedPredicates, iriPredicates] = props.model.parts
-    .reduce(([prefixedPredicates, iriPredicates], field) => {
-      const target = field.predicate !== field.predicateIRI ? prefixedPredicates : iriPredicates
-      if (!target[field.predicate]) {
-        target[field.predicate] = []
-      }
-      target[field.predicate].push(field)
-      return [prefixedPredicates, iriPredicates]
-    }, [{}, {}])
+  const prefixedPredicates: Record<string, TermPart[]> = {}
+  const iriPredicates: Record<string, TermPart[]> = {}
+
+  for (const field of props.model.parts) {
+    const target = field.predicate !== field.predicateIRI ? prefixedPredicates : iriPredicates
+    const values = target[field.predicate] ?? []
+    values.push(field)
+    target[field.predicate] = values
+  }
+
+  const toGroups = (groups: Record<string, TermPart[]>): PredicateGroup[] => Object
+    .entries(groups)
+    .map(([predicate, values]) => ({ predicate, values }))
 
   const sortedPrefixedPredicates = sortBy(
-    Object
-      .entries(prefixedPredicates)
-      .filter(([predicate]) => !importantPredicates.includes(predicate))
-      .map(([predicate, values]) => ({ predicate, values })),
+    toGroups(prefixedPredicates).filter(({ predicate }) => !importantPredicates.includes(predicate)),
     'predicate')
 
-  const sortedIriPredicates = sortBy(
-    Object
-      .entries(iriPredicates)
-      .map(([predicate, values]) => ({ predicate, values })),
-    'predicate')
+  const sortedIriPredicates = sortBy(toGroups(iriPredicates), 'predicate')
 
   return {
     prefixedPredicates,

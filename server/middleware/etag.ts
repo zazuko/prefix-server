@@ -11,7 +11,7 @@ export default defineEventHandler((event) => {
   }
 
   const { version } = useRuntimeConfig(event).public
-  const etag = `"${hash(`${version ? version.name : ''}:${event.path}`).toString(16)}"`
+  const etag = `"${hash(`${version.name}:${event.path}`).toString(16)}"`
   setHeader(event, 'ETag', etag)
 
   const ifNoneMatch = getRequestHeader(event, 'if-none-match')

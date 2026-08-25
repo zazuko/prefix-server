@@ -68,15 +68,13 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ExternalLink } from 'feather-icon-literals'
+import type { TermEntry } from '#shared/types/api'
 
-const props = defineProps({
-  model: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  model: TermEntry
+}>()
 
 const declaration = computed(() => `PREFIX ${props.model.prefixedSplitA}: <${props.model.iriSplitA}>`)
 

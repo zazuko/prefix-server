@@ -178,15 +178,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import qs from 'query-string'
 
 useHead({
   title: 'RDF namespace lookup API'
 })
 
-function apiPath (path, query, encode = false) {
-  const querystring = qs.stringify(query, { encode })
+function apiPath (path: string, query?: Record<string, string>, encode = false): string {
+  const querystring = qs.stringify(query ?? {}, { encode })
   if (querystring) {
     return `${path}?${querystring}`
   }

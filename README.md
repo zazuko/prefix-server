@@ -15,7 +15,15 @@ $ npm run dev
 
 # build for production and launch server
 $ npm run build
-$ npm start
+$ npm run start
+```
+
+## Checks
+
+```bash
+# lint and type-check the whole project (app, server, scripts and e2e tests)
+$ npm run lint
+$ npm run typecheck
 ```
 
 ## Tests

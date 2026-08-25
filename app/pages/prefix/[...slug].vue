@@ -12,20 +12,20 @@
 
             <h3>The <code>{{ metadata.namespace }}</code> namespace defines:</h3>
 
-            <table v-show="sortedKeys.length > 1" class="toc">
+            <table v-show="sections.length > 1" class="toc">
               <tbody>
                 <tr
-                  v-for="prefixedType in sortedKeys"
-                  v-show="content[prefixedType].length"
-                  :key="prefixedType">
+                  v-for="section in sections"
+                  v-show="section.terms.length"
+                  :key="section.type">
                   <td>
-                    <NuxtLink :to="{ hash: `#${anchor(prefixedType)}` }">
-                      {{ content[prefixedType].length }}
+                    <NuxtLink :to="{ hash: `#${section.anchor}` }">
+                      {{ section.terms.length }}
                     </NuxtLink>
                   </td>
                   <td>
-                    <NuxtLink :to="{ hash: `#${anchor(prefixedType)}` }">
-                      {{ prefixedType }}
+                    <NuxtLink :to="{ hash: `#${section.anchor}` }">
+                      {{ section.type }}
                     </NuxtLink>
                   </td>
                 </tr>
@@ -33,29 +33,29 @@
             </table>
 
             <div
-              v-for="prefixedType in sortedKeys"
-              :id="anchor(prefixedType)"
-              :key="prefixedType">
-              <h2 v-show="content[prefixedType].length">
-                {{ content[prefixedType].length }}
-                <NuxtLink :to="{ path: `/${prefixedType}` }">
-                  <code>{{ prefixedType }}</code>
+              v-for="section in sections"
+              :id="section.anchor"
+              :key="section.type">
+              <h2 v-show="section.terms.length">
+                {{ section.terms.length }}
+                <NuxtLink :to="{ path: `/${section.type}` }">
+                  <code>{{ section.type }}</code>
                 </NuxtLink>
               </h2>
               <ul>
                 <li
-                  v-for="obj in content[prefixedType]"
-                  :key="obj.prefixed">
-                  <NuxtLink :to="{ path: `/${obj.prefixed}` }">
-                    {{ obj.itemText }}
+                  v-for="term in section.terms"
+                  :key="term.prefixed">
+                  <NuxtLink :to="{ path: `/${term.prefixed}` }">
+                    {{ term.itemText }}
                   </NuxtLink>
                 </li>
               </ul>
             </div>
 
-            <h2 v-show="content.otherTypes.length">
-              {{ content.otherTypes.length }}
-              other term{{ content.otherTypes.length > 1 ? 's' : '' }}
+            <h2 v-show="otherTypes.length">
+              {{ otherTypes.length }}
+              other term{{ otherTypes.length > 1 ? 's' : '' }}
             </h2>
           </div>
         </section>
@@ -64,7 +64,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { PrefixResponse, PrefixTermSummary } from '#shared/types/api'
+
 definePageMeta({
   middleware: (to) => {
     const prefix = [to.params.slug].flat().join('/')
@@ -80,15 +82,24 @@ definePageMeta({
 const route = useRoute()
 const prefix = [route.params.slug].flat().join('/')
 
-const { data, error } = await useFetch('/api/v1/prefix', { query: { q: prefix }, key: `prefix:${prefix}` })
-if (error.value) {
+const { data, error } = await useFetch<PrefixResponse | []>('/api/v1/prefix', { query: { q: prefix }, key: `prefix:${prefix}` })
+const response = data.value
+if (error.value || !response || Array.isArray(response)) {
   throw createError({ statusCode: 404, statusMessage: 'Not Found' })
 }
 
-const { data: content, metadata } = data.value
-const sortedKeys = Object.keys(content).filter(key => key !== 'otherTypes').sort()
+const { data: content, metadata } = response
+const otherTypes = content.otherTypes
 
-const anchor = prefixedType => prefixedType.replace(':', '-').toLowerCase()
+// the terms of the vocabulary grouped by type, e.g. `rdfs:Class`, `rdf:Property`
+const sections = Object.keys(content)
+  .filter(type => type !== 'otherTypes')
+  .sort()
+  .map(type => ({
+    type,
+    anchor: type.replace(':', '-').toLowerCase(),
+    terms: content[type] as PrefixTermSummary[]
+  }))
 
 useHead({
   title: `RDF prefix ${prefix} lookup`

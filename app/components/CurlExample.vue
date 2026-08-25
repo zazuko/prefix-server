@@ -26,21 +26,17 @@
   </code>
 </template>
 
-<script setup>
-const props = defineProps({
-  url: {
-    type: String,
-    required: true
-  },
-  result: {
-    type: [Object, Array],
-    default: null
-  }
+<script setup lang="ts">
+const props = withDefaults(defineProps<{
+  url: string
+  result?: object | null
+}>(), {
+  result: null
 })
 
 const config = useRuntimeConfig()
 const requestURL = useRequestURL()
-const copy = useTemplateRef('copy')
+const copy = useTemplateRef<HTMLAnchorElement>('copy')
 const status = useCopyStatus('Copy')
 
 const apiBase = computed(() => (config.public.apiBase || requestURL.origin).replace(/\/$/, ''))
@@ -50,12 +46,12 @@ const query = computed(() => props.url.split('?').slice(1).join('?'))
 
 function copySuccess () {
   status.success()
-  copy.value.focus()
+  copy.value?.focus()
 }
 
 function copyError () {
   status.error()
-  copy.value.focus()
+  copy.value?.focus()
 }
 </script>
 

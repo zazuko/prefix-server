@@ -1,27 +1,18 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 
-const collectResults = n => (result) => {
-  const results = Cypress._
-    .chain(result)
-    .map('textContent')
-    .map(x => x.trim())
-    .value()
-  if (n) {
-    cy.wrap(results.slice(0, n)).snapshot()
-  }
-  else {
-    cy.wrap(results).snapshot()
-  }
+const collectResults = (n?: number) => (result: JQuery<HTMLElement>) => {
+  const results = Array.from(result, element => (element.textContent ?? '').trim())
+  cy.wrap(n ? results.slice(0, n) : results).snapshot()
 }
 
 const searchField = () => cy.get('.search-field-container input')
 const suggestionList = () => cy.get('.autocomplete .results')
 const suggestedElements = () => cy.get('.autocomplete .results li')
 const keys = {
-  generic: x => cy.focused().trigger('keydown', { keyCode: x, which: x }),
+  generic: (keyCode: number) => cy.focused().trigger('keydown', { keyCode, which: keyCode }),
   downArrow: () => keys.generic(40),
   upArrow: () => keys.generic(38),
-  repeat (what, count, time = 10) {
+  repeat (what: () => void, count: number, time = 10) {
     for (let i = 0; i < count; i++) {
       what()
       cy.wait(time)

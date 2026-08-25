@@ -3,6 +3,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: E2E
@@ -23,6 +26,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Build the app
         run: |
           npm run build-data
@@ -32,5 +38,5 @@ jobs:
         uses: cypress-io/github-action@v7
         with:
           install: false
-          start: npm start
+          start: npm run start
           wait-on: "http://localhost:3000"

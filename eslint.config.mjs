@@ -106,7 +106,7 @@ export default withNuxt(
     }
   },
   {
-    files: ['test/**/*.js', 'cypress.config.js'],
+    files: ['test/**/*.ts', 'cypress.config.ts'],
     ...cypress.configs.recommended
   }
 )

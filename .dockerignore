@@ -4,5 +4,4 @@
 /.output
 /server/assets/datafiles/*
 /cypress
-/test
 Dockerfile

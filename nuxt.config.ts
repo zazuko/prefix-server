@@ -40,13 +40,12 @@ export default defineNuxtConfig({
       // base URL shown in the API examples; `API_URL_BROWSER` at build time,
       // `NUXT_PUBLIC_API_BASE` at runtime, the request origin otherwise
       apiBase: process.env.API_URL_BROWSER || '',
-      version: process.env.APP_VERSION
-        ? {
-            name: process.env.APP_VERSION,
-            commit: process.env.APP_COMMIT || '',
-            url: `https://github.com/zazuko/prefix-server/tree/${process.env.APP_COMMIT || ''}`
-          }
-        : null
+      // set at build time from `APP_VERSION` / `APP_COMMIT` (empty when unknown)
+      version: {
+        name: process.env.APP_VERSION || '',
+        commit: process.env.APP_COMMIT || '',
+        url: process.env.APP_VERSION ? `https://github.com/zazuko/prefix-server/tree/${process.env.APP_COMMIT || ''}` : ''
+      }
     }
   },
 

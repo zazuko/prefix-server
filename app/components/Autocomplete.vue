@@ -13,7 +13,7 @@
       name="q"
       autocomplete="off"
       autofocus
-      @input="emit('update:searchInput', $event.target.value)"
+      @input="onInput"
       @focus="elementFocus"
       @blur="elementBlur" />
     <button
@@ -38,26 +38,27 @@
   </form>
 </template>
 
-<script setup>
-const props = defineProps({
-  entries: {
-    type: Array,
-    default: () => []
-  },
-  searchInput: {
-    type: String,
-    default: ''
-  }
+<script setup lang="ts">
+import type { TermEntry } from '#shared/types/api'
+
+const props = withDefaults(defineProps<{
+  entries?: TermEntry[]
+  searchInput?: string
+}>(), {
+  entries: () => [],
+  searchInput: ''
 })
-const emit = defineEmits(['update:searchInput'])
+const emit = defineEmits<{
+  'update:searchInput': [value: string]
+}>()
 
 const router = useRouter()
-const input = useTemplateRef('input')
-const button = useTemplateRef('button')
-const list = useTemplateRef('list')
+const input = useTemplateRef<HTMLInputElement>('input')
+const button = useTemplateRef<HTMLButtonElement>('button')
+const list = useTemplateRef<HTMLUListElement>('list')
 
 const focused = ref(false)
-let timeout = null
+let timeout: ReturnType<typeof setTimeout> | null = null
 
 const results = computed(() => props.entries.map(({ itemText, prefixed }) => {
   const value = String(prefixed || '')
@@ -76,6 +77,9 @@ watch(() => props.searchInput, () => {
 })
 
 onMounted(() => {
+  if (!input.value) {
+    return
+  }
   input.value.selectionStart = props.searchInput.length
   input.value.selectionEnd = props.searchInput.length
   if (results.value.length) {
@@ -84,7 +88,11 @@ onMounted(() => {
   }
 })
 
-function onKeydown (event) {
+function onInput (event: Event) {
+  emit('update:searchInput', (event.target as HTMLInputElement).value)
+}
+
+function onKeydown (event: KeyboardEvent) {
   if (event.key === 'ArrowDown' || event.keyCode === 40) {
     focusNext(event)
   }
@@ -93,36 +101,46 @@ function onKeydown (event) {
   }
 }
 
-function focusNext (event) {
+function focusElement (element: Element | null | undefined) {
+  if (element instanceof HTMLElement) {
+    element.focus()
+  }
+}
+
+function focusNext (event: KeyboardEvent) {
+  const active = document.activeElement
+
   // The input is focused, focus the first element of the list
-  if (document.activeElement === input.value || document.activeElement === button.value) {
-    const el = list.value.firstElementChild
-    if (el) {
+  if (active === input.value || active === button.value) {
+    const first = list.value?.firstElementChild
+    if (first) {
       event.preventDefault()
-      el.firstElementChild.focus()
+      focusElement(first.firstElementChild)
     }
     return
   }
 
-  const li = document.activeElement.parentElement
-  if (li.nextElementSibling) { // Check if we are not at the bottom of the list
+  const next = active?.parentElement?.nextElementSibling
+  if (next) { // Check if we are not at the bottom of the list
     event.preventDefault()
-    li.nextElementSibling.firstElementChild.focus()
+    focusElement(next.firstElementChild)
   }
 }
 
-function focusPrevious (event) {
+function focusPrevious (event: KeyboardEvent) {
+  const active = document.activeElement
+
   // The input is focused, do nothing
-  if (document.activeElement === input.value) {
+  if (active === input.value) {
     return
   }
 
-  const li = document.activeElement.parentElement
-  if (li.previousElementSibling && li.previousElementSibling.tagName === 'LI') {
-    li.previousElementSibling.firstElementChild.focus()
+  const previous = active?.parentElement?.previousElementSibling
+  if (previous && previous.tagName === 'LI') {
+    focusElement(previous.firstElementChild)
   }
   else { // We are at the top of the list
-    input.value.focus()
+    input.value?.focus()
   }
   event.preventDefault()
 }
@@ -145,9 +163,10 @@ function elementBlur () {
   }, 100)
 }
 
-function guardEvent (e) {
+function guardEvent (e: Event): boolean {
+  const { metaKey, altKey, ctrlKey, shiftKey, button: mouseButton } = e as Partial<MouseEvent>
   // don't redirect with control keys
-  if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) {
+  if (metaKey || altKey || ctrlKey || shiftKey) {
     return false
   }
   // don't redirect when preventDefault called
@@ -155,30 +174,33 @@ function guardEvent (e) {
     return false
   }
   // don't redirect on right click
-  if (e.button !== undefined && e.button !== 0) {
+  if (mouseButton !== undefined && mouseButton !== 0) {
     return false
   }
   return true
 }
 
-function navigate (target, e) {
+function navigate (target: string, e: Event) {
   router.push(`/${target}`)
   // TODO(sandhose): find another way to close the modal
-  document.activeElement.blur()
+  focusElement(null)
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
   e.preventDefault()
 }
 
-function formSubmit (e) {
+function formSubmit (e: Event) {
   if (guardEvent(e)) {
     navigate(props.searchInput || '', e)
   }
 }
 
-function linkClick (e) {
+function linkClick (e: MouseEvent) {
   // Taken from vue-router. We can't use <NuxtLink> elements because
   // they don't forward focus/blur events.
   if (guardEvent(e)) {
-    navigate(e.target.dataset.target, e)
+    navigate((e.currentTarget as HTMLAnchorElement).dataset.target || '', e)
   }
 }
 </script>

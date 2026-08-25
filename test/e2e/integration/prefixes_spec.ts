@@ -1,11 +1,5 @@
-const collectResults = (result) => {
-  const results = Cypress._
-    .chain(result)
-    .map('textContent')
-    .map(x => x.trim().split(':')[0])
-    .value()
-  return results
-}
+const collectResults = (result: JQuery<HTMLElement>): string[] =>
+  Array.from(result, element => (element.textContent ?? '').trim().split(':')[0] ?? '')
 
 describe('Prefixes', () => {
   beforeEach(() => {
@@ -38,7 +32,7 @@ describe('Prefixes', () => {
   })
 
   it('should 404 unknown prefixes', () => {
-    cy.visit('/prefix/hahaha:', { failOnStatusCode: false }).then((res) => {
+    cy.visit('/prefix/hahaha:', { failOnStatusCode: false }).then(() => {
       cy.get('.content-container > h1').invoke('text').then((text) => {
         expect(text).to.equal('404')
       })
@@ -60,7 +54,7 @@ describe('Prefixes', () => {
 
   it('should lead to individual terms', () => {
     cy.get('#prefixes li').first().click()
-    cy.get('h1 > code').invoke('text').then((prefix) => {
+    cy.get('h1 > code').invoke('text').then(() => {
       cy.get('#rdfs-class ul li').first().invoke('text').then((term) => {
         cy.get('#rdfs-class ul li').first().find('a').click()
         cy.url().should('include', term.trim().split(' ')[0])

@@ -91,6 +91,7 @@ sw.*
 /test/e2e/videos/*.mp4
 
 # build artifacts
+*.tsbuildinfo
 /server/assets/datafiles/
 .output
 .data

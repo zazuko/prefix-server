@@ -1,7 +1,8 @@
-import { getQueryParam } from '../../utils/query.js'
-import { cachedShrink } from '../../utils/vocabularies.js'
+import type { ConversionResponse, HelpResponse } from '#shared/types/api'
+import { getQueryParam } from '../../utils/query'
+import { cachedShrink } from '../../utils/vocabularies'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler((event): ConversionResponse | HelpResponse => {
   let iri = getQueryParam(event, 'q')
 
   if (!iri) {

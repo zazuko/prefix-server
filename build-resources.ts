@@ -7,7 +7,7 @@ import path from 'node:path'
 import { promisify } from 'node:util'
 import zlib from 'node:zlib'
 import createDebug from 'debug'
-import { prepareData } from './scripts/prepare-data.js'
+import { prepareData } from './scripts/prepare-data.ts'
 
 const debug = createDebug('prefix-server')
 const gzip = promisify(zlib.gzip)

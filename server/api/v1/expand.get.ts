@@ -1,7 +1,8 @@
-import { getQueryParam } from '../../utils/query.js'
-import { cachedExpand } from '../../utils/vocabularies.js'
+import type { ConversionResponse, HelpResponse } from '#shared/types/api'
+import { getQueryParam } from '../../utils/query'
+import { cachedExpand } from '../../utils/vocabularies'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler((event): ConversionResponse | HelpResponse => {
   const prefixed = getQueryParam(event, 'q')
 
   if (!prefixed) {

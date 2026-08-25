@@ -104,13 +104,13 @@ describe('/api/v1', () => {
     it('should suggest results', () => {
       cy.request('/api/v1/suggest?q=Person').then((response) => {
         expect(response.status).to.eq(200)
-        response.body.slice(0, 8).forEach((term) => {
+        response.body.slice(0, 8).forEach((term: string) => {
           expect(term.toLowerCase()).to.contain('person')
         })
       })
       cy.request('/api/v1/suggest?q=person').then((response) => {
         expect(response.status).to.eq(200)
-        response.body.slice(0, 8).forEach((term) => {
+        response.body.slice(0, 8).forEach((term: string) => {
           expect(term.toLowerCase()).to.contain('person')
         })
       })
@@ -127,7 +127,7 @@ describe('/api/v1', () => {
       })
       cy.request('/api/v1/autocomplete?q=r').then((response) => {
         expect(response.status).to.eq(200)
-        expect(response.body.filter(p => p.startsWith('r'))).to.have.length(response.body.length)
+        expect(response.body.filter((p: string) => p.startsWith('r'))).to.have.length(response.body.length)
       })
     })
     it('should be case insensitive', () => {
