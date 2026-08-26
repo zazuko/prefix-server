@@ -1,5 +1,6 @@
 # prefix-server
-[![Build Status](https://travis-ci.org/zazuko/prefix-server.svg?branch=master)](https://travis-ci.org/zazuko/prefix-server) 
+[![Test](https://github.com/zazuko/prefix-server/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/zazuko/prefix-server/actions/workflows/test.yaml)
+[![Docker image](https://github.com/zazuko/prefix-server/actions/workflows/docker.yaml/badge.svg?branch=main)](https://github.com/zazuko/prefix-server/actions/workflows/docker.yaml)
 
 > RDF prefix / namespaces resolution
 
